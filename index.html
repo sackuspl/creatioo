@@ -43,19 +43,132 @@
 <body>
 
 
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6936a24c70de34197eda3ffd/1jbumjuum';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner">
+  <p>Używamy plików cookie koniecznych do funkcjonowania strony i zapewnienia Ci wygodnego korzystania. Kontynuując, wyrażasz zgodę na ich użycie. <a href="/polityka-cookies.html">Dowiedz się więcej</a></p>
+  <button id="accept-cookie">Akceptuję</button>
+</div>
+
+<style>
+    
+  #cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    z-index: 100;
+    font-family: 'Poppins', sans-serif;
+    max-width: 90%;
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    flex-wrap: wrap;
+    overflow: hidden;
+  }
+
+  /* Pseudo-element dla blur pod kształtem banneru */
+  #cookie-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 10px;
+    background-color: #000000b7; /* lekko przezroczysty fiolet */
+    backdrop-filter: blur(4px);
+    z-index: -1; /* pod treścią banneru */
+  }
+
+  #cookie-banner.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+#cookie-banner p {
+    margin: 0;
+    font-size: 14px;
+    flex: 1;
+    line-height: 1.4; /* odstęp między linijkami */
+    z-index: 1; /* nad pseudo-elementem */
+    position: relative;
+    text-shadow: 1px 3px 6px rgba(0, 0, 0, 0.445); /* cien pod napisem */
+}
+
+#cookie-banner a {
+    font-weight: 450;
+    color: #b07eff;
+    text-decoration: underline;
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    text-shadow: 1px 3px 6px rgba(0, 0, 0, 0.445); /* cien pod napisem */
+}
+
+#cookie-banner a:hover {
+    font-weight: 450;
+    color: #d0b2ff; /* jaśniejszy fiolet lub biały dla efektu hover */
+}
+
+
+  #cookie-banner button {
+    background-color: #9b64f4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  #cookie-banner button:hover {
+    background-color: #7845ca;
+    color: rgb(255, 255, 255);
+  }
+
+  @media (max-width: 500px) {
+    #cookie-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    #cookie-banner button {
+      align-self: center;
+    }
+  }
+</style>
+
+<script>
+  const banner = document.getElementById('cookie-banner');
+
+  // Sprawdź, czy użytkownik już zaakceptował cookie
+  const accepted = localStorage.getItem('cookieAccepted');
+
+  if (!accepted) {
+    // Pokaż banner z animacją
+    setTimeout(() => banner.classList.add('show'), 300);
+  }
+
+  document.getElementById('accept-cookie').addEventListener('click', function() {
+    localStorage.setItem('cookieAccepted', 'true');
+
+    // Animacja znikania
+    banner.classList.remove('show');
+    banner.style.transform = 'translateX(-50%) translateY(100px)';
+    banner.style.opacity = '0';
+
+    setTimeout(() => banner.style.display = 'none', 500);
+  });
 </script>
-<!--End of Tawk.to Script-->
 
 
 <script>
@@ -1361,6 +1474,23 @@ setInterval(updateTimestamps, 60000);
 </section><script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>  <script src="assets/smoothscroll/smooth-scroll.js"></script>  <script src="assets/ytplayer/index.js"></script>  <script src="assets/dropdown/js/navbar-dropdown.js"></script>  <script src="assets/theme/js/script.js"></script>  <script src="assets/formoid/formoid.min.js"></script>  
   
   
- <div id="scrollToTop" class="scrollToTop mbr-arrow-up"><a style="text-align: center;"><i class="mbr-arrow-up-icon mbr-arrow-up-icon-cm cm-icon cm-icon-smallarrow-up"></i></a></div>
-  </body>
+ 
+  
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6936a24c70de34197eda3ffd/1jbumjuum';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
+
+</body>
 </html>
