@@ -3,7 +3,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebas
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
-// Konfiguracja Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBz3774VzTNAIVXleWPURd01gf2EOPktQ8",
   authDomain: "github-likes.firebaseapp.com",
@@ -19,72 +18,92 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
 
-// Zaloguj anonimowo (jeśli jeszcze nie)
+// Bezpieczne obsłużenie ewentualnego canvas.getContext (guard) — jeśli masz canvas w innym miejscu
+try {
+  const maybeCanvas = document.getElementById('myCanvas'); // zmień id jeśli masz inne
+  if (maybeCanvas) {
+    // const ctx = maybeCanvas.getContext('2d'); // odkomentuj jeśli używasz
+  } else {
+    // console.log('Brak #myCanvas — pomijam getContext');
+  }
+} catch (e) {
+  console.warn('Błąd przy getContext (ignoruję):', e);
+}
+
+// Zaloguj anonimowo (jeżeli nie jest jeszcze)
 signInAnonymously(auth)
   .then(() => console.log("Użytkownik anonimowy zalogowany (inited)"))
   .catch(err => console.error("Anon login error:", err));
 
-// Czekamy na stan auth, dopiero wtedy podpinamy listeners
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    console.log("Brak użytkownika jeszcze...");
+// Pomocniczy mechanizm: czekamy na DOM i na auth; dopiero wtedy inicjujemy binding
+let domReady = false;
+let authReady = false;
+let currentUser = null;
+
+function tryInitBindings() {
+  if (!domReady || !authReady) {
+    console.log("Init bindings: czekam — domReady:", domReady, "authReady:", authReady);
     return;
   }
-  console.log("Auth ready, uid =", user.uid);
+  console.log("Init bindings: START (DOM i AUTH gotowe). uid:", currentUser?.uid);
 
-  // Teraz bezpiecznie podpinamy listeners do przycisków (można wywołać to wielokrotnie — zbindowanie w pętli)
-  document.querySelectorAll('.like-btn').forEach(btn => {
-    // unikamy dubli - jeśli już mamy 'data-bound' to pomijamy
+  // Podpinamy listenery — zabezpieczenie przed dublem: dataset.bound
+  const buttons = document.querySelectorAll('.like-btn');
+  console.log("Znaleziono przycisków .like-btn:", buttons.length);
+  buttons.forEach(btn => {
     if (btn.dataset.bound === "1") return;
     btn.dataset.bound = "1";
 
     const postId = btn.dataset.id;
     const countEl = btn.querySelector('.like-count');
+    if (!postId) {
+      console.warn("Przycisk like bez data-id:", btn);
+      return;
+    }
+    if (!countEl) {
+      console.warn("Brak elementu .like-count wewnątrz przycisku dla postId:", postId);
+    }
     const likeRef = ref(database, 'likes/' + postId);
+    console.log("Podpinam onValue dla", postId);
 
-    // Pobieranie wartości w czasie rzeczywistym
+    // onValue
     onValue(likeRef, snapshot => {
       const post = snapshot.val();
+      // DEBUG: pokaż snapshot wartości
+      console.debug("onValue:", postId, post);
+
       const newVal = post?.count || 0;
+      if (countEl) countEl.textContent = newVal;
 
-      // Aktualizacja licznika (prosto — animację można zachować, tu prostsze ustawienie)
-      // Jeśli chcesz animację zachowaj poprzednią implementację animacji liczbowej.
-      countEl.textContent = newVal;
-
-      // Ustawiamy klasę .liked na podstawie tego, czy UID jest zapisany w post.users
-      const currentUser = auth.currentUser;
-      if (currentUser && post?.users && post.users[currentUser.uid]) {
+      const user = auth.currentUser;
+      if (user && post?.users && post.users[user.uid]) {
         btn.classList.add('liked');
       } else {
         btn.classList.remove('liked');
       }
     }, (err) => {
-      console.error("onValue error:", err);
+      console.error("Błąd onValue dla", postId, err);
     });
 
-    // Kliknięcie w przycisk -> toggle like/unlike
+    // click handler
     btn.addEventListener('click', async (e) => {
-      const currentUser = auth.currentUser;
-      if (!currentUser) {
-        alert("Trwa logowanie użytkownika... spróbuj za moment.");
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Trwa logowanie użytkownika — spróbuj za moment.");
         return;
       }
-      const userId = currentUser.uid;
+      const userId = user.uid;
+      console.log("Klik on", postId, "uid=", userId);
 
-      // Dla lepszego UX: od razu toggle klasy i animuj (później DB zweryfikuje stan)
-      const alreadyLiked = btn.classList.contains('liked');
-      if (alreadyLiked) {
-        btn.classList.remove('liked');
-      } else {
-        btn.classList.add('liked');
-      }
+      // natychmiastowy toggle UI dla responsywności (odwracamy w razie błędu)
+      const already = btn.classList.contains('liked');
+      if (already) btn.classList.remove('liked'); else btn.classList.add('liked');
 
-      // Animacja pulsate
+      // animacje
       btn.classList.add('pulsate');
       setTimeout(() => btn.classList.remove('pulsate'), 300);
-
-      // Efekt burst tylko kiedy dodajemy like (nie przy unlike)
-      if (!alreadyLiked) {
+      if (!already) {
         for (let i = 0; i < 6; i++) {
           const bubble = document.createElement('span');
           bubble.className = 'burst';
@@ -97,39 +116,52 @@ onAuthStateChanged(auth, (user) => {
         }
       }
 
-      // Wykonujemy transakcję która toggle'uje like
+      // transaction toggle
       try {
-        await runTransaction(likeRef, (post) => {
+        const result = await runTransaction(likeRef, (post) => {
           if (!post) {
-            // jeśli nie ma posta -> stworzyć i dodać UID
             return { count: 1, users: { [userId]: true } };
           }
-
           if (!post.users) post.users = {};
-
           if (post.users[userId]) {
-            // już polubił -> odkliknięcie
             post.count = Math.max((post.count || 1) - 1, 0);
             delete post.users[userId];
           } else {
-            // nie polubił -> kliknięcie
             post.count = (post.count || 0) + 1;
             post.users[userId] = true;
           }
-
           return post;
         });
-        // Transakcja zakończona — onValue zaktualizuje UI do stanu z DB.
+        console.log("Transaction finished for", postId, result);
+        // onValue zaktualizuje UI na podstawie DB - to jest źródło prawdy
       } catch (err) {
-        console.error("Transaction error:", err);
-        // Jeśli DB odrzuciła zapytanie, cofamy wizualnie zmianę klasy
-        if (btn.classList.contains('liked') && !alreadyLiked) {
-          btn.classList.remove('liked');
-        } else if (!btn.classList.contains('liked') && alreadyLiked) {
-          btn.classList.add('liked');
-        }
-        alert("Błąd podczas zapisu (sprawdź reguły w Firebase).");
+        console.error("Transaction error dla", postId, err);
+        // cofamy UI toggle w razie błędu
+        if (btn.classList.contains('liked') && already === false) btn.classList.remove('liked');
+        if (!btn.classList.contains('liked') && already === true) btn.classList.add('liked');
+        alert("Błąd zapisu. Sprawdź reguły DB (permission_denied).");
       }
     });
-  }); // koniec forEach przycisków
-}); // koniec onAuthStateChanged
+  });
+}
+
+// DOM ready
+window.addEventListener('DOMContentLoaded', () => {
+  domReady = true;
+  console.log("DOM gotowy");
+  tryInitBindings();
+});
+
+// Auth ready
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    authReady = true;
+    console.log("Auth ready, uid=", user.uid);
+  } else {
+    authReady = false;
+    currentUser = null;
+    console.log("Auth: brak użytkownika (null)");
+  }
+  tryInitBindings();
+});
