@@ -55,16 +55,17 @@ document.querySelectorAll('.like-btn').forEach(btn => {
 
     const userId = user.uid;
 
-    // Aktualizacja liczby w Firebase z ograniczeniem 1 like na użytkownika
+    // Poprawiona transakcja – zwraca zawsze obiekt {count, users}
     runTransaction(likeRef, post => {
       if (!post) {
-        post = { count: 1, users: { [userId]: true } };
-        return post;
+        // jeśli post nie istnieje, tworzymy nowy obiekt
+        return { count: 1, users: { [userId]: true } };
       }
 
-      // Jeśli użytkownik już polubił, nic nie rób
+      // jeśli użytkownik już polubił, nic nie robimy
       if (post.users?.[userId]) return;
 
+      // zwiększamy count i dodajemy UID użytkownika
       post.count = (post.count || 0) + 1;
       if (!post.users) post.users = {};
       post.users[userId] = true;
