@@ -39,6 +39,28 @@
 <meta name="twitter:url" content="https://creatioo.pl">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+
+<link
+  rel="stylesheet"
+  href="https://site-assets.fontawesome.com/releases/v7.1.0/css/all.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://site-assets.fontawesome.com/releases/v7.1.0/css/sharp-solid.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://site-assets.fontawesome.com/releases/v7.1.0/css/sharp-regular.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://site-assets.fontawesome.com/releases/v7.1.0/css/sharp-light.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://site-assets.fontawesome.com/releases/v7.1.0/css/duotone.css"
+/>
+
 </head>
 <body>
 
@@ -530,6 +552,8 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
         Dowiedz się więcej
     </a>
 </div>
+
+
                 </div>
             </div>
         </div>
@@ -581,13 +605,19 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
     <!-- NOWY DIV -->
     <div class="carousel-viewport">
         <div class="carousel-track">
-           <div class="post">
+            <div class="post" data-id="post-1">
     <div class="image-blog">
         <img src="assets/images/test.png" alt="Post Image">
         <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
+
     </div>
+    
     <div class="post-content">
+         <div class="tag-like-row">
         <span class="tag">Grafika komputerowa</span>
+                    <!-- LIKE BUTTON -->
+    <button class="like-btn" data-id="post-1"><i class="fa-jelly-fill fa-solid fa-thumbs-up"></i> <span class="like-count">0</span></button>
+    </div>
         <h3>Explore Hidden Places</h3>
         <p>Lorem ipsum dolor sit amet copsum dolor sit amet consectetur adipiscing elpsum dolor sit ampsum dolor sit amet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elnsectetur adipiscing elit.</p>
         <div class="author-row">
@@ -602,105 +632,85 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
 </div>
 
 
-           <div class="post">
+   <!-- Post 2 (identyczny, tylko zmienione ID) -->
+  <div class="post" data-id="post-2">
     <div class="image-blog">
-        <img src="assets/images/test.png" alt="Post Image">
-        <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
+      <img src="assets/images/test.png" alt="Post Image">
+      <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
     </div>
     <div class="post-content">
-        <span class="tag">Ogólne</span>
-        <h3>Explore Hidden Places</h3>
-        <p>Lorem ipsum dolor sit amet copsum dolor sit amet consectetur adipiscing elpsum dolor sit ampsum dolor sit amet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elnsectetur adipiscing elit.</p>
-        <div class="author-row">
-            <div class="author">
-                <img src="assets/images/employee.png" alt="creatioo.pl">
-                <span class="employee">creatioo.pl</span>
-            </div>
-
-            <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
+      <div class="tag-like-row">
+        <span class="tag">Grafika komputerowa</span>
+        <button class="like-btn" data-id="post-2">
+          <i class="fa-jelly-fill fa-solid fa-thumbs-up"></i>
+          <span class="like-count">0</span>
+        </button>
+      </div>
+      <h3>Explore Hidden Places</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      <div class="author-row">
+        <div class="author">
+          <img src="assets/images/employee.png" alt="creatioo.pl">
+          <span class="employee">creatioo.pl</span>
         </div>
+        <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
+      </div>
     </div>
-</div>
+  </div>
 
-           <div class="post">
+    <!-- Post 3 (identyczny, tylko zmienione ID) -->
+  <div class="post" data-id="post-3">
     <div class="image-blog">
-        <img src="assets/images/test.png" alt="Post Image">
-        <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
+      <img src="assets/images/test.png" alt="Post Image">
+      <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
     </div>
     <div class="post-content">
-        <span class="tag">Nowości</span>
-        <h3>Explore Hidden Places</h3>
-        <p>Lorem ipsum dolor sit amet copsum dolor sit amet consectetur adipiscing elpsum dolor sit ampsum dolor sit amet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elnsectetur adipiscing elit.</p>
-        <div class="author-row">
-            <div class="author">
-                <img src="assets/images/employee.png" alt="creatioo.pl">
-                <span class="employee">creatioo.pl</span>
-            </div>
-
-            <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
+      <div class="tag-like-row">
+        <span class="tag">Grafika komputerowa</span>
+        <button class="like-btn" data-id="post-3">
+          <i class="fa-jelly-fill fa-solid fa-thumbs-up"></i>
+          <span class="like-count">0</span>
+        </button>
+      </div>
+      <h3>Explore Hidden Places</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      <div class="author-row">
+        <div class="author">
+          <img src="assets/images/employee.png" alt="creatioo.pl">
+          <span class="employee">creatioo.pl</span>
         </div>
+        <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
+      </div>
     </div>
-</div>
+  </div>
 
-           <div class="post">
+
+   <!-- Post 4 (identyczny, tylko zmienione ID) -->
+  <div class="post" data-id="post-4">
     <div class="image-blog">
-        <img src="assets/images/test.png" alt="Post Image">
-        <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
+      <img src="assets/images/test.png" alt="Post Image">
+      <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
     </div>
     <div class="post-content">
-        <span class="tag">Travel</span>
-        <h3>Explore Hidden Places</h3>
-        <p>Lorem ipsum dolor sit amet copsum dolor sit amet consectetur adipiscing elpsum dolor sit ampsum dolor sit amet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elnsectetur adipiscing elit.</p>
-        <div class="author-row">
-            <div class="author">
-                <img src="assets/images/employee.png" alt="creatioo.pl">
-                <span class="employee">creatioo.pl</span>
-            </div>
-
-            <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
+      <div class="tag-like-row">
+        <span class="tag">Grafika komputerowa</span>
+        <button class="like-btn" data-id="post-4">
+          <i class="fa-jelly-fill fa-solid fa-thumbs-up"></i>
+          <span class="like-count">0</span>
+        </button>
+      </div>
+      <h3>Explore Hidden Places</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      <div class="author-row">
+        <div class="author">
+          <img src="assets/images/employee.png" alt="creatioo.pl">
+          <span class="employee">creatioo.pl</span>
         </div>
+        <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
+      </div>
     </div>
-</div>
+  </div>
 
-           <div class="post">
-    <div class="image-blog">
-        <img src="assets/images/test.png" alt="Post Image">
-        <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
-    </div>
-    <div class="post-content">
-        <span class="tag">Travel</span>
-        <h3>Explore Hidden Places</h3>
-        <p>Lorem ipsum dolor sit amet copsum dolor sit amet consectetur adipiscing elpsum dolor sit ampsum dolor sit amet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elnsectetur adipiscing elit.</p>
-        <div class="author-row">
-            <div class="author">
-                <img src="assets/images/employee.png" alt="creatioo.pl">
-                <span class="employee">creatioo.pl</span>
-            </div>
-
-            <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
-        </div>
-    </div>
-</div>
-
-           <div class="post">
-    <div class="image-blog">
-        <img src="assets/images/test.png" alt="Post Image">
-        <div class="timestamp" data-created="2025-12-05T21:50:00Z"></div>
-    </div>
-    <div class="post-content">
-        <span class="tag">Travel</span>
-        <h3>Explore Hidden Places</h3>
-        <p>Lorem ipsum dolor sit amet copsum dolor sit amet consectetur adipiscing elpsum dolor sit ampsum dolor sit amet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elet consectetur adipiscing elpsum dolor sit amet consectetur adipiscing elnsectetur adipiscing elit.</p>
-        <div class="author-row">
-            <div class="author">
-                <img src="assets/images/employee.png" alt="creatioo.pl">
-                <span class="employee">creatioo.pl</span>
-            </div>
-
-            <button class="read-more" onclick="window.open('index.html', '_blank')">Czytaj dalej</button>
-        </div>
-    </div>
-</div>
 
         </div>
     </div> <!-- KONIEC NOWEGO DIV -->
@@ -798,6 +808,131 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
 
 
 </section>
+
+
+<style>
+/* Kontener tag + like */
+.tag-like-row {
+    display: flex;            /* flex, żeby tag i like były w jednej linii */
+    align-items: center;      /* wyrównanie w pionie */
+    gap: 8px;                 /* odstęp między tagiem a przyciskiem like */
+    margin-bottom: 8px;       /* odstęp od reszty treści */
+}
+
+/* Przycisk like */
+.like-btn {
+    position: static;         /* usuń absolute */
+    border: none;
+    margin-left: auto; /* wypycha przycisk maksymalnie w prawo */
+    margin-top: -7px;  /* przesunięcie w górę */
+    padding: 4px 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;      /* ikonka i licznik w jednej linii, pionowo wyśrodkowane */
+    justify-content: center;
+    border-radius: 5px;       /* zaokrąglenie całego przycisku */
+    font-size: 16px;
+    color: #696969;             /* domyślny kolor ikonki i licznika */
+    transition: color 0.3s, transform 0.2s, background-color 0.2s;
+}
+
+/* Licznik */
+.like-btn .like-count {
+    font-family: 'Poppins', sans-serif;
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    color: inherit;           /* dziedziczy kolor z przycisku */
+}
+
+/* Kolor po polubieniu */
+.like-btn.liked {
+    color: #9b64f4;           /* zmiana koloru ikonki i licznika */
+}
+
+/* Pulsowanie ikony */
+.like-btn.pulsate i {
+    animation: pulsate 0.3s forwards;
+}
+
+@keyframes pulsate {
+    0% { transform: scale(1); color: #696969; }
+    50% { transform: scale(1.6); color: #9b64f4; }
+    100% { transform: scale(1); color: #9b64f4; }
+}
+
+/* Małe „bąbelki / wybuchy” */
+.burst {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #c586ff;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: burst 0.6s forwards;
+}
+
+@keyframes burst {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+}
+
+</style>
+
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+    const postEl = btn.closest('[data-id]');
+    const postId = postEl.dataset.id;
+
+    // Pobranie stanu polubionych postów z localStorage
+    let likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+
+    // Ustawienie początkowego stanu przycisku
+    const countEl = btn.querySelector('.like-count');
+    countEl.textContent = likedPosts.includes(postId) ? 1 : 0;
+    if (likedPosts.includes(postId)) btn.classList.add('liked');
+
+    // Obsługa kliknięcia
+    btn.addEventListener('click', () => {
+        likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+
+        if (likedPosts.includes(postId)) {
+            // Odbicie like
+            likedPosts = likedPosts.filter(id => id !== postId);
+            countEl.textContent = 0;
+            btn.classList.remove('liked');
+        } else {
+            // Dodanie like
+            likedPosts.push(postId);
+            countEl.textContent = 1;
+            btn.classList.add('liked');
+        }
+
+        // Animacja pulsowania
+        btn.classList.add('pulsate');
+        setTimeout(() => btn.classList.remove('pulsate'), 300);
+
+        // Efekt „burst” (małe bąbelki wychodzące z przycisku)
+        for (let i = 0; i < 6; i++) {
+            const bubble = document.createElement('span');
+            bubble.className = 'burst';
+            const x = (Math.random() - 0.5) * 60 + 'px';
+            const y = (Math.random() - 0.5) * 60 + 'px';
+            bubble.style.setProperty('--x', x);
+            bubble.style.setProperty('--y', y);
+            btn.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 600);
+        }
+
+        // Zapis stanu w localStorage
+        localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+    });
+});
+
+
+</script>
+
+
 <style>
 .custom-slider .image-wrapper {
   position: relative; 
@@ -1532,7 +1667,7 @@ setInterval(updateTimestamps, 60000);
     display: flex;
     justify-content: space-between; /* autor po lewej, przycisk po prawej */
     align-items: center;
-    margin-top: 8px;
+    margin-top: auto;   /* klucz: przykleja stopkę do dołu post-content */
 }
 
 .read-more {
@@ -1647,6 +1782,7 @@ setInterval(updateTimestamps, 60000);
     display: flex;
     flex-direction: column; /* obrazek + treść w kolumnie */
     margin-bottom: 100px; /* możesz dać 50–70 jeśli chcesz więcej */
+    min-height: 428px;      /* minimalna wysokość, dopasuj do największego posta */
 }
 
 .post img {
@@ -1662,6 +1798,7 @@ setInterval(updateTimestamps, 60000);
     display: flex;
     flex-direction: column;
     gap: 8px;
+    flex-grow: 1;       /* post-content wypełnia wysokość postu */
 }
 
 .post-content .tag {
