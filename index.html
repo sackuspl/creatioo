@@ -770,35 +770,84 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
 
 
 <div id="my-unique-slider" class="slider-container" style="position: relative; width: 600px; margin: 0 auto;">
-    <!-- Wrapper slidera -->
-    <div class="custom-slider-wrapper">
-        <div class="custom-slider">
-            <img src="assets/images/mockups-home/mockup-home1.png" alt="">
-            <img src="assets/images/mockups-home/mockup-home2.png" alt="">
-            <img src="assets/images/mockups-home/mockup-home3.png" alt="">
-            <img src="https://picsum.photos/900/506?random=4" alt="">
-            <img src="https://picsum.photos/900/506?random=5" alt="">
-            <img src="https://picsum.photos/900/506?random=6" alt="">
-            <img src="https://picsum.photos/900/506?random=7" alt="">
-            <img src="https://picsum.photos/900/506?random=8" alt="">
-        </div>
+  <div class="custom-slider-wrapper">
+    <div class="custom-slider">
+      <div class="image-wrapper"><img src="assets/images/mockups-home/mockup-home1.png" alt=""></div>
+      <div class="image-wrapper"><img src="assets/images/mockups-home/mockup-home2.png" alt=""></div>
+      <div class="image-wrapper"><img src="assets/images/mockups-home/mockup-home3.png" alt=""></div>
+      <div class="image-wrapper"><img src="assets/images/mockups-home/mockup-home4.png" alt=""></div>
+      <div class="image-wrapper"><img src="assets/images/mockups-home/mockup-home5.png" alt=""></div>
+      <div class="image-wrapper"><img src="assets/images/mockups-home/mockup-home6.png" alt=""></div>
     </div>
+  </div>
 
-    <!-- Strzałki wewnątrz kontenera -->
-    <div class="arrow-slider prev"><i class="fas fa-chevron-left"></i></div>
-    <div class="arrow-slider next"><i class="fas fa-chevron-right"></i></div>
 
-    <!-- Wskaźniki pod sliderem -->
-    <div class="custom-slider-indicators"></div>
+  <div class="arrow-slider prev"><i class="fas fa-chevron-left"></i></div>
+  <div class="arrow-slider next"><i class="fas fa-chevron-right"></i></div>
+  <div class="custom-slider-indicators"></div>
 </div>
 
+<!-- OVERLAY PODGLĄDU -->
+<div id="image-preview-overlay">
+    <div id="image-wrapper">
+        <img id="image-preview-img" src="" alt="">
+        <img id="watermark-img" src="assets/images/watermark-16-9.png" alt="watermark">
+    </div>
+    <button id="image-preview-close">Zamknij</button>
+</div>
+
+
 </section>
+<style>
+.custom-slider .image-wrapper {
+  position: relative; 
+  flex: 0 0 100%; /* Każdy slajd zajmuje 100% szerokości slidera */
+}
 
+.custom-slider .image-wrapper img {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+}
 
+.custom-slider .image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('assets/images/watermark-16-9.png') center/cover no-repeat;
+  opacity: 1;
+  pointer-events: none;
+  border-radius: 12px;
+}
+
+</style>
+<script>
+    const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const img = new Image();
+img.src = 'assets/images/mockup.png';
+const watermark = new Image();
+watermark.src = 'assets/images/watermark.png';
+
+img.onload = () => {
+  canvas.width = img.width;
+  canvas.height = img.height;
+  ctx.drawImage(img, 0, 0);
+  watermark.onload = () => {
+    ctx.globalAlpha = 0.3;
+    ctx.drawImage(watermark, 0, 0, img.width, img.height);
+  };
+};
+
+</script>
 <script>
 (function() {
     const container = document.getElementById('my-unique-slider');
-    if (!container) return; // jeśli nie ma kontenera, nic nie rób
+    if (!container) return;
 
     const slider = container.querySelector('.custom-slider');
     const prev = container.querySelector('.arrow-slider.prev');
@@ -807,6 +856,11 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
     const images = slider.children;
     const total = images.length;
     let index = 0;
+    let intervalId = null;
+    let hasDisplayed = false; // czy slider był widoczny po raz pierwszy
+
+    const overlay = document.getElementById("image-preview-overlay");
+    const overlayImg = document.getElementById("image-preview-img");
 
     // Tworzenie wskaźników
     indicators.innerHTML = '';
@@ -838,17 +892,75 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
         showSlide(index);
     });
 
-    // Automatyczne przesuwanie
-    setInterval(() => {
-        index = (index + 1) % total;
-        showSlide(index);
-    }, 4000);
+    // --- Funkcje dla automatycznej animacji ---
+    function startInterval() {
+        if (!intervalId) {
+            intervalId = setInterval(() => {
+                index = (index + 1) % total;
+                showSlide(index);
+            }, 5000);
+        }
+    }
 
-    // Pokaż pierwsze zdjęcie od razu
-    showSlide(index);
+    function stopInterval() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    }
+
+    function displaySliderOnce() {
+        if (!hasDisplayed) {
+            showSlide(index);
+            hasDisplayed = true;
+        }
+    }
+
+    // Intersection Observer — uruchomienie po pojawieniu się slidera
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                displaySliderOnce();
+                startInterval();
+                observer.unobserve(container);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    observer.observe(container);
+
+    // --- PODGLĄD ZDJĘCIA ---
+    const sliderImages = container.querySelectorAll('.custom-slider img');
+
+    sliderImages.forEach(img => {
+        img.style.cursor = "pointer";
+        img.addEventListener("click", () => {
+            overlayImg.src = img.src;
+            overlay.classList.add("active");
+            stopInterval(); // zatrzymujemy animację
+        });
+    });
+
+    const closeBtn = document.getElementById("image-preview-close");
+
+    // Zamknięcie przycisk
+    closeBtn.addEventListener("click", () => {
+        overlay.classList.remove("active");
+        startInterval(); // wznawiamy animację po zamknięciu
+    });
+
+    // Zamknięcie klikając w tło
+    overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove("active");
+            startInterval(); // wznawiamy animację
+        }
+    });
+
 })();
-
 </script>
+
+
 
 
 
@@ -927,7 +1039,165 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
 .custom-slider-indicators div.active {
     background-color: #9b64f4; /* ciemniejszy szary dla aktywnego */
 }
+</style>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const sliderImages = document.querySelectorAll("#my-unique-slider .custom-slider img");
+    const overlay = document.getElementById("image-preview-overlay");
+    const overlayImg = document.getElementById("image-preview-img");
+    const closeBtn = document.getElementById("image-preview-close");
+    
+    let isMouseDown = false;
+
+    // Kliknięcie w obrazek otwiera go
+    sliderImages.forEach(img => {
+        img.style.cursor = "pointer";
+        img.addEventListener("click", () => {
+            overlayImg.src = img.src;
+            overlay.classList.add("active");
+
+            // ustaw tło lupy na aktualny obraz
+            magnifier.style.backgroundImage = `url(${img.src})`;
+        });
+    });
+
+    // Zamknij przez przycisk
+    closeBtn.addEventListener("click", () => {
+        overlay.classList.remove("active");
+        magnifier.style.display = "none";
+        isMouseDown = false;
+    });
+
+    // Zamknij klikając w tło (nie w obraz)
+    overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove("active");
+            magnifier.style.display = "none";
+            isMouseDown = false;
+        }
+    });
+
+    // OBSŁUGA LUPY
+    overlayImg.addEventListener("mousedown", e => {
+        isMouseDown = true;
+        magnifier.style.display = "block";
+        moveMagnifier(e);
+    });
+
+    overlay.addEventListener("mouseup", () => {
+        isMouseDown = false;
+        magnifier.style.display = "none";
+    });
+
+    overlay.addEventListener("mousemove", e => {
+        if (isMouseDown) moveMagnifier(e);
+    });
+
+function moveMagnifier(e) {
+    const rect = overlayImg.getBoundingClientRect();
+
+    // pozycja kursora względem obrazka
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const magnifierSize = 250; // średnica lupy
+
+    // ustaw środek lupy dokładnie na kursorem
+    magnifier.style.left = `${e.clientX - magnifierSize / 2}px`;
+    magnifier.style.top  = `${e.clientY - magnifierSize / 2}px`;
+
+    // procentowa pozycja tła lupy względem obrazu
+    const bgX = (x / rect.width) * 100;
+    const bgY = (y / rect.height) * 100;
+    magnifier.style.backgroundPosition = `${bgX}% ${bgY}%`;
+}
+
+});
+</script>
+
+
+
+<style>
+    /* FULLSCREEN OVERLAY */
+#image-preview-overlay {
+    position: fixed;
+    font-family: "Poppins", sans-serif;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.719);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease;
+}
+
+#image-preview-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#image-preview-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+    transition: transform .35s ease;
+    margin-bottom: 15px;
+}
+
+
+#image-preview-overlay.active #image-preview-img {
+    transform: scale(1);
+}
+
+/* PODŁUŻNY PRZYCISK ZAMKNIJ */
+#image-preview-close {
+    color: #ffffff;
+    margin-top: 25px;
+    padding: 0 35px;          /* podłużny efekt */
+    height: 50px;
+    min-width: 200px;         /* możesz zwiększyć np. do 260px */
+    border-radius: 50px;
+    border: none;
+    background: #9b64f4b0;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.205);
+    transition: transform .2s ease, background .2s ease;
+}
+
+#image-preview-close:hover {
+    transform: scale(1.05);
+    background: #804ad6b0;
+}
+
+#watermark-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;  /* nad obrazem */
+    border-radius: 12px;
+}
+#image-wrapper {
+    position: relative;
+    display: inline-block;
+    max-width: 60%;
+    max-height: 60%;
+    margin: 0 auto;
+}
 </style>
 
 
