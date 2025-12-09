@@ -879,58 +879,7 @@ document.addEventListener("DOMContentLoaded", () => setLanguage(currentLang));
 
 </style>
 
-<script>
-document.querySelectorAll('.like-btn').forEach(btn => {
-    const postEl = btn.closest('[data-id]');
-    const postId = postEl.dataset.id;
 
-    // Pobranie stanu polubionych postów z localStorage
-    let likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
-
-    // Ustawienie początkowego stanu przycisku
-    const countEl = btn.querySelector('.like-count');
-    countEl.textContent = likedPosts.includes(postId) ? 1 : 0;
-    if (likedPosts.includes(postId)) btn.classList.add('liked');
-
-    // Obsługa kliknięcia
-    btn.addEventListener('click', () => {
-        likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
-
-        if (likedPosts.includes(postId)) {
-            // Odbicie like
-            likedPosts = likedPosts.filter(id => id !== postId);
-            countEl.textContent = 0;
-            btn.classList.remove('liked');
-        } else {
-            // Dodanie like
-            likedPosts.push(postId);
-            countEl.textContent = 1;
-            btn.classList.add('liked');
-        }
-
-        // Animacja pulsowania
-        btn.classList.add('pulsate');
-        setTimeout(() => btn.classList.remove('pulsate'), 300);
-
-        // Efekt „burst” (małe bąbelki wychodzące z przycisku)
-        for (let i = 0; i < 6; i++) {
-            const bubble = document.createElement('span');
-            bubble.className = 'burst';
-            const x = (Math.random() - 0.5) * 60 + 'px';
-            const y = (Math.random() - 0.5) * 60 + 'px';
-            bubble.style.setProperty('--x', x);
-            bubble.style.setProperty('--y', y);
-            btn.appendChild(bubble);
-            setTimeout(() => bubble.remove(), 600);
-        }
-
-        // Zapis stanu w localStorage
-        localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
-    });
-});
-
-
-</script>
 
 
 <style>
@@ -2068,6 +2017,11 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 <!--End of Tawk.to Script-->
 
+
+
+
+
+<script type="module" src="js/firebase-like.js"></script>
 
 </body>
 </html>
