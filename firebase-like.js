@@ -34,18 +34,17 @@ document.querySelectorAll('.like-btn').forEach(btn => {
   onValue(likeRef, snapshot => {
     const post = snapshot.val();
     const newVal = post?.count || 0;
-    const oldVal = parseInt(countEl.textContent) || 0;
-    const duration = 300;
-    const startTime = performance.now();
 
-    function animateNumber(now) {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const current = Math.floor(progress * (newVal - oldVal) + oldVal);
-      countEl.textContent = current;
-      if (progress < 1) requestAnimationFrame(animateNumber);
+    // Aktualizacja licznika
+    countEl.textContent = newVal;
+
+    // Zmiana koloru jeśli użytkownik polubił
+    const user = auth.currentUser;
+    if (user && post?.users?.[user.uid]) {
+      btn.classList.add('liked');
+    } else {
+      btn.classList.remove('liked');
     }
-
-    requestAnimationFrame(animateNumber);
   });
 
   // Kliknięcie w przycisk
@@ -55,20 +54,24 @@ document.querySelectorAll('.like-btn').forEach(btn => {
 
     const userId = user.uid;
 
-    // Poprawiona transakcja – zwraca zawsze obiekt {count, users}
+    // Transakcja Like / Unlike
     runTransaction(likeRef, post => {
       if (!post) {
-        // jeśli post nie istnieje, tworzymy nowy obiekt
+        // jeśli post nie istnieje, tworzymy nowy obiekt z 1 like
         return { count: 1, users: { [userId]: true } };
       }
 
-      // jeśli użytkownik już polubił, nic nie robimy
-      if (post.users?.[userId]) return;
-
-      // zwiększamy count i dodajemy UID użytkownika
-      post.count = (post.count || 0) + 1;
       if (!post.users) post.users = {};
-      post.users[userId] = true;
+
+      if (post.users[userId]) {
+        // użytkownik już polubił -> odkliknięcie
+        post.count = Math.max((post.count || 1) - 1, 0);
+        delete post.users[userId];
+      } else {
+        // użytkownik nie polubił -> kliknięcie
+        post.count = (post.count || 0) + 1;
+        post.users[userId] = true;
+      }
 
       return post;
     });
