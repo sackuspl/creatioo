@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Galeria • Sacky Design</title>
+
+  <!-- MAIN CSS -->
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/fontawesome.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/sharp-solid.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/duotone.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/solid.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/regular.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/brands.css"/>
+
+  <!-- FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+
+  <style>
+
+    .gallery-hero {
+      padding-top: 180px;
+      padding-bottom: 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gallery-hero::before {
+      content: '';
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      top: -240px;
+      right: -160px;
+      pointer-events: none;
+    }
+
+    .gallery-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      margin: auto;
+    }
+
+    .gallery-hero h1 {
+      font-size: 72px;
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      font-weight: 900;
+    }
+
+    .gallery-hero h1 span {
+      color: var(--primary);
+    }
+
+    .gallery-hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    .gallery-grid-section {
+      padding-top: 40px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      cursor: pointer;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      transition: transform 0.45s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.1)
+      );
+
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-overlay h3 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .gallery-back {
+      text-align: center;
+      margin-top: 70px;
+    }
+
+    @media(max-width: 1000px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width: 700px) {
+
+      .gallery-hero h1 {
+        font-size: 48px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-item img {
+        height: 260px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-content">
+
+      <a href="/" style="text-decoration:none; color:inherit;">
+        <div class="logo">SACKY<span>DESIGN</span></div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Strona główna</a></li>
+          <li><a href="#gallery">Galeria</a></li>
+          <li><a href="#contact">Kontakt</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="gallery-hero">
+
+    <div class="container gallery-hero-content">
+
+      <div class="hero-eyebrow">
+        <i class="fa-solid fa-circle" style="font-size:7px;"></i>
+        Portfolio · Sacky Design
+      </div>
+
+      <h1>
+        Nasze <span>projekty</span>
+      </h1>
+
+      <p>
+        Wybrane realizacje brandingowe, projekty social media,
+        identyfikacje wizualne oraz nowoczesne materiały reklamowe.
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-grid-section" id="gallery">
+
+    <div class="container">
+
+      <div class="gallery-grid">
+
+        <div class="gallery-item">
+          <img src="../images/projects/1.jpg" alt="Projekt 1">
+          <div class="gallery-overlay">
+            <h3>Branding</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item">
+          <img src="../images/projects/2.jpg" alt="Projekt 2">
+          <div class="gallery-overlay">
+            <h3>Social Media</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item">
+          <img src="../images/projects/3.jpg" alt="Projekt 3">
+          <div class="gallery-overlay">
+            <h3>Identyfikacja</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item">
+          <img src="../images/projects/4.jpg" alt="Projekt 4">
+          <div class="gallery-overlay">
+            <h3>Nowoczesny Design</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item">
+          <img src="../images/projects/1.jpg" alt="Projekt 5">
+          <div class="gallery-overlay">
+            <h3>Projekt Reklamowy</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item">
+          <img src="../images/projects/2.jpg" alt="Projekt 6">
+          <div class="gallery-overlay">
+            <h3>Logo Design</h3>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="gallery-back">
+        <a href="/" class="btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          Powrót na stronę główną
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+
+      <h2 class="section-title">Kontakt</h2>
+
+      <form
+        action="https://formsubmit.co/sackydesign@gmail.com"
+        method="POST"
+        class="contact-form"
+      >
+
+        <input
+          type="text"
+          name="name"
+          placeholder="Twoje imię"
+          required
+        >
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Adres e-mail"
+          required
+        >
+
+        <textarea
+          name="message"
+          placeholder="Treść wiadomości"
+          required
+        ></textarea>
+
+        <button type="submit" class="btn">
+          Wyślij wiadomość
+          <i class="fa-solid fa-paper-plane" style="font-size:14px;"></i>
+        </button>
+
+      </form>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>
+      © 2026 <strong>SackyDesign</strong>
+      · Wszystkie prawa zastrzeżone
+    </p>
+  </footer>
+
+  <script>
+
+    // LIGHTBOX
+
+    const galleryImages = document.querySelectorAll('.gallery-item img');
+
+    galleryImages.forEach(image => {
+
+      image.addEventListener('click', () => {
+
+        const lightbox = document.createElement('div');
+
+        lightbox.classList.add('lightbox');
+
+        lightbox.innerHTML = `
+          <img src="${image.src}">
+        `;
+
+        document.body.appendChild(lightbox);
+
+        lightbox.addEventListener('click', () => {
+          lightbox.remove();
+        });
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
