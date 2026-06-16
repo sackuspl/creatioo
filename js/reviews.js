@@ -1,10 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const track    = document.getElementById("reviews-track");
   const dotsWrap = document.getElementById("reviews-dots");
   const prev     = document.querySelector(".prev-review");
   const next     = document.querySelector(".next-review");
 
-  const reviewsData = [
+  // Domyślne opinie — widoczne, jeśli baza Firestore jest jeszcze pusta
+  // lub aktualnie niedostępna. Dashboard nadpisuje tę listę.
+  const defaultReviews = [
     { name: "Marta Wiśniewska", role: "CEO, BrandLab",      text: "Współpraca z Sacky to czysta przyjemność. Logotyp, który stworzył dla nas, przeszedł nasze oczekiwania — minimalistyczny, a jednocześnie bardzo charakterystyczny.", stars: 5 },
     { name: "Tomasz Jabłoński",  role: "Founder, TJ Digital", text: "Profesjonalizm na najwyższym poziomie. Projekty zawsze na czas, poprawki bez problemów, a efekt końcowy za każdym razem robi wrażenie na klientach.", stars: 5 },
     { name: "Karolina Zając",   role: "Marketing, Novera",   text: "Identyfikacja wizualna, którą przygotował Sacky, całkowicie odświeżyła nasz wizerunek. Klienci od razu zauważyli zmianę i komentują bardzo pozytywnie.", stars: 5 },
@@ -13,11 +15,22 @@ document.addEventListener("DOMContentLoaded", () => {
     { name: "Bartek Nowicki",   role: "Restauracja Umami",   text: "Menu i materiały drukowane wyglądają rewelacyjnie. Goście często pytają kto to projektował — to chyba najlepszy dowód jakości.", stars: 5 },
   ];
 
+  let reviewsData = defaultReviews;
+
+  try {
+    const snap = await db.collection("reviews").orderBy("order").get();
+    if (!snap.empty) {
+      reviewsData = snap.docs.map(doc => doc.data());
+    }
+  } catch (err) {
+    console.error("Nie udało się wczytać opinii z Firestore, używam domyślnych:", err);
+  }
+
   const VISIBLE = 3;
   const GAP = 20;
   let index = 0;
   const total = reviewsData.length;
-  const maxIndex = total - VISIBLE;
+  const maxIndex = Math.max(0, total - VISIBLE);
 
   // inicjały do awatara
   function initials(name) {
@@ -42,34 +55,39 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   `).join("");
 
+  // Jeśli jest mniej opinii niż widocznych miejsc — chowamy nawigację
+  const showNav = total > VISIBLE;
+  prev.style.display = showNav ? "" : "none";
+  next.style.display = showNav ? "" : "none";
+
   // dots — jedna kropka na grupę 3
   const dotCount = Math.ceil(total / VISIBLE);
-  dotsWrap.innerHTML = Array.from({ length: dotCount }, (_, i) =>
+  dotsWrap.innerHTML = showNav ? Array.from({ length: dotCount }, (_, i) =>
     `<div class="reviews-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
-  ).join("");
+  ).join("") : "";
 
   const dots = dotsWrap.querySelectorAll(".reviews-dot");
 
-function update() {
-  const viewport = document.querySelector(".reviews-viewport");
-  const cardWidth = (viewport.offsetWidth - GAP * (VISIBLE - 1)) / VISIBLE;
-  const step = cardWidth + GAP;
-  track.style.transform = `translateX(-${index * step}px)`;
+  function update() {
+    const viewport = document.querySelector(".reviews-viewport");
+    const cardWidth = (viewport.offsetWidth - GAP * (VISIBLE - 1)) / VISIBLE;
+    const step = cardWidth + GAP;
+    track.style.transform = `translateX(-${index * step}px)`;
 
-  // sync dots
-  const activeDot = Math.min(Math.floor(index / VISIBLE), dotCount - 1);
-  dots.forEach((d, i) => d.classList.toggle("active", i === activeDot));
-}
+    // sync dots
+    const activeDot = Math.min(Math.floor(index / VISIBLE), dotCount - 1);
+    dots.forEach((d, i) => d.classList.toggle("active", i === activeDot));
+  }
 
-next.addEventListener("click", () => {
-  index = index >= maxIndex ? 0 : index + 1;
-  update();
-});
+  next.addEventListener("click", () => {
+    index = index >= maxIndex ? 0 : index + 1;
+    update();
+  });
 
-prev.addEventListener("click", () => {
-  index = index <= 0 ? maxIndex : index - 1;
-  update();
-});
+  prev.addEventListener("click", () => {
+    index = index <= 0 ? maxIndex : index - 1;
+    update();
+  });
 
   dots.forEach(d => {
     d.addEventListener("click", () => {
