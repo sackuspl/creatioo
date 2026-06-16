@@ -22,10 +22,17 @@
 </head>
 <body>
 
+<button class="scroll-top" id="scrollTopBtn" aria-label="Wróć na górę">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
   <!-- ═══════════════════════════════════════════ NAVBAR -->
   <header class="navbar" id="navbar">
     <div class="container nav-content">
-      <a href="/" class="logo-text">creatioo</span></a>
+      <a href="/" class="nav-logo">
+  <img src="assets/images/logo2.png" alt="creatioo" class="nav-logo-dark">
+  <img src="assets/images/logo.png"  alt="creatioo" class="nav-logo-light">
+</a>
 
       <nav>
         <ul class="nav-links">
@@ -351,6 +358,7 @@ cb.addEventListener('change', () => {
 
   <!-- ═══════════════════════════════════════════ CLIENTS -->
 <section class="clients-section" id="clients">
+  <div class="section-grid-bg"></div>
   <div class="container">
     <div class="section-header reveal">
       <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Klienci</div>
@@ -444,77 +452,117 @@ cb.addEventListener('change', () => {
   
    <script src="js/projects.js"></script>
 
-  <!-- ═══════════════════════════════════════════ CONTACT -->
-  <section class="contact-section" id="contact">
-    <div class="container contact-inner">
-      <div class="contact-left reveal">
-        <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Kontakt</div>
-        <h2>Zacznijmy<br>coś fajnego</h2>
-        <p>Opisz mi projekt, a odpiszę w ciągu 24 godzin z wyceną i planem działania.</p>
+<section class="contact-section" id="contact">
+  <div class="container contact-inner">
+    <div class="contact-left reveal">
+      <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Kontakt</div>
+      <h2>Zacznijmy<br>coś fajnego</h2>
+      <p>Opisz mi projekt, a odpiszę w ciągu 24 godzin z wyceną i planem działania.</p>
 
-        <div class="contact-info">
-          <a href="mailto:sackydesign@gmail.com" class="contact-link">
-            <i class="fa-solid fa-envelope"></i>
-            sackydesign@gmail.com
-          </a>
-          <a href="https://instagram.com" target="_blank" class="contact-link">
-            <i class="fa-brands fa-instagram"></i>
-            Instagram
-          </a>
+      <div class="contact-info">
+        <a href="mailto:sackydesign@gmail.com" class="contact-link">
+          <i class="fa-solid fa-envelope"></i>
+          sackydesign@gmail.com
+        </a>
+        <a href="https://instagram.com" target="_blank" class="contact-link">
+          <i class="fa-brands fa-instagram"></i>
+          Instagram
+        </a>
+      </div>
+
+      <div class="contact-faq">
+        <span class="contact-faq-title">Pytania i odpowiedzi</span>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>Ile trwa realizacja projektu?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Czas realizacji zależy od zakresu projektu — logo zazwyczaj gotowe jest w 3–5 dni roboczych, większe identyfikacje wizualne w 1–2 tygodnie.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>Jak wygląda proces współpracy?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Zaczynamy od briefu, potem przesyłam propozycje do wyboru. Po wyborze kierunku robię poprawki aż do Twojej pełnej satysfakcji.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>Jakie pliki otrzymam po realizacji?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Dostarczam pliki w formatach PNG, JPG, SVG oraz PDF — wszystko gotowe do druku i internetu.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>Czy oferujesz poprawki?</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Tak, każde zlecenie obejmuje rundę poprawek. Zależy mi, żebyś był w 100% zadowolony z efektu końcowego.</p>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <form
-        action="https://formsubmit.co/sackydesign@gmail.com"
-        method="POST"
-        class="contact-form reveal"
-      >
-        <div class="form-group">
-          <label for="name"><i class="fa-solid fa-user"></i> Imię</label>
-          <input type="text" id="name" name="name" placeholder="Jan Kowalski" required>
-        </div>
-        <div class="form-group">
-          <label for="email"><i class="fa-solid fa-envelope"></i> E-mail</label>
-          <input type="email" id="email" name="email" placeholder="jan@firma.pl" required>
-        </div>
-        <div class="form-group">
-          <label for="type"><i class="fa-solid fa-tag"></i> Rodzaj projektu</label>
-          <select id="type" name="type">
-            <option value="">Wybierz...</option>
-            <option>Logo & Identyfikacja</option>
-            <option>Social Media</option>
-            <option>Reklama & Druk</option>
-            <option>Inny projekt</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message"><i class="fa-solid fa-comment"></i> Wiadomość</label>
-          <textarea id="message" name="message" placeholder="Opisz projekt..." required></textarea>
-        </div>
-        <button type="submit" class="btn" style="width:100%; justify-content:center;">
-          Wyślij wiadomość
-          <i class="fa-solid fa-paper-plane"></i>
-        </button>
-      </form>
     </div>
-  </section>
 
-  <!-- ═══════════════════════════════════════════ FOOTER -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo-text">creatioo</span>
-        <p>Grafika, która mówi za Ciebie.</p>
+    <form
+      action="https://formsubmit.co/sackydesign@gmail.com"
+      method="POST"
+      class="contact-form reveal"
+    >
+      <div class="form-group">
+        <label for="name"><i class="fa-solid fa-user"></i> Imię</label>
+        <input type="text" id="name" name="name" placeholder="Jan Kowalski" required>
       </div>
-
-      <div class="footer-links">
-        <a href="#about">O mnie</a>
-        <a href="#features">Usługi</a>
-        <a href="#reviews">Opinie</a>
-        <a href="/gallery/">Galeria</a>
-        <a href="#contact">Kontakt</a>
+      <div class="form-group">
+        <label for="email"><i class="fa-solid fa-envelope"></i> E-mail</label>
+        <input type="email" id="email" name="email" placeholder="jan@firma.pl" required>
       </div>
+      <div class="form-group">
+        <label for="type"><i class="fa-solid fa-tag"></i> Rodzaj projektu</label>
+        <select id="type" name="type">
+          <option value="">Wybierz...</option>
+          <option>Logo & Identyfikacja</option>
+          <option>Social Media</option>
+          <option>Reklama & Druk</option>
+          <option>Inny projekt</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message"><i class="fa-solid fa-comment"></i> Wiadomość</label>
+        <textarea id="message" name="message" placeholder="Opisz projekt..." required></textarea>
+      </div>
+      <button type="submit" class="btn" style="width:100%; justify-content:center;">
+        Wyślij wiadomość
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+</section>
 
+ <footer class="footer">
+  <div class="footer-main">
+
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <img src="assets/images/logo2.png" alt="creatioo" class="footer-logo-dark">
+        <img src="assets/images/logo.png"  alt="creatioo" class="footer-logo-light">
+      </a>
+      <p class="footer-tagline">Grafika, która mówi za Ciebie.<br>Projekty tworzone z pasją i precyzją.</p>
       <div class="footer-social">
         <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
           <i class="fa-brands fa-instagram"></i>
@@ -528,10 +576,32 @@ cb.addEventListener('change', () => {
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <p>© 2026 <strong>creatioo</strong> · Wszystkie prawa zastrzeżone</p>
+    <div class="footer-col">
+      <span class="footer-col-title">Nawigacja</span>
+      <ul>
+        <li><a href="#about">O mnie</a></li>
+        <li><a href="#features">Usługi</a></li>
+        <li><a href="#reviews">Opinie</a></li>
+        <li><a href="/gallery/">Galeria</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+      </ul>
     </div>
-  </footer>
+
+    <div class="footer-col">
+      <span class="footer-col-title">Kontakt</span>
+      <ul>
+        <li><a href="mailto:sackydesign@gmail.com">sackydesign@gmail.com</a></li>
+        <li><a href="https://instagram.com" target="_blank">@creatioo</a></li>
+        <li><a href="https://instagram.com" target="_blank">Instagram DM</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 <strong>creatioo</strong> · Wszystkie prawa zastrzeżone</p>
+  </div>
+</footer>
 
   <script src="js/main.js"></script>
   <script src="js/reviews.js"></script>

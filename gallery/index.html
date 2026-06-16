@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>creatioo - Grafika która mówi</title>
 
-  <title>Galeria • Sacky Design</title>
-
-  <!-- MAIN CSS -->
-  <link rel="stylesheet" href="../css/style.css" />
-
-  <!-- FontAwesome -->
+  <!-- FontAwesome Pro -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/fontawesome.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/sharp-solid.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/duotone.css"/>
@@ -17,335 +13,177 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/regular.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/brands.css"/>
 
-  <!-- FONT -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
 
-  <style>
+  <link rel="stylesheet" href="css/style.css" />
 
-    .gallery-hero {
-      padding-top: 180px;
-      padding-bottom: 80px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
 
-    .gallery-hero::before {
-      content: '';
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
-      border-radius: 50%;
-      top: -240px;
-      right: -160px;
-      pointer-events: none;
-    }
-
-    .gallery-hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 760px;
-      margin: auto;
-    }
-
-    .gallery-hero h1 {
-      font-size: 72px;
-      line-height: 1;
-      letter-spacing: -2px;
-      margin-bottom: 24px;
-      font-weight: 900;
-    }
-
-    .gallery-hero h1 span {
-      color: var(--primary);
-    }
-
-    .gallery-hero p {
-      font-size: 18px;
-      color: var(--text-muted);
-      line-height: 1.8;
-    }
-
-    .gallery-grid-section {
-      padding-top: 40px;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .gallery-item {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius);
-      cursor: pointer;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-    }
-
-    .gallery-item:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 340px;
-      object-fit: cover;
-      transition: transform 0.45s ease;
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.05);
-    }
-
-    .gallery-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.55),
-        rgba(0,0,0,0.1)
-      );
-
-      display: flex;
-      align-items: flex-end;
-      padding: 24px;
-
-      opacity: 0;
-      transition: var(--transition);
-    }
-
-    .gallery-item:hover .gallery-overlay {
-      opacity: 1;
-    }
-
-    .gallery-overlay h3 {
-      color: #fff;
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .gallery-back {
-      text-align: center;
-      margin-top: 70px;
-    }
-
-    @media(max-width: 1000px) {
-      .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media(max-width: 700px) {
-
-      .gallery-hero h1 {
-        font-size: 48px;
-      }
-
-      .gallery-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .gallery-item img {
-        height: 260px;
-      }
-    }
-
-  </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="container nav-content">
+<button class="scroll-top" id="scrollTopBtn" aria-label="Wróć na górę">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
 
-      <a href="/" style="text-decoration:none; color:inherit;">
-        <div class="logo">SACKY<span>DESIGN</span></div>
-      </a>
+  <!-- ═══════════════════════════════════════════ NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-content">
+      <a href="/" class="nav-logo">
+  <img src="assets/images/logo2.png" alt="creatioo" class="nav-logo-dark">
+  <img src="assets/images/logo.png"  alt="creatioo" class="nav-logo-light">
+</a>
 
       <nav>
         <ul class="nav-links">
-          <li><a href="/">Strona główna</a></li>
-          <li><a href="#gallery">Galeria</a></li>
+          <li><a href="#about">O mnie</a></li>
+          <li><a href="#features">Usługi</a></li>
+          <li><a href="#clients">Klienci</a></li>
+          <li><a href="#reviews">Opinie</a></li>
+          <li><a href="#projects">Projekty</a></li>
           <li><a href="#contact">Kontakt</a></li>
         </ul>
       </nav>
 
+      <div class="nav-actions">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
+          <i class="fa-solid fa-moon" id="theme-icon"></i>
+        </button>
+        <a href="#contact" class="btn btn-sm">Wycena <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="gallery-hero">
-
-    <div class="container gallery-hero-content">
-
-      <div class="hero-eyebrow">
-        <i class="fa-solid fa-circle" style="font-size:7px;"></i>
-        Portfolio · Sacky Design
-      </div>
-
-      <h1>
-        Nasze <span>projekty</span>
-      </h1>
-
-      <p>
-        Wybrane realizacje brandingowe, projekty social media,
-        identyfikacje wizualne oraz nowoczesne materiały reklamowe.
-      </p>
-
+<!-- ── SEKCJA GALERII ─────────────────────────────────────── -->
+<section class="gallery-section" id="gallery">
+  <div class="container">
+ 
+<div class="gallery-header">
+  <div class="gallery-header-left">
+    <div class="eyebrow">
+      <i class="fa-solid fa-circle" style="font-size:6px;"></i> Galeria prac
     </div>
+    <h2>Projekty, które<br>mówią same za siebie</h2>
+    <p>Każdy projekt to osobna historia — kliknij, żeby poznać proces i wyzwania za nim stojące.</p>
+  </div>
+</div>
 
-  </section>
-
-  <!-- GALLERY -->
-  <section class="gallery-grid-section" id="gallery">
-
-    <div class="container">
-
-      <div class="gallery-grid">
-
-        <div class="gallery-item">
-          <img src="../images/projects/1.jpg" alt="Projekt 1">
-          <div class="gallery-overlay">
-            <h3>Branding</h3>
-          </div>
-        </div>
-
-        <div class="gallery-item">
-          <img src="../images/projects/2.jpg" alt="Projekt 2">
-          <div class="gallery-overlay">
-            <h3>Social Media</h3>
-          </div>
-        </div>
-
-        <div class="gallery-item">
-          <img src="../images/projects/3.jpg" alt="Projekt 3">
-          <div class="gallery-overlay">
-            <h3>Identyfikacja</h3>
-          </div>
-        </div>
-
-        <div class="gallery-item">
-          <img src="../images/projects/4.jpg" alt="Projekt 4">
-          <div class="gallery-overlay">
-            <h3>Nowoczesny Design</h3>
-          </div>
-        </div>
-
-        <div class="gallery-item">
-          <img src="../images/projects/1.jpg" alt="Projekt 5">
-          <div class="gallery-overlay">
-            <h3>Projekt Reklamowy</h3>
-          </div>
-        </div>
-
-        <div class="gallery-item">
-          <img src="../images/projects/2.jpg" alt="Projekt 6">
-          <div class="gallery-overlay">
-            <h3>Logo Design</h3>
-          </div>
-        </div>
-
+<div class="gallery-controls">
+    <button class="btn2 reveal" data-filter="home">
+      <i class="fa-solid fa-arrow-left"></i> Strona Główna
+    </button>
+  <div class="gallery-filters" role="group" aria-label="Filtruj projekty">
+    <button class="filter-btn active" data-filter="all">
+      <i class="fa-solid fa-border-all"></i> Wszystkie <span class="count" id="count-all">12</span>
+    </button>
+    <button class="filter-btn" data-filter="logo">
+      <i class="fa-solid fa-star"></i> Logotypy <span class="count" id="count-logo">4</span>
+    </button>
+        <button class="filter-btn" data-filter="banner">
+          <i class="fa-solid fa-image"></i> Bannery <span class="count" id="count-banner">3</span>
+        </button>
+        <button class="filter-btn" data-filter="wizytowka">
+          <i class="fa-solid fa-address-card"></i> Wizytówki <span class="count" id="count-wizytowka">2</span>
+        </button>
+        <button class="filter-btn" data-filter="produkt">
+          <i class="fa-solid fa-box"></i> Produkty <span class="count" id="count-produkt">3</span>
+        </button>
       </div>
+    </div>
+ 
+    <div class="gallery-grid" id="galleryGrid"></div>
+ 
+    <div class="gallery-empty" id="galleryEmpty">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <p>Brak projektów w tej kategorii</p>
+    </div>
+ 
+  </div>
+</section>
+ 
+ 
+<!-- ── LIGHTBOX (przed </body>) ───────────────────────────── -->
+<div class="project-modal" id="project-modal" role="dialog" aria-modal="true" aria-label="Podgląd projektu">
+  <div class="project-modal-backdrop" id="projectModalBackdrop"></div>
+  <div class="project-modal-panel">
+    <div class="project-modal-img-wrap">
+      <img id="projectModalImg" src="" alt="">
+    </div>
+    <div class="project-modal-info">
+      <div class="project-modal-cat" id="projectModalCat"></div>
+      <h2 class="project-modal-title" id="projectModalTitle"></h2>
+      <div class="project-modal-divider"></div>
+      <p class="project-modal-desc" id="projectModalDesc"></p>
+      <div class="project-modal-meta" id="projectModalMeta"></div>
+    </div>
+    <button class="project-modal-close" id="projectModalClose" aria-label="Zamknij">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="project-modal-nav">
+      <button class="project-modal-nav-btn" id="projectModalPrev" aria-label="Poprzedni">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <button class="project-modal-nav-btn" id="projectModalNext" aria-label="Następny">
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
 
-      <div class="gallery-back">
-        <a href="/" class="btn">
-          <i class="fa-solid fa-arrow-left"></i>
-          Powrót na stronę główną
+
+
+ <footer class="footer">
+  <div class="footer-main">
+
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <img src="assets/images/logo2.png" alt="creatioo" class="footer-logo-dark">
+        <img src="assets/images/logo.png"  alt="creatioo" class="footer-logo-light">
+      </a>
+      <p class="footer-tagline">Grafika, która mówi za Ciebie.<br>Projekty tworzone z pasją i precyzją.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" class="social-link" aria-label="Facebook">
+          <i class="fa-brands fa-facebook"></i>
+        </a>
+        <a href="mailto:sackydesign@gmail.com" class="social-link" aria-label="Email">
+          <i class="fa-solid fa-envelope"></i>
         </a>
       </div>
-
     </div>
 
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="container">
-
-      <h2 class="section-title">Kontakt</h2>
-
-      <form
-        action="https://formsubmit.co/sackydesign@gmail.com"
-        method="POST"
-        class="contact-form"
-      >
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Twoje imię"
-          required
-        >
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Adres e-mail"
-          required
-        >
-
-        <textarea
-          name="message"
-          placeholder="Treść wiadomości"
-          required
-        ></textarea>
-
-        <button type="submit" class="btn">
-          Wyślij wiadomość
-          <i class="fa-solid fa-paper-plane" style="font-size:14px;"></i>
-        </button>
-
-      </form>
-
+    <div class="footer-col">
+      <span class="footer-col-title">Nawigacja</span>
+      <ul>
+        <li><a href="#about">O mnie</a></li>
+        <li><a href="#features">Usługi</a></li>
+        <li><a href="#reviews">Opinie</a></li>
+        <li><a href="/gallery/">Galeria</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+      </ul>
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>
-      © 2026 <strong>SackyDesign</strong>
-      · Wszystkie prawa zastrzeżone
-    </p>
-  </footer>
+    <div class="footer-col">
+      <span class="footer-col-title">Kontakt</span>
+      <ul>
+        <li><a href="mailto:sackydesign@gmail.com">sackydesign@gmail.com</a></li>
+        <li><a href="https://instagram.com" target="_blank">@creatioo</a></li>
+        <li><a href="https://instagram.com" target="_blank">Instagram DM</a></li>
+      </ul>
+    </div>
 
-  <script>
+  </div>
 
-    // LIGHTBOX
+  <div class="footer-bottom">
+    <p>© 2026 <strong>creatioo</strong> · Wszystkie prawa zastrzeżone</p>
+  </div>
+</footer>
 
-    const galleryImages = document.querySelectorAll('.gallery-item img');
-
-    galleryImages.forEach(image => {
-
-      image.addEventListener('click', () => {
-
-        const lightbox = document.createElement('div');
-
-        lightbox.classList.add('lightbox');
-
-        lightbox.innerHTML = `
-          <img src="${image.src}">
-        `;
-
-        document.body.appendChild(lightbox);
-
-        lightbox.addEventListener('click', () => {
-          lightbox.remove();
-        });
-
-      });
-
-    });
-
-  </script>
-
+  <script src="js/main.js"></script>
+  <script src="js/gallery.js"></script>
 </body>
 </html>
