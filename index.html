@@ -36,9 +36,9 @@
 
       <nav>
         <ul class="nav-links">
-          <li><a href="#about">O mnie</a></li>
-          <li><a href="#features">Usługi</a></li>
-          <li><a href="#clients">Klienci</a></li>
+          <li><a href="/">Strona Główna</a></li>
+          <li><a href="#about">Informacje</a></li>
+          <li><a href="#features">Oferta</a></li>
           <li><a href="#reviews">Opinie</a></li>
           <li><a href="#projects">Projekty</a></li>
           <li><a href="#contact">Kontakt</a></li>
@@ -46,10 +46,11 @@
       </nav>
 
       <div class="nav-actions">
-        <button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
-          <i class="fa-solid fa-moon" id="theme-icon"></i>
-        </button>
-        <a href="#contact" class="btn btn-sm">Wycena <i class="fa-solid fa-arrow-right"></i></a>
+<button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
+  <i class="fa-solid fa-moon icon-moon"></i>
+  <i class="fa-solid fa-sun icon-sun"></i>
+</button>
+        <a href="#contact" class="btn btn-sm">Skontaktuj się <i class="fa-solid fa-arrow-right"></i></a>
       </div>
     </div>
   </header>
@@ -169,7 +170,7 @@
   </div>
     </div>
 </div>
-    <div class="scroll-indicator" id="scroll-indicator">
+    <div class="scroll-indicator reveal" id="scroll-indicator">
       <i class="fa-solid fa-chevron-down"></i>
     </div>
   </section>
@@ -249,7 +250,6 @@ cb.addEventListener('change', () => {
 
     <!-- ══ PRAWA KOLUMNA: treść ══ -->
     <div class="about-content">
-      <div class="eyebrow reveal"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> O mnie</div>
       <h2 class="reveal">Cześć, jestem<br><span class="gradient-text">Sacky</span></h2>
       <p class="reveal">
         Grafik z pasją do minimalizmu i czystego designu. Od ponad 5 lat pomagam markom
@@ -278,8 +278,8 @@ cb.addEventListener('change', () => {
   <section class="features-section" id="features">
     <div class="container">
       <div class="section-header reveal">
-        <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Usługi</div>
         <h2>Co mogę dla Ciebie zrobić</h2>
+         <p class="section-sub">Kompleksowe wsparcie w projektowaniu Twojej marki</p>
       </div>
 
       <div class="features-grid">
@@ -333,8 +333,8 @@ cb.addEventListener('change', () => {
   <section class="reviews-section" id="reviews">
     <div class="container">
       <div class="section-header reveal">
-        <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Opinie</div>
         <h2>Co mówią klienci</h2>
+              <p class="section-sub">Opinie osób, które skorzystały z moich usług i efektów współpracy</p>
       </div>
 
       <div class="reviews-slider">
@@ -361,9 +361,8 @@ cb.addEventListener('change', () => {
   <div class="section-grid-bg"></div>
   <div class="container">
     <div class="section-header reveal">
-      <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Klienci</div>
       <h2>Zaufali mi</h2>
-      <p class="section-sub">Marki i firmy, dla których miałem przyjemność tworzyć</p>
+      <p class="section-sub">Projekty i firmy, dla których miałem przyjemność tworzyć</p>
     </div>
   </div>
 
@@ -418,8 +417,8 @@ cb.addEventListener('change', () => {
   <section class="projects-section" id="projects">
     <div class="container">
       <div class="section-header reveal">
-        <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Portfolio</div>
-        <h2>Wybrane projekty</h2>
+        <h2>Wykonane projekty</h2>
+          <p class="section-sub">Obszerne portfolio moich realizacji</p>
       </div>
 
 <div class="projects-slider">
@@ -455,7 +454,6 @@ cb.addEventListener('change', () => {
 <section class="contact-section" id="contact">
   <div class="container contact-inner">
     <div class="contact-left reveal">
-      <div class="eyebrow"><i class="fa-solid fa-circle-small" style="font-size:8px;"></i> Kontakt</div>
       <h2>Zacznijmy<br>coś fajnego</h2>
       <p>Opisz mi projekt, a odpiszę w ciągu 24 godzin z wyceną i planem działania.</p>
 
@@ -579,11 +577,12 @@ cb.addEventListener('change', () => {
     <div class="footer-col">
       <span class="footer-col-title">Nawigacja</span>
       <ul>
-        <li><a href="#about">O mnie</a></li>
-        <li><a href="#features">Usługi</a></li>
-        <li><a href="#reviews">Opinie</a></li>
-        <li><a href="/gallery/">Galeria</a></li>
-        <li><a href="#contact">Kontakt</a></li>
+          <li><a href="#">Strona Główna</a></li>
+          <li><a href="#about">Informacje</a></li>
+          <li><a href="#features">Oferta</a></li>
+          <li><a href="#reviews">Opinie</a></li>
+          <li><a href="#projects">Projekty</a></li>
+          <li><a href="#contact">Kontakt</a></li>
       </ul>
     </div>
 

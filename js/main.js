@@ -97,18 +97,13 @@ document.addEventListener('click', (e) => {
 
 // ── THEME TOGGLE ─────────────────────────────────────────────
 const themeToggle = document.getElementById('theme-toggle');
-const themeIcon   = document.getElementById('theme-icon');
-const htmlEl      = document.documentElement;
+const htmlEl = document.documentElement;
 
 function applyTheme(theme) {
   htmlEl.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
-  if (themeIcon) {
-    themeIcon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-  }
 }
 
-// przywróć zapisany motyw (domyślnie dark)
 applyTheme(localStorage.getItem('theme') || 'dark');
 
 themeToggle?.addEventListener('click', () => {
@@ -554,3 +549,5 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft')  { if (currentIndex > 0) { currentIndex--; renderLightbox(); } }
   if (e.key === 'ArrowRight') { if (currentIndex < currentList.length - 1) { currentIndex++; renderLightbox(); } }
 });
+
+

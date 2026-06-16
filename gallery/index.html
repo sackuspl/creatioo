@@ -31,27 +31,28 @@
   <!-- ═══════════════════════════════════════════ NAVBAR -->
   <header class="navbar" id="navbar">
     <div class="container nav-content">
-      <a href="/" class="nav-logo">
+      <a href="../" class="nav-logo">
   <img src="assets/images/logo2.png" alt="creatioo" class="nav-logo-dark">
   <img src="assets/images/logo.png"  alt="creatioo" class="nav-logo-light">
 </a>
 
       <nav>
         <ul class="nav-links">
-          <li><a href="#about">O mnie</a></li>
-          <li><a href="#features">Usługi</a></li>
-          <li><a href="#clients">Klienci</a></li>
-          <li><a href="#reviews">Opinie</a></li>
-          <li><a href="#projects">Projekty</a></li>
-          <li><a href="#contact">Kontakt</a></li>
+          <li><a href="../">Strona Główna</a></li>
+          <li><a href="../index.html#about">Informacje</a></li>
+          <li><a href="../index.html#features">Oferta</a></li>
+          <li><a href="../index.html#reviews">Opinie</a></li>
+          <li><a href="../index.html#projects">Projekty</a></li>
+          <li><a href="../index.html#contact">Kontakt</a></li>
         </ul>
       </nav>
 
       <div class="nav-actions">
-        <button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
-          <i class="fa-solid fa-moon" id="theme-icon"></i>
-        </button>
-        <a href="#contact" class="btn btn-sm">Wycena <i class="fa-solid fa-arrow-right"></i></a>
+<button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
+  <i class="fa-solid fa-moon icon-moon"></i>
+  <i class="fa-solid fa-sun icon-sun"></i>
+</button>
+        <a href="../index.html#contact" class="btn btn-sm">Skontaktuj się <i class="fa-solid fa-arrow-right"></i></a>
       </div>
     </div>
   </header>
@@ -71,9 +72,9 @@
 </div>
 
 <div class="gallery-controls">
-    <button class="btn2 reveal" data-filter="home">
-      <i class="fa-solid fa-arrow-left"></i> Strona Główna
-    </button>
+<button class="btn2 reveal" onclick="window.location.href='../'">
+  <i class="fa-solid fa-arrow-left"></i> Strona Główna
+</button>
   <div class="gallery-filters" role="group" aria-label="Filtruj projekty">
     <button class="filter-btn active" data-filter="all">
       <i class="fa-solid fa-border-all"></i> Wszystkie <span class="count" id="count-all">12</span>
@@ -104,7 +105,6 @@
 </section>
  
  
-<!-- ── LIGHTBOX (przed </body>) ───────────────────────────── -->
 <div class="project-modal" id="project-modal" role="dialog" aria-modal="true" aria-label="Podgląd projektu">
   <div class="project-modal-backdrop" id="projectModalBackdrop"></div>
   <div class="project-modal-panel">

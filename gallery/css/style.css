@@ -175,7 +175,7 @@ h3 { font-size: 20px; font-weight: 700; }
 .section-header .eyebrow { margin-bottom: 16px; }
 .section-header h2 { margin-bottom: 16px; }
 .section-sub {
-  font-size: 17px;
+  font-size: 16px;
   color: var(--text-muted);
   max-width: 500px;
   margin: 0 auto;
@@ -345,20 +345,67 @@ h3 { font-size: 20px; font-weight: 700; }
 }
 
 .theme-toggle {
-  width: 38px; height: 38px;
-  border-radius: var(--r-xs);
-  border: 1px solid var(--border-soft);
-  background: var(--surface);
-  color: var(--text-muted);
+  transform: translateX(-10px);
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
-  font-size: 15px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all var(--dur) var(--ease);
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1.3rem;
 }
-.theme-toggle:hover {
-  border-color: var(--border);
-  color: var(--accent);
-  transform: translateY(-2px);
+
+.theme-toggle i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+              opacity 0.35s ease,
+              color 0.4s ease,
+              filter 0.2s ease;
+}
+
+/* Domyślnie (dark) – widoczny księżyc */
+.icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+  color: #cbd5e1;
+}
+.icon-sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+  color: #fbbf24;
+}
+
+/* Jasny motyw – widoczne słońce */
+[data-theme="light"] .icon-moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+[data-theme="light"] .icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle:hover i {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* light mode */
+[data-theme="light"] .hero-stats {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(168, 85, 247, 0.18);
+  box-shadow:
+    0 8px 32px rgba(100, 80, 160, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
 }
 
 /* ── HERO ────────────────────────────────────────────────── */
@@ -3089,6 +3136,7 @@ h3 { font-size: 20px; font-weight: 700; }
 .gallery-item:hover .gallery-item-icon  { opacity: 1; transform: scale(1); }
 
 .gallery-item-badge {
+  display: none;
   position: absolute;
   top: 10px; left: 10px;
   font-size: 9px;
