@@ -1170,3 +1170,349 @@ a:hover { text-decoration: underline; }
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE STYLES — max-width: 768px
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── LAYOUT ─────────────────────────────────────────────── */
+  #app.visible {
+    flex-direction: column;
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 16px;
+    padding-bottom: 90px; /* miejsce na dolny nav */
+  }
+
+  /* ── SIDEBAR → DOLNY PASEK NAWIGACJI ────────────────────── */
+  .sidebar {
+    width: 100%;
+    min-height: unset;
+    height: 64px;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    background: rgba(12, 12, 20, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 200;
+    padding: 0;
+  }
+
+  /* Ukryj logo i footer w sidebar na mobile */
+  .sidebar-logo,
+  .sidebar-footer,
+  .nav-label {
+    display: none;
+  }
+
+  /* Nav jako poziomy rząd ikon */
+  .sidebar-nav {
+    flex-direction: row;
+    padding: 0;
+    gap: 0;
+    align-items: stretch;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .nav-item {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    border-radius: 0;
+    font-size: 0.62rem;
+    font-weight: 500;
+    flex: 1;
+    color: var(--text-dim);
+    letter-spacing: 0;
+  }
+
+  .nav-item i {
+    width: auto;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .nav-item.active {
+    background: none;
+    color: var(--accent);
+    position: relative;
+  }
+
+  /* Aktywna zakładka — linia u góry */
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 0 0 2px 2px;
+  }
+
+  .nav-item.active i {
+    color: var(--accent);
+  }
+
+  /* ── NAGŁÓWEK STRONY ────────────────────────────────────── */
+  .page-header {
+    margin-bottom: 20px;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.8rem;
+  }
+
+  /* ── OVERVIEW GRID ──────────────────────────────────────── */
+  .overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .overview-card {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .overview-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .overview-num {
+    font-size: 1.3rem;
+  }
+
+  .overview-label {
+    font-size: 0.72rem;
+  }
+
+  /* ── KARTY ──────────────────────────────────────────────── */
+  .card {
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+  }
+
+  .card-head {
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 0.875rem;
+  }
+
+  /* ── LISTA DRAG ─────────────────────────────────────────── */
+  .drag-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .drag-thumb,
+  .drag-thumb-placeholder {
+    width: 38px;
+    height: 38px;
+  }
+
+  .drag-name {
+    font-size: 0.82rem;
+  }
+
+  .drag-meta {
+    font-size: 0.72rem;
+  }
+
+  /* Na mobile chowamy handle (drag = swipe niepraktyczny) */
+  .drag-handle {
+    display: none;
+  }
+
+  .btn-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.82rem;
+  }
+
+  /* ── ZAKŁADKI KATEGORII ─────────────────────────────────── */
+  .gallery-dash-tabs {
+    gap: 6px;
+    padding-bottom: 14px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gallery-dash-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-dash-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+  }
+
+  /* ── MODAL ──────────────────────────────────────────────── */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    border-radius: var(--r) var(--r) 0 0;
+    padding: 24px 20px 32px;
+    max-width: 100%;
+    width: 100%;
+    max-height: 90dvh;
+    overflow-y: auto;
+    animation: modalSlideUp 0.28s var(--ease);
+  }
+
+  @keyframes modalSlideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* Pasek przeciągania na górze modala */
+  .modal::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-head {
+    margin-bottom: 20px;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-field {
+    margin-bottom: 14px;
+  }
+
+  .modal-foot {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .btn-ghost,
+  .btn-save {
+    width: 100%;
+    padding: 12px;
+    font-size: 0.9rem;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* ── CONFIRM ────────────────────────────────────────────── */
+  .confirm-overlay {
+    align-items: flex-end;
+  }
+
+  .confirm-box {
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--r) var(--r) 0 0;
+    padding: 24px 24px 36px;
+  }
+
+  .confirm-btns {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .btn-confirm-cancel,
+  .btn-confirm-delete {
+    width: 100%;
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  /* ── LOGIN ──────────────────────────────────────────────── */
+  .login-card {
+    padding: 36px 24px 28px;
+  }
+
+  /* ── TOAST ──────────────────────────────────────────────── */
+  #toast {
+    bottom: 80px; /* nad dolnym nav */
+    right: 12px;
+    left: 12px;
+  }
+
+  .toast-msg {
+    max-width: 100%;
+    font-size: 0.82rem;
+  }
+
+  /* ── PRZYCISK DODAJ ─────────────────────────────────────── */
+  .btn-add {
+    font-size: 0.78rem;
+    padding: 7px 13px;
+  }
+
+}
+
+/* ── BARDZO MAŁE EKRANY (< 380px) ──────────────────────── */
+@media (max-width: 380px) {
+  .overview-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .overview-card {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .overview-icon {
+    display: none;
+  }
+
+  .main {
+    padding: 12px;
+  }
+
+  .nav-item {
+    font-size: 0.55rem;
+  }
+}
