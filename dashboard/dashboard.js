@@ -142,7 +142,7 @@ document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
 
 /* ── LOAD ALL ───────────────────────────────────────────── */
 async function loadAll() {
-  await Promise.all([loadReviews(), loadClients(), await loadGallery(), loadProjects()]);
+  await Promise.all([loadReviews(), loadClients(), loadGallery(), loadProjects()]);
   updateOverview();
 }
 
@@ -727,10 +727,11 @@ async function loadGallery() {
   listEl.innerHTML = `<div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>`;
 
   try {
-    const snap = await db.collection('gallery').orderBy('order').get();
+    const snap = await db.collection('gallery').get(); // ← bez orderBy
     State.gallery = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
     State.gallery = [];
+    console.error('Galeria błąd:', e);
     toast('Błąd wczytywania galerii', 'error');
   }
 
