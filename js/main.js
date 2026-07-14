@@ -1,3 +1,10 @@
+/* ── PRELOADER ─────────────────────────────────────────────── */
+
+window.addEventListener('load', () => {
+  document.getElementById('preloader').classList.add('loaded');
+});
+
+
 // ── REVEAL ON SCROLL ────────────────────────────────────────
 const revealEls = document.querySelectorAll('.reveal');
 
