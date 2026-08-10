@@ -16,7 +16,7 @@
 
   <!-- Open Graph Meta Tags -->
 <meta property="og:title" content="creatioo.eu - Tworzymy, by wyróżniać.">
-<meta property="og:description" content="Kreatywne projekty, które przyciągają wzrok. Dd logotypów i identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
+<meta property="og:description" content="Kreatywne projekty, które przyciągają wzrok. Dd identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
 <meta property="og:url" content="https://creatioo.eu">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sackuspl.github.io/creatioo/assets/images/og-image.png">
@@ -27,7 +27,7 @@
 <!-- Twitter Card Tags -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="creatioo.eu - Tworzymy, by wyróżniać.">
-<meta name="twitter:description" content="Kreatywne projekty, które przyciągają wzrok. Dd logotypów i identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
+<meta name="twitter:description" content="Kreatywne projekty, które przyciągają wzrok. Dd identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
 <meta name="twitter:image" content="https://sackuspl.github.io/creatioo/assets/images/og-image.png">
 <meta name="twitter:url" content="https://creatioo.eu">
 
@@ -374,12 +374,12 @@ cb.addEventListener('change', () => {
   </section>
 
 
-  <!-- ═══════════════════════════════════════════ REVIEWS -->
+<!-- ═══════════════════════════════════════════ REVIEWS -->
   <section class="reviews-section" id="reviews">
     <div class="container">
       <div class="section-header reveal">
         <h2>Co mówią klienci</h2>
-              <p class="section-sub">Opinie osób, które skorzystały z moich usług i efektów współpracy</p>
+        <p class="section-sub">Opinie osób, które skorzystały z moich usług i efektów współpracy</p>
       </div>
 
       <div class="reviews-slider">
@@ -397,8 +397,56 @@ cb.addEventListener('change', () => {
       </div>
 
       <div class="reviews-dots" id="reviews-dots"></div>
+
+      <!-- NOWE: przycisk otwierający formularz -->
+      <div class="review-submit-wrap">
+        <button class="btn-submit-review" id="openReviewFormBtn">
+          <i class="fa-regular fa-pen-to-square"></i> Prześlij opinię
+        </button>
+      </div>
     </div>
   </section>
+
+  <!-- NOWE: modal formularza opinii (publiczny) -->
+  <div class="review-form-overlay" id="publicReviewOverlay">
+    <div class="review-form-box">
+      <button class="review-form-close" id="closePublicReviewForm" aria-label="Zamknij">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h3>Podziel się opinią</h3>
+      <p class="review-form-sub">Twoja opinia pojawi się na stronie po zatwierdzeniu.</p>
+
+      <form id="publicReviewForm" novalidate>
+        <div class="pr-field">
+          <label for="prName">Imię i nazwisko *</label>
+          <input type="text" id="prName" required maxlength="60">
+        </div>
+        <div class="pr-field">
+          <label for="prRole">Stanowisko / Firma</label>
+          <input type="text" id="prRole" maxlength="60">
+        </div>
+        <div class="pr-field">
+          <label>Ocena</label>
+          <div class="pr-stars" id="prStars">
+            <button type="button" class="pr-star-btn" data-v="1"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="pr-star-btn" data-v="2"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="pr-star-btn" data-v="3"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="pr-star-btn" data-v="4"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="pr-star-btn" data-v="5"><i class="fa-solid fa-star"></i></button>
+          </div>
+        </div>
+        <div class="pr-field">
+          <label for="prText">Treść opinii *</label>
+          <textarea id="prText" rows="4" maxlength="500" required></textarea>
+        </div>
+
+        <div class="pr-status" id="prStatus"></div>
+
+        <button type="submit" class="btn-submit-review" id="prSubmitBtn">Wyślij do zatwierdzenia</button>
+      </form>
+    </div>
+  </div>
+  
 
 
   <!-- ═══════════════════════════════════════════ CLIENTS -->
@@ -539,38 +587,44 @@ cb.addEventListener('change', () => {
 
     </div>
 
-    <form
-      action="https://formsubmit.co/sackydesign@gmail.com"
-      method="POST"
-      class="contact-form reveal"
-    >
-      <div class="form-group">
-        <label for="name"><i class="fa-solid fa-user"></i> Imię</label>
-        <input type="text" id="name" name="name" placeholder="Jan Kowalski" required>
-      </div>
-      <div class="form-group">
-        <label for="email"><i class="fa-solid fa-envelope"></i> E-mail</label>
-        <input type="email" id="email" name="email" placeholder="jan@firma.pl" required>
-      </div>
-      <div class="form-group">
-        <label for="type"><i class="fa-solid fa-tag"></i> Rodzaj projektu</label>
-        <select id="type" name="type">
-          <option value="">Wybierz...</option>
-          <option>Logo & Identyfikacja</option>
-          <option>Social Media</option>
-          <option>Reklama & Druk</option>
-          <option>Inny projekt</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="message"><i class="fa-solid fa-comment"></i> Wiadomość</label>
-        <textarea id="message" name="message" placeholder="Opisz projekt..." required></textarea>
-      </div>
-      <button type="submit" class="btn" style="width:100%; justify-content:center;">
-        Wyślij wiadomość
-        <i class="fa-solid fa-paper-plane"></i>
-      </button>
-    </form>
+<form
+  action="https://formspree.io/f/mbgrgnye"
+  method="POST"
+  class="contact-form reveal"
+>
+  <!-- honeypot anty-spam -->
+  <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
+  <input type="hidden" name="_subject" value="Nowe zapytanie z formularza kontaktowego">
+
+  <div class="form-group">
+    <label for="name"><i class="fa-solid fa-user"></i> Imię</label>
+    <input type="text" id="name" name="name" placeholder="Jan Kowalski" required autocomplete="name">
+  </div>
+  <div class="form-group">
+    <label for="email"><i class="fa-solid fa-envelope"></i> Twój E-mail</label>
+    <input type="email" id="email" name="email" placeholder="jan@firma.pl" required autocomplete="email">
+  </div>
+  <div class="form-group">
+    <label for="type"><i class="fa-solid fa-tag"></i> Rodzaj projektu</label>
+    <select id="type" name="type" required>
+      <option value="">Wybierz...</option>
+      <option>Pytanie & Inne</option>
+      <option>Logo & Identyfikacja</option>
+      <option>Social Media</option>
+      <option>Reklama & Druk</option>
+      <option>Inny projekt</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="message"><i class="fa-solid fa-comment"></i> Wiadomość</label>
+    <textarea id="message" name="message" placeholder="Opisz projekt..." required></textarea>
+  </div>
+  <button type="submit" class="btn" style="width:100%; justify-content:center;">
+    Wyślij wiadomość
+    <i class="fa-solid fa-paper-plane"></i>
+  </button>
+</form>
   </div>
 </section>
 

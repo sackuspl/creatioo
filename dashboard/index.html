@@ -95,6 +95,14 @@
         <i class="fa-regular fa-comment-dots"></i> Opinie
       </button>
       <button
+  class="nav-item"
+  data-section="sectionPending"
+  data-title="Opinie oczekujące"
+  data-sub="Zatwierdź lub odrzuć przesłane opinie">
+  <i class="fa-regular fa-hourglass-half"></i> Oczekujące
+  <span class="badge" id="pendingNavBadge" style="margin-left:auto;"></span>
+</button>
+      <button
         class="nav-item"
         data-section="sectionClients"
         data-title="Zaufali mi"
@@ -192,6 +200,21 @@
         </div>
       </div>
     </div>
+
+    <div class="section" id="sectionPending">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">
+        <i class="fa-regular fa-hourglass-half"></i>
+        Opinie oczekujące
+        <span class="badge" id="pendingCount">0</span>
+      </div>
+    </div>
+    <div id="pendingList">
+      <div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>
+    </div>
+  </div>
+</div>
 
     <!-- ── SEKCJA: KLIENCI ─────────────── -->
     <div class="section" id="sectionClients">
@@ -463,8 +486,8 @@
      ══════════════════════════════════ -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
-    <div class="confirm-icon"><i class="fa-solid fa-trash"></i></div>
-    <h3>Potwierdź usunięcie</h3>
+    <div class="confirm-icon" id="confirmIcon"><i class="fa-solid fa-trash"></i></div>
+    <h3 id="confirmTitle">Potwierdź usunięcie</h3>
     <p id="confirmMsg">Czy na pewno chcesz usunąć ten element?</p>
     <div class="confirm-btns">
       <button class="btn-confirm-cancel" id="confirmCancel">Anuluj</button>

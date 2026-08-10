@@ -9,6 +9,7 @@ const State = {
   clients: [],
   projects: [],
   gallery: [],
+  pending: [],
 };
 
 /* ── DRAG & DROP ────────────────────────────────────────── */
@@ -30,13 +31,31 @@ function toast(msg, type = 'success') {
 }
 
 /* ── CONFIRM ────────────────────────────────────────────── */
-function confirm(message, onConfirm) {
-  const overlay = document.getElementById('confirmOverlay');
-  const msgEl   = document.getElementById('confirmMsg');
-  const okBtn   = document.getElementById('confirmOk');
+function confirm(message, onConfirm, options = {}) {
+  const overlay   = document.getElementById('confirmOverlay');
+  const msgEl     = document.getElementById('confirmMsg');
+  const titleEl   = document.getElementById('confirmTitle');
+  const iconEl    = document.getElementById('confirmIcon');
+  const okBtn     = document.getElementById('confirmOk');
   const cancelBtn = document.getElementById('confirmCancel');
 
-  msgEl.textContent = message;
+  const {
+    variant      = 'danger',           // 'danger' | 'success'
+    icon         = 'fa-trash',
+    title        = 'Potwierdź usunięcie',
+    confirmLabel = 'Usuń',
+  } = options;
+
+  msgEl.textContent   = message;
+  titleEl.textContent = title;
+  iconEl.innerHTML    = `<i class="fa-solid ${icon}"></i>`;
+  okBtn.textContent   = confirmLabel;
+
+  iconEl.classList.toggle('confirm-icon--success', variant === 'success');
+  iconEl.classList.toggle('confirm-icon--danger', variant !== 'success');
+  okBtn.classList.toggle('btn-confirm-approve', variant === 'success');
+  okBtn.classList.toggle('btn-confirm-delete', variant !== 'success');
+
   overlay.classList.add('open');
 
   const close = () => overlay.classList.remove('open');
@@ -142,7 +161,7 @@ document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
 
 /* ── LOAD ALL ───────────────────────────────────────────── */
 async function loadAll() {
-  await Promise.all([loadReviews(), loadClients(), loadGallery(), loadProjects()]);
+  await Promise.all([loadReviews(), loadClients(), loadGallery(), loadProjects(), loadPending()]);
   updateOverview();
 }
 
@@ -304,6 +323,113 @@ function deleteReview(id) {
     }
   });
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   OPINIE OCZEKUJĄCE (pendingReviews)
+   ═══════════════════════════════════════════════════════════ */
+async function loadPending() {
+  const listEl = document.getElementById('pendingList');
+  listEl.innerHTML = `<div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>`;
+
+  try {
+    const snap = await db.collection('pendingReviews').orderBy('createdAt', 'desc').get();
+    State.pending = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    State.pending = [];
+    toast('Błąd wczytywania oczekujących opinii', 'error');
+  }
+
+  renderPending();
+}
+
+function renderPending() {
+  const listEl = document.getElementById('pendingList');
+  document.getElementById('pendingCount').textContent = State.pending.length;
+
+  const navBadge = document.getElementById('pendingNavBadge');
+  if (navBadge) {
+    navBadge.textContent = State.pending.length || '';
+    navBadge.style.display = State.pending.length ? '' : 'none';
+  }
+
+  if (!State.pending.length) {
+    listEl.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-regular fa-circle-check"></i>
+        <p>Brak oczekujących opinii.</p>
+      </div>`;
+    return;
+  }
+
+  listEl.innerHTML = '';
+  listEl.className = 'drag-list';
+
+  State.pending.forEach(r => {
+    const el = document.createElement('div');
+    el.className = 'drag-item';
+    el.dataset.id = r.id;
+
+    const starsHtml = Array.from({ length: 5 }, (_, si) =>
+      `<i class="fa-${si < r.stars ? 'solid' : 'regular'} fa-star${si < r.stars ? '' : ' empty'}"></i>`
+    ).join('');
+
+    el.innerHTML = `
+      <div class="drag-thumb-placeholder"><i class="fa-regular fa-user"></i></div>
+      <div class="drag-info">
+        <div class="drag-name">${escHtml(r.name)}</div>
+        <div class="drag-meta">${escHtml(r.role || '')} · <span class="stars-preview">${starsHtml}</span></div>
+        <div class="drag-meta" style="margin-top:4px;">${escHtml(r.text || '')}</div>
+      </div>
+      <div class="drag-actions">
+        <button class="btn-icon" title="Zatwierdź" onclick="approvePending('${r.id}')"><i class="fa-solid fa-check" style="color:#27ae60;"></i></button>
+        <button class="btn-icon del" title="Odrzuć" onclick="rejectPending('${r.id}')"><i class="fa-solid fa-xmark"></i></button>
+      </div>`;
+
+    listEl.appendChild(el);
+  });
+}
+
+async function approvePending(id) {
+  const r = State.pending.find(x => x.id === id);
+  if (!r) return;
+
+  confirm(`Zatwierdzić opinię od „${r.name}"?`, async () => {
+    try {
+      // znajdź najwyższy istniejący "order" i dodaj 1 — gwarantuje koniec listy
+      const maxOrder = State.reviews.reduce((max, rv) => Math.max(max, rv.order ?? -1), -1);
+
+      await db.collection('reviews').add({
+        name:  r.name,
+        role:  r.role || '',
+        text:  r.text,
+        stars: r.stars || 5,
+        order: maxOrder + 1,
+      });
+      await db.collection('pendingReviews').doc(id).delete();
+
+      toast('Opinia zatwierdzona i opublikowana');
+      await Promise.all([loadReviews(), loadPending()]);
+      updateOverview();
+    } catch (err) {
+      toast('Błąd zatwierdzania: ' + err.message, 'error');
+    }
+  }, { variant: 'success', icon: 'fa-check', title: 'Zatwierdź opinię', confirmLabel: 'Zatwierdź' });
+}
+
+function rejectPending(id) {
+  const r = State.pending.find(x => x.id === id);
+  confirm(`Odrzucić opinię od „${r?.name}"? Zostanie trwale usunięta.`, async () => {
+    try {
+      await db.collection('pendingReviews').doc(id).delete();
+      toast('Opinia odrzucona');
+      await loadPending();
+    } catch (e) {
+      toast('Błąd odrzucania', 'error');
+    }
+  });
+}
+
 
 /* ═══════════════════════════════════════════════════════════
    KLIENCI (clients)

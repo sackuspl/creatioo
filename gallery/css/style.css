@@ -5,6 +5,17 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
 
+
+
+img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
 ::selection {
     background-color: #a855f7;
     color: white;

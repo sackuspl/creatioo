@@ -99,3 +99,104 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("resize", update);
   update();
 });
+
+
+/* ── PUBLICZNY FORMULARZ „PRZEŚLIJ OPINIĘ” ────────────────── */
+(() => {
+  const overlay   = document.getElementById("publicReviewOverlay");
+  const openBtn   = document.getElementById("openReviewFormBtn");
+  const closeBtn  = document.getElementById("closePublicReviewForm");
+  const form      = document.getElementById("publicReviewForm");
+  const statusEl  = document.getElementById("prStatus");
+  const submitBtn = document.getElementById("prSubmitBtn");
+  const starBtns  = document.querySelectorAll(".pr-star-btn");
+
+  let selectedStars = 5;
+
+  /* ── DEVICE ID (wymagane przez reguły Firestore) ── */
+  function getDeviceId() {
+    let id = localStorage.getItem("reviewDeviceId");
+    if (!id) {
+      id = crypto.randomUUID ? crypto.randomUUID() : `dev-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem("reviewDeviceId", id);
+    }
+    return id;
+  }
+  const deviceId = getDeviceId();
+
+  function setStars(n) {
+    selectedStars = n;
+    starBtns.forEach((b, i) => b.classList.toggle("active", i < n));
+  }
+  setStars(5);
+
+  starBtns.forEach((btn, i) => {
+    btn.addEventListener("click", () => setStars(i + 1));
+  });
+
+  function openForm() {
+    overlay.classList.add("open");
+    statusEl.textContent = "";
+    statusEl.className = "pr-status";
+  }
+  function closeForm() {
+    overlay.classList.remove("open");
+  }
+
+  openBtn?.addEventListener("click", openForm);
+  closeBtn?.addEventListener("click", closeForm);
+  overlay?.addEventListener("click", (e) => {
+    if (e.target === overlay) closeForm();
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("prName").value.trim();
+    const role = document.getElementById("prRole").value.trim();
+    const text = document.getElementById("prText").value.trim();
+
+    if (!name || !text) {
+      statusEl.textContent = "Uzupełnij wymagane pola.";
+      statusEl.className = "pr-status error";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Wysyłanie…";
+
+    try {
+      await db.collection("pendingReviews").add({
+        name,
+        role,
+        text,
+        stars: selectedStars,
+        status: "pending",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        deviceId,
+      });
+
+      await db.collection("reviewCooldowns").doc(deviceId).set({
+        lastSubmit: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      statusEl.textContent = "Dziękujemy! Opinia czeka na zatwierdzenie.";
+      statusEl.className = "pr-status success";
+      form.reset();
+      setStars(5);
+
+      setTimeout(closeForm, 1800);
+    } catch (err) {
+      console.error(err);
+      if (err.code === "permission-denied") {
+        statusEl.textContent = "Wysłałeś już swoją opinię.";
+      } else {
+        statusEl.textContent = "Błąd wysyłania. Spróbuj ponownie.";
+      }
+      statusEl.className = "pr-status error";
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Wyślij do zatwierdzenia";
+  });
+})();
