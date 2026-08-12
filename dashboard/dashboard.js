@@ -1151,3 +1151,77 @@ function deleteGalleryItem(id) {
     }
   });
 }
+
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   CLOUDINARY UPLOAD (unsigned preset)
+═══════════════════════════════════════════════════════════ */
+const CLOUDINARY_CLOUD_NAME = 'dafgacxhm';
+const CLOUDINARY_UPLOAD_PRESET = 'dashboard_unsigned';
+const MAX_UPLOAD_MB = 5;
+
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+    { method: 'POST', body: formData }
+  );
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'Upload nie powiódł się.');
+  }
+  const data = await res.json();
+  return data.secure_url;
+}
+
+function setupCloudinaryUpload({ fileInputId, urlInputId, btnId, previewFn }) {
+  const fileInput = document.getElementById(fileInputId);
+  const urlInput = document.getElementById(urlInputId);
+  const btn = document.getElementById(btnId);
+  if (!fileInput || !urlInput || !btn) return;
+
+  const originalLabel = btn.innerHTML;
+  btn.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      toast('Dozwolone formaty: JPG, PNG, WebP', 'error');
+      fileInput.value = '';
+      return;
+    }
+    if (file.size > MAX_UPLOAD_MB * 1024 * 1024) {
+      toast(`Plik jest większy niż ${MAX_UPLOAD_MB}MB`, 'error');
+      fileInput.value = '';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Wysyłanie…';
+
+    try {
+      const url = await uploadToCloudinary(file);
+      urlInput.value = url;
+      if (typeof previewFn === 'function') previewFn(url);
+      toast('Plik przesłany na Cloudinary');
+    } catch (err) {
+      toast('Błąd uploadu: ' + err.message, 'error');
+    } finally {
+      fileInput.value = '';
+      btn.disabled = false;
+      btn.innerHTML = originalLabel;
+    }
+  });
+}
+
+setupCloudinaryUpload({ fileInputId: 'cFile', urlInputId: 'cUrl', btnId: 'cUploadBtn', previewFn: updateClientPreview });
+setupCloudinaryUpload({ fileInputId: 'pFile', urlInputId: 'pUrl', btnId: 'pUploadBtn', previewFn: updateProjectPreview });
+setupCloudinaryUpload({ fileInputId: 'gFile', urlInputId: 'gUrl', btnId: 'gUploadBtn', previewFn: updateGalleryPreview });

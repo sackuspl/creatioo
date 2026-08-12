@@ -224,6 +224,7 @@ themeToggle?.addEventListener('click', () => {
   const min  = document.getElementById('pswMinus');
   const szv  = document.getElementById('pswSzVal');
   const pk   = document.getElementById('pswPicker');
+  if (!el || !fnt || !B || !I || !U || !plus || !min || !szv || !pk) return;
   let size = 32;
  
   function apply(){

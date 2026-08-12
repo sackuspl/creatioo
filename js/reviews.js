@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const dotsWrap = document.getElementById("reviews-dots");
   const prev     = document.querySelector(".prev-review");
   const next     = document.querySelector(".next-review");
+  const viewport = document.querySelector(".reviews-viewport");
+
 
   // Domyślne opinie — widoczne, jeśli baza Firestore jest jeszcze pusta
   // lub aktualnie niedostępna. Dashboard nadpisuje tę listę.
@@ -15,7 +17,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     { name: "Bartek Nowicki",   role: "Restauracja Umami",   text: "Menu i materiały drukowane wyglądają rewelacyjnie. Goście często pytają kto to projektował — to chyba najlepszy dowód jakości.", stars: 5 },
   ];
 
+
   let reviewsData = defaultReviews;
+
 
   try {
     const snap = await db.collection("reviews").orderBy("order").get();
@@ -26,16 +30,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Nie udało się wczytać opinii z Firestore, używam domyślnych:", err);
   }
 
-  const VISIBLE = 3;
+
+  // ── RESPONSYWNA LICZBA WIDOCZNYCH KART ──────────────────────
+  function getVisibleCount() {
+    return window.innerWidth <= 768 ? 1 : 3;
+  }
+
+  let VISIBLE = getVisibleCount();
   const GAP = 20;
   let index = 0;
   const total = reviewsData.length;
-  const maxIndex = Math.max(0, total - VISIBLE);
+  let maxIndex = Math.max(0, total - VISIBLE);
+
 
   // inicjały do awatara
   function initials(name) {
     return name.split(" ").map(w => w[0]).slice(0, 2).join("");
   }
+
 
   // render kart
   track.innerHTML = reviewsData.map(r => `
@@ -55,53 +67,119 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
   `).join("");
 
-  // Jeśli jest mniej opinii niż widocznych miejsc — chowamy nawigację
-  const showNav = total > VISIBLE;
-  prev.style.display = showNav ? "" : "none";
-  next.style.display = showNav ? "" : "none";
 
-  // dots — jedna kropka na grupę 3
-  const dotCount = Math.ceil(total / VISIBLE);
-  dotsWrap.innerHTML = showNav ? Array.from({ length: dotCount }, (_, i) =>
-    `<div class="reviews-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
-  ).join("") : "";
+  let dotCount, dots, showNav;
 
-  const dots = dotsWrap.querySelectorAll(".reviews-dot");
+  function rebuildNav() {
+    showNav = total > VISIBLE;
+    prev.style.display = showNav ? "" : "none";
+    next.style.display = showNav ? "" : "none";
 
+    dotCount = Math.ceil(total / VISIBLE);
+    dotsWrap.innerHTML = showNav ? Array.from({ length: dotCount }, (_, i) =>
+      `<div class="reviews-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
+    ).join("") : "";
+
+    dots = dotsWrap.querySelectorAll(".reviews-dot");
+
+    dots.forEach(d => {
+      d.addEventListener("click", () => {
+        goTo(Math.min(parseInt(d.dataset.i) * VISIBLE, maxIndex));
+      });
+    });
+  }
+
+  function isMobile() {
+    return VISIBLE === 1;
+  }
+
+  // ── DESKTOP (VISIBLE=3) — jak dotychczas: transform + JS matematyka.
   function update() {
-    const viewport = document.querySelector(".reviews-viewport");
     const cardWidth = (viewport.offsetWidth - GAP * (VISIBLE - 1)) / VISIBLE;
     const step = cardWidth + GAP;
     track.style.transform = `translateX(-${index * step}px)`;
+    syncDots();
+  }
 
-    // sync dots
+  // ── MOBILE (VISIBLE=1) — natywne przewijanie + scroll-snap.
+  function goToMobile(i, smooth = true) {
+    index = i;
+    const target = index * (viewport.clientWidth + GAP);
+    viewport.scrollTo({ left: target, behavior: smooth ? "smooth" : "auto" });
+    syncDots();
+  }
+
+  function goTo(i) {
+    if (isMobile()) {
+      goToMobile(i);
+    } else {
+      index = i;
+      update();
+    }
+  }
+
+  function syncDots() {
     const activeDot = Math.min(Math.floor(index / VISIBLE), dotCount - 1);
     dots.forEach((d, i) => d.classList.toggle("active", i === activeDot));
   }
 
-  next.addEventListener("click", () => {
-    index = index >= maxIndex ? 0 : index + 1;
+  rebuildNav();
+
+  if (isMobile()) {
+    track.style.transform = "none";
+    let scrollTimer;
+    viewport.addEventListener("scroll", () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        index = Math.round(viewport.scrollLeft / (viewport.clientWidth + GAP));
+        index = Math.max(0, Math.min(index, maxIndex));
+        syncDots();
+      }, 120);
+    }, { passive: true });
+  } else {
     update();
+  }
+
+
+  next.addEventListener("click", () => {
+    goTo(index >= maxIndex ? 0 : index + 1);
   });
+
 
   prev.addEventListener("click", () => {
-    index = index <= 0 ? maxIndex : index - 1;
-    update();
+    goTo(index <= 0 ? maxIndex : index - 1);
   });
 
-  dots.forEach(d => {
-    d.addEventListener("click", () => {
-      index = Math.min(parseInt(d.dataset.i) * VISIBLE, maxIndex);
-      update();
-    });
-  });
 
-  window.addEventListener("resize", update);
-  update();
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const newVisible = getVisibleCount();
+      if (newVisible !== VISIBLE) {
+        VISIBLE = newVisible;
+        maxIndex = Math.max(0, total - VISIBLE);
+        index = Math.min(index, maxIndex);
+        rebuildNav();
+      }
+      if (isMobile()) {
+        track.style.transform = "none";
+        goToMobile(index, false);
+      } else {
+        update();
+      }
+    }, 150);
+  });
 });
 
 
-/* ── PUBLICZNY FORMULARZ „PRZEŚLIJ OPINIĘ” ────────────────── */
+
+/* ── PUBLICZNY FORMULARZ „PRZEŚLIJ OPINIĘ” ────────────────────
+   WAŻNE: to jest CAŁKOWICIE ODDZIELNY blok, poza funkcją powyżej.
+   Działa od razu, niezależnie od tego, czy zapytanie do Firestore
+   po opinie zdąży się wykonać, zawiesi się, czy zwróci błąd —
+   przycisk "Prześlij opinię" i cały formularz muszą działać
+   zawsze, nawet gdy baza danych jest wolna lub niedostępna. */
 (() => {
   const overlay   = document.getElementById("publicReviewOverlay");
   const openBtn   = document.getElementById("openReviewFormBtn");
@@ -111,9 +189,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const submitBtn = document.getElementById("prSubmitBtn");
   const starBtns  = document.querySelectorAll(".pr-star-btn");
 
+
   let selectedStars = 5;
 
-  /* ── DEVICE ID (wymagane przez reguły Firestore) ── */
+
   function getDeviceId() {
     let id = localStorage.getItem("reviewDeviceId");
     if (!id) {
@@ -124,15 +203,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   const deviceId = getDeviceId();
 
+
   function setStars(n) {
     selectedStars = n;
     starBtns.forEach((b, i) => b.classList.toggle("active", i < n));
   }
   setStars(5);
 
+
   starBtns.forEach((btn, i) => {
     btn.addEventListener("click", () => setStars(i + 1));
   });
+
 
   function openForm() {
     overlay.classList.add("open");
@@ -143,18 +225,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     overlay.classList.remove("open");
   }
 
+
   openBtn?.addEventListener("click", openForm);
   closeBtn?.addEventListener("click", closeForm);
   overlay?.addEventListener("click", (e) => {
     if (e.target === overlay) closeForm();
   });
 
+
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
+
 
     const name = document.getElementById("prName").value.trim();
     const role = document.getElementById("prRole").value.trim();
     const text = document.getElementById("prText").value.trim();
+
 
     if (!name || !text) {
       statusEl.textContent = "Uzupełnij wymagane pola.";
@@ -162,8 +248,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+
     submitBtn.disabled = true;
     submitBtn.textContent = "Wysyłanie…";
+
 
     try {
       await db.collection("pendingReviews").add({
@@ -176,14 +264,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         deviceId,
       });
 
+
       await db.collection("reviewCooldowns").doc(deviceId).set({
         lastSubmit: firebase.firestore.FieldValue.serverTimestamp(),
       });
+
 
       statusEl.textContent = "Dziękujemy! Opinia czeka na zatwierdzenie.";
       statusEl.className = "pr-status success";
       form.reset();
       setStars(5);
+
 
       setTimeout(closeForm, 1800);
     } catch (err) {
@@ -195,6 +286,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       statusEl.className = "pr-status error";
     }
+
 
     submitBtn.disabled = false;
     submitBtn.textContent = "Wyślij do zatwierdzenia";

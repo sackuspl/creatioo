@@ -1,15 +1,48 @@
 <!DOCTYPE html>
 <html lang="pl" data-theme="dark">
 <head>
+
+  <link rel="icon" type="image/png" href="assets/images/creatioo-icon.png">
+<!-- albo dla SVG (ostrzejsze na dużych ekranach): -->
+<link rel="icon" type="image/svg+xml" href="assets/images/creatioo-icon.png">
+
+<!-- opcjonalnie dla starszych przeglądarek/Windows: -->
+<link rel="icon" type="image/x-icon" href="assets/images/creatioo-icon.png">
+
+<!-- opcjonalnie dla iOS (ikona po dodaniu do ekranu głównego): -->
+<link rel="apple-touch-icon" href="assets/images/creatioo-icon.png">
+
+  <!-- Open Graph Meta Tags -->
+<meta property="og:title" content="creatioo.pl - Tworzymy, by wyróżniać.">
+<meta property="og:description" content="Kreatywne projekty, które przyciągają wzrok. Dd identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
+<meta property="og:url" content="https://creatioo.pl">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://sackuspl.github.io/creatioo/assets/images/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter Card Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="creatioo.pl - Tworzymy, by wyróżniać.">
+<meta name="twitter:description" content="Kreatywne projekty, które przyciągają wzrok. Dd identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
+<meta name="twitter:image" content="https://sackuspl.github.io/creatioo/assets/images/og-image.png">
+<meta name="twitter:url" content="https://creatioo.pl">
+
+
+
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>creatioo - Grafika która mówi</title>
+  <title>creatioo.pl - Tworzymy, by wyróżniać.</title>
+
 
 
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
 <script src="../js/firebase-init.js"></script>
+
 
   <!-- FontAwesome Pro -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/fontawesome.css"/>
@@ -19,20 +52,25 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/regular.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/brands.css"/>
 
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
 
+
   <link rel="stylesheet" href="css/style.css" />
+
 
 
 </head>
 <body>
 
+
 <button class="scroll-top" id="scrollTopBtn" aria-label="Wróć na górę">
   <i class="fa-solid fa-arrow-up"></i>
 </button>
+
 
   <!-- ═══════════════════════════════════════════ NAVBAR -->
   <header class="navbar" id="navbar">
@@ -41,6 +79,7 @@
   <img src="assets/images/logo2.png" alt="creatioo" class="nav-logo-dark">
   <img src="assets/images/logo.png"  alt="creatioo" class="nav-logo-light">
 </a>
+
 
       <nav>
         <ul class="nav-links">
@@ -53,6 +92,7 @@
         </ul>
       </nav>
 
+
       <div class="nav-actions">
 <button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
   <i class="fa-solid fa-moon icon-moon"></i>
@@ -63,41 +103,52 @@
     </div>
   </header>
 
+
 <!-- ── SEKCJA GALERII ─────────────────────────────────────── -->
 <section class="gallery-section" id="gallery">
   <div class="container">
  
 <div class="gallery-header">
   <div class="gallery-header-left">
-    <div class="eyebrow">
-      <i class="fa-solid fa-circle" style="font-size:6px;"></i> Galeria prac
-    </div>
-    <h2>Projekty, które<br>mówią same za siebie</h2>
-    <p>Każdy projekt to osobna historia — kliknij, żeby poznać proces i wyzwania za nim stojące.</p>
+
+    <h2>Wykonane projekty<br></h2>
+    <p>Wybrane realizacje, które najlepiej pokazują mój styl, podejście i zakres możliwości.</p>
   </div>
 </div>
+
 
 <div class="gallery-controls">
 <button class="btn2 reveal" onclick="window.location.href='../'">
   <i class="fa-solid fa-arrow-left"></i> Strona Główna
 </button>
-  <div class="gallery-filters" role="group" aria-label="Filtruj projekty">
-    <button class="filter-btn active" data-filter="all">
-      <i class="fa-solid fa-border-all"></i> Wszystkie <span class="count" id="count-all">12</span>
+
+  <div class="gallery-filters-wrap">
+
+    <button type="button" class="gallery-filter-toggle" id="filterToggleBtn" aria-expanded="false">
+      <i class="fa-solid fa-sliders"></i>
+      <span id="filterToggleLabel">Wybierz kategorię</span>
+      <i class="fa-solid fa-chevron-down gallery-filter-toggle-arrow"></i>
     </button>
-    <button class="filter-btn" data-filter="logo">
-      <i class="fa-solid fa-star"></i> Logotypy <span class="count" id="count-logo">4</span>
-    </button>
-        <button class="filter-btn" data-filter="banner">
-          <i class="fa-solid fa-image"></i> Bannery <span class="count" id="count-banner">3</span>
-        </button>
-        <button class="filter-btn" data-filter="wizytowka">
-          <i class="fa-solid fa-address-card"></i> Wizytówki <span class="count" id="count-wizytowka">2</span>
-        </button>
-        <button class="filter-btn" data-filter="produkt">
-          <i class="fa-solid fa-box"></i> Produkty <span class="count" id="count-produkt">3</span>
-        </button>
-      </div>
+
+    <div class="gallery-filters" role="group" aria-label="Filtruj projekty" id="galleryFiltersPanel">
+      <button class="filter-btn active" data-filter="all">
+        <i class="fa-solid fa-border-all"></i> Wszystkie <span class="count" id="count-all">12</span>
+      </button>
+      <button class="filter-btn" data-filter="logo">
+        <i class="fa-solid fa-star"></i> Logotypy <span class="count" id="count-logo">4</span>
+      </button>
+      <button class="filter-btn" data-filter="banner">
+        <i class="fa-solid fa-image"></i> Bannery <span class="count" id="count-banner">3</span>
+      </button>
+      <button class="filter-btn" data-filter="wizytowka">
+        <i class="fa-solid fa-address-card"></i> Wizytówki <span class="count" id="count-wizytowka">2</span>
+      </button>
+      <button class="filter-btn" data-filter="produkt">
+        <i class="fa-solid fa-box"></i> Produkty <span class="count" id="count-produkt">3</span>
+      </button>
+    </div>
+
+  </div>
     </div>
  
     <div class="gallery-grid" id="galleryGrid"></div>
@@ -113,20 +164,19 @@
  
 <div class="project-modal" id="project-modal" role="dialog" aria-modal="true" aria-label="Podgląd projektu">
   <div class="project-modal-backdrop" id="projectModalBackdrop"></div>
+
+  <button class="project-modal-close" id="projectModalClose" aria-label="Zamknij">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
   <div class="project-modal-panel">
-    <div class="project-modal-img-wrap">
-      <img id="projectModalImg" src="" alt="">
+
+    <div class="project-modal-stage">
+      <div class="project-modal-img-wrap">
+        <img id="projectModalImg" src="" alt="">
+      </div>
     </div>
-    <div class="project-modal-info">
-      <div class="project-modal-cat" id="projectModalCat"></div>
-      <h2 class="project-modal-title" id="projectModalTitle"></h2>
-      <div class="project-modal-divider"></div>
-      <p class="project-modal-desc" id="projectModalDesc"></p>
-      <div class="project-modal-meta" id="projectModalMeta"></div>
-    </div>
-    <button class="project-modal-close" id="projectModalClose" aria-label="Zamknij">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
+
     <div class="project-modal-nav">
       <button class="project-modal-nav-btn" id="projectModalPrev" aria-label="Poprzedni">
         <i class="fa-solid fa-arrow-left"></i>
@@ -135,13 +185,21 @@
         <i class="fa-solid fa-arrow-right"></i>
       </button>
     </div>
+
   </div>
+
+  <div class="project-modal-info" id="projectModalInfo">
+    <div class="project-modal-meta" id="projectModalMeta"></div>
+  </div>
+
 </div>
+
 
 
 
  <footer class="footer">
   <div class="footer-main">
+
 
     <div class="footer-brand">
       <a href="#" class="footer-logo">
@@ -162,6 +220,7 @@
       </div>
     </div>
 
+
     <div class="footer-col">
       <span class="footer-col-title">Nawigacja</span>
       <ul>
@@ -173,6 +232,7 @@
       </ul>
     </div>
 
+
     <div class="footer-col">
       <span class="footer-col-title">Kontakt</span>
       <ul>
@@ -182,15 +242,26 @@
       </ul>
     </div>
 
+
   </div>
+
 
   <div class="footer-bottom">
     <p>© 2026 <strong>creatioo</strong> · Wszystkie prawa zastrzeżone</p>
   </div>
 </footer>
 
+
   <script src="js/main.js"></script>
   <script src="js/gallery.js"></script>
+  <script src="js/gallery-filter-toggle.js"></script>
+
+
+  <!-- MOBILE STYLE -->
+
+
+<link rel="stylesheet" href="../css/mobile.css">
+
 
 </body>
 </html>

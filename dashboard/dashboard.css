@@ -1538,3 +1538,39 @@ a:hover { text-decoration: underline; }
     font-size: 0.55rem;
   }
 }
+
+
+
+/* ── CLOUDINARY UPLOAD ──────────────────────────────────── */
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  white-space: nowrap;
+}
+
+.btn-upload:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+.btn-upload:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-upload i.fa-spin { color: var(--accent); }
+
+.upload-sep {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}

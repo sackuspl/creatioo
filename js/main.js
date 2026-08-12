@@ -1,12 +1,18 @@
 /* ── PRELOADER ─────────────────────────────────────────────── */
 
+
+
 window.addEventListener('load', () => {
   document.getElementById('preloader').classList.add('loaded');
 });
 
 
+
+
 // ── REVEAL ON SCROLL ────────────────────────────────────────
 const revealEls = document.querySelectorAll('.reveal');
+
+
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
@@ -20,80 +26,95 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 
+
+
 revealEls.forEach(el => revealObserver.observe(el));
 
+
+
 // ── COUNTERS ─────────────────────────────────────────────────
+// Poprawka: niższy threshold (0.5 → 0.15) + zapasowe sprawdzenie
+// widoczności na starcie. Na mobile .hero-stats bywa widoczny od
+// razu po wczytaniu strony i observer z threshold 0.5 nie zawsze
+// zdążył złapać moment przejścia przez 50% widoczności — licznik
+// zostawał na 0.
 const counters   = document.querySelectorAll('.counter');
 const statsSection = document.querySelector('.hero-stats');
 let counterStarted = false;
 
-const counterObserver = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting && !counterStarted) {
-    counterStarted = true;
-    counters.forEach(counter => {
-      const target = +counter.dataset.target;
-      let count = 0;
-      const speed = target / 120;
-      const tick = () => {
-        count += speed;
-        if (count < target) {
-          counter.innerText = Math.floor(count);
-          requestAnimationFrame(tick);
-        } else {
-          counter.innerText = target;
-        }
-      };
-      tick();
-    });
-  }
-}, { threshold: 0.5 });
 
-if (statsSection) counterObserver.observe(statsSection);
+function runCounters() {
+  if (counterStarted) return;
+  counterStarted = true;
+  counters.forEach(counter => {
+    const target = +counter.dataset.target;
+    let count = 0;
+    const speed = target / 120;
+    const tick = () => {
+      count += speed;
+      if (count < target) {
+        counter.innerText = Math.floor(count);
+        requestAnimationFrame(tick);
+      } else {
+        counter.innerText = target;
+      }
+    };
+    tick();
+  });
+}
+
+
+const counterObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    runCounters();
+  }
+}, { threshold: 0.15 });
+
+
+if (statsSection) {
+  counterObserver.observe(statsSection);
+
+
+  // Zapasowe sprawdzenie: jeśli pasek jest już w widoku w momencie
+  // wczytania strony, ręcznie odpalamy animację od razu.
+  const rect = statsSection.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    runCounters();
+  }
+}
+
+
 
 // ── SCROLL INDICATOR ─────────────────────────────────────────
 const scrollIndicator = document.querySelector('.scroll-indicator');
+
+
 
 window.addEventListener('scroll', () => {
   if (!scrollIndicator) return;
   scrollIndicator.classList.toggle('hidden', window.scrollY > 100);
 });
 
+
+
 // ── NAVBAR SCROLLED STATE ────────────────────────────────────
 const navbar = document.getElementById('navbar');
+
+
 
 window.addEventListener('scroll', () => {
   if (!navbar) return;
   navbar.classList.toggle('scrolled', window.scrollY > 20);
 });
 
-// ── PROJECTS AUTO SLIDE ──────────────────────────────────────
-const projectsTrack = document.getElementById('projects-track');
 
-if (projectsTrack) {
-  setInterval(() => {
-    const atEnd =
-      projectsTrack.scrollLeft + projectsTrack.clientWidth >=
-      projectsTrack.scrollWidth - 10;
 
-    projectsTrack.scrollBy({
-      left: atEnd ? -projectsTrack.scrollWidth : 370,
-      behavior: 'smooth'
-    });
-  }, 4000);
-
-  document.querySelector('.next-project')?.addEventListener('click', () => {
-    projectsTrack.scrollBy({ left: 370, behavior: 'smooth' });
-  });
-
-  document.querySelector('.prev-project')?.addEventListener('click', () => {
-    projectsTrack.scrollBy({ left: -370, behavior: 'smooth' });
-  });
-}
-
-// ── LIGHTBOX ─────────────────────────────────────────────────
+// ── LIGHTBOX (witryna projektów na stronie głównej) ───────────
 document.addEventListener('click', (e) => {
-  const img = e.target.closest('.projects-track img');
+  const img = e.target.closest('.project-tile-img.active');
   if (!img) return;
+
+
 
   const lb = document.createElement('div');
   lb.classList.add('lightbox');
@@ -102,16 +123,24 @@ document.addEventListener('click', (e) => {
   lb.addEventListener('click', () => lb.remove());
 });
 
+
+
 // ── THEME TOGGLE ─────────────────────────────────────────────
 const themeToggle = document.getElementById('theme-toggle');
 const htmlEl = document.documentElement;
+
+
 
 function applyTheme(theme) {
   htmlEl.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
 }
 
+
+
 applyTheme(localStorage.getItem('theme') || 'dark');
+
+
 
 themeToggle?.addEventListener('click', () => {
   const current = htmlEl.getAttribute('data-theme');
@@ -122,8 +151,12 @@ themeToggle?.addEventListener('click', () => {
 
 
 
+
+
 // Karuzela logotypów klientów ("Zaufali mi") — przeniesiona do js/clients.js,
 // bo ten plik dodatkowo ściąga listę klientów z Firestore przed jej zbudowaniem.
+
+
 
 
 
@@ -173,15 +206,40 @@ themeToggle?.addEventListener('click', () => {
   apply();
 })();
 
+
+
 // ── SCROLL TO TOP ─────────────────────────────────────────────────
+// Poprawka: przycisk pojawia się na środku dołu ekranu podczas
+// przewijania, ale gdy jesteśmy blisko końca strony (stopki),
+// klasa .at-bottom (obsłużona w mobile.css) przesuwa go na prawą
+// stronę, żeby nie zasłaniał treści stopki. Gdy user wraca w górę,
+// klasa jest usuwana i przycisk wraca na środek.
+
 
 (function () {
   const btn = document.getElementById('scrollTopBtn');
-  const THRESHOLD = 300; // px od góry, po których przycisk się pojawia
+  const THRESHOLD = 300;      // px od góry, po których przycisk się pojawia
+  const BOTTOM_OFFSET = 140;  // px od dołu strony, od których przycisk przechodzi na bok
 
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > THRESHOLD);
-  }, { passive: true });
+
+  function updateScrollTop() {
+    const scrollY = window.scrollY;
+    const viewportH = window.innerHeight;
+    const docH = document.documentElement.scrollHeight;
+
+
+    btn.classList.toggle('visible', scrollY > THRESHOLD);
+
+
+    const distanceFromBottom = docH - (scrollY + viewportH);
+    btn.classList.toggle('at-bottom', distanceFromBottom < BOTTOM_OFFSET);
+  }
+
+
+  window.addEventListener('scroll', updateScrollTop, { passive: true });
+  window.addEventListener('resize', updateScrollTop, { passive: true });
+  updateScrollTop();
+
 
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -189,16 +247,22 @@ themeToggle?.addEventListener('click', () => {
 })();
 
 
+
+
 document.querySelectorAll('.faq-trigger').forEach(trigger => {
   trigger.addEventListener('click', () => {
     const isOpen = trigger.getAttribute('aria-expanded') === 'true';
     const answer = trigger.nextElementSibling;
+
+
 
     // zamknij wszystkie
     document.querySelectorAll('.faq-trigger').forEach(t => {
       t.setAttribute('aria-expanded', 'false');
       t.nextElementSibling.classList.remove('open');
     });
+
+
 
     // otwórz kliknięty
     if (!isOpen) {
@@ -207,6 +271,8 @@ document.querySelectorAll('.faq-trigger').forEach(trigger => {
     }
   });
 });
+
+
 
 
 
@@ -353,19 +419,27 @@ const projects = [
   },
 ];
 
+
+
 /* ── RENDER SIATKI ───────────────────────────────────────── */
 const grid  = document.getElementById('galleryGrid');
 const empty = document.getElementById('galleryEmpty');
 
+
+
 function buildGrid(filter) {
   const visible = filter === 'all' ? projects : projects.filter(p => p.cat === filter);
   grid.innerHTML = '';
+
+
 
   if (visible.length === 0) {
     empty.style.display = 'block';
     return;
   }
   empty.style.display = 'none';
+
+
 
   visible.forEach((p, i) => {
     const el = document.createElement('div');
@@ -386,7 +460,11 @@ function buildGrid(filter) {
   });
 }
 
+
+
 buildGrid('all');
+
+
 
 /* ── FILTRY ─────────────────────────────────────────────── */
 document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -396,6 +474,8 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     buildGrid(btn.dataset.filter);
   });
 });
+
+
 
 /* ── LIGHTBOX ────────────────────────────────────────────── */
 const lightbox   = document.getElementById('lightbox');
@@ -409,8 +489,12 @@ const lbPrev     = document.getElementById('lightboxPrev');
 const lbNext     = document.getElementById('lightboxNext');
 const lbBackdrop = document.getElementById('lightboxBackdrop');
 
+
+
 let currentIndex = 0;
 let currentList  = [];
+
+
 
 function openLightbox(id, filter) {
   currentList  = filter === 'all' ? projects : projects.filter(p => p.cat === filter);
@@ -419,6 +503,8 @@ function openLightbox(id, filter) {
   lightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
+
 
 function renderLightbox() {
   const p = currentList[currentIndex];
@@ -441,13 +527,19 @@ function renderLightbox() {
   lbNext.style.opacity = currentIndex === currentList.length - 1 ? '0.35' : '1';
 }
 
+
+
 function closeLightbox() {
   lightbox.classList.remove('open');
   document.body.style.overflow = '';
 }
 
+
+
 lbClose.addEventListener('click', closeLightbox);
 lbBackdrop.addEventListener('click', closeLightbox);
+
+
 
 lbPrev.addEventListener('click', () => {
   if (currentIndex > 0) { currentIndex--; renderLightbox(); }
@@ -455,6 +547,8 @@ lbPrev.addEventListener('click', () => {
 lbNext.addEventListener('click', () => {
   if (currentIndex < currentList.length - 1) { currentIndex++; renderLightbox(); }
 });
+
+
 
 document.addEventListener('keydown', e => {
   if (!lightbox.classList.contains('open')) return;

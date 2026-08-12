@@ -133,8 +133,7 @@ function buildGrid(filter) {
         <img src="${p.img}" alt="${escapeHtml(p.title)}" loading="lazy">
         <span class="gallery-item-badge">${escapeHtml(p.catLabel)}</span>
         <div class="gallery-item-overlay">
-          <div class="gallery-item-cat">${escapeHtml(p.catLabel)}</div>
-          <div class="gallery-item-title">${escapeHtml(p.title)}</div>
+    
         </div>
         <div class="gallery-item-icon"><i class="fa-solid fa-expand"></i></div>
       `;
@@ -180,9 +179,6 @@ function initFilters() {
    ═══════════════════════════════════════════════════════════ */
 const projectModal = document.getElementById('project-modal');
 const lbImg        = document.getElementById('projectModalImg');
-const lbCat        = document.getElementById('projectModalCat');
-const lbTitle      = document.getElementById('projectModalTitle');
-const lbDesc       = document.getElementById('projectModalDesc');
 const lbMeta       = document.getElementById('projectModalMeta');
 const lbClose      = document.getElementById('projectModalClose');
 const lbPrev       = document.getElementById('projectModalPrev');
@@ -225,30 +221,34 @@ function renderLightbox(direction = 'none') {
     lbImg.classList.add(animCls);
     lbImg.addEventListener('animationend', () => lbImg.classList.remove(animCls), { once: true });
 
-    const infoEl = lbDesc.parentElement;
+    const infoEl = lbMeta.parentElement;
     infoEl.classList.remove('anim-fade');
     void infoEl.offsetWidth;
     infoEl.classList.add('anim-fade');
     infoEl.addEventListener('animationend', () => infoEl.classList.remove('anim-fade'), { once: true });
   }
 
-  lbImg.src           = p.img;
-  lbImg.alt           = p.title;
-  lbCat.textContent   = p.catLabel;
-  lbTitle.textContent = p.title;
+  lbImg.src = p.img;
+  lbImg.alt = p.title;
 
-  lbDesc.innerHTML = p.desc
-    ? p.desc
-        .replace(/\n\n/g, '</p><p style="margin-top:12px">')
-        .replace(/^/, '<p>')
-        .replace(/$/, '</p>')
-    : '<p><em>Brak opisu.</em></p>';
+  /* Zawsze pokazujemy komplet pól — jeśli w danych projektu brakuje
+     narzędzi / czasu / roku, wstawiamy kreskę zamiast pomijać cały
+     wiersz. Dzięki temu pasek informacji nigdy nie "znika" ani nie
+     wygląda jakby się nie wczytał. */
+  const metaFields = [
+    { icon: 'fa-wrench',   label: 'Narzędzia:',       value: p.tools },
+    { icon: 'fa-clock',    label: 'Czas realizacji:', value: p.time  },
+    { icon: 'fa-calendar', label: 'Rok:',              value: p.year  },
+  ];
 
-  lbMeta.innerHTML = `
-    ${p.tools ? `<div class="project-modal-meta-item"><i class="fa-solid fa-wrench"></i><span><strong>Narzędzia:</strong> ${escapeHtml(p.tools)}</span></div>` : ''}
-    ${p.time  ? `<div class="project-modal-meta-item"><i class="fa-solid fa-clock"></i><span><strong>Czas realizacji:</strong> ${escapeHtml(p.time)}</span></div>` : ''}
-    ${p.year  ? `<div class="project-modal-meta-item"><i class="fa-solid fa-calendar"></i><span><strong>Rok:</strong> ${escapeHtml(p.year)}</span></div>` : ''}
-  `;
+  lbMeta.innerHTML = metaFields
+    .map(f => `
+      <div class="project-modal-meta-item">
+        <i class="fa-solid ${f.icon}"></i>
+        <span><strong>${f.label}</strong> ${escapeHtml(f.value) || '—'}</span>
+      </div>
+    `)
+    .join('');
 
   lbPrev.disabled      = currentIndex === 0;
   lbNext.disabled      = currentIndex === currentList.length - 1;
