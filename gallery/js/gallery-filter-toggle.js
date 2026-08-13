@@ -16,6 +16,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!toggleBtn || !panel) return;
 
+  // ── NAPRAWA "blur na cały ekran, nie da się kliknąć kategorii" ──
+  // .gallery-section > * ma w style.css wymuszone position:relative +
+  // z-index:1 (dla ozdobnych rozmytych kółek w tle). To tworzy nowy
+  // stacking context na .container, wewnątrz którego panel filtrów
+  // jest uwięziony — jego lokalny z-index:999 nic nie daje, bo
+  // .gallery-filter-backdrop (dodawany prosto do <body>, z-index:998)
+  // żyje w głównym stackingu i zawsze wygrywa z całym .container (z:1).
+  // Rozwiązanie: gdy panel jest otwarty, podbijamy z-index tego
+  // konkretnego przodka ponad backdrop, żeby panel mógł się pokazać.
+  const stackingAncestor = toggleBtn.closest(".container") || toggleBtn.parentElement;
+  const ancestorPrevZIndex = stackingAncestor ? stackingAncestor.style.zIndex : "";
+
   const filterLabels = {
     all: "Wszystkie",
     logo: "Logotypy",
@@ -43,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openPanel() {
     positionPanel();
+    if (stackingAncestor) stackingAncestor.style.zIndex = "1000"; // ponad backdropem (998)
     panel.classList.add("open");
     toggleBtn.classList.add("open");
     toggleBtn.setAttribute("aria-expanded", "true");
@@ -54,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleBtn.classList.remove("open");
     toggleBtn.setAttribute("aria-expanded", "false");
     backdrop.classList.remove("open");
+    if (stackingAncestor) stackingAncestor.style.zIndex = ancestorPrevZIndex; // przywróć oryginał
   }
 
   toggleBtn.addEventListener("click", (e) => {

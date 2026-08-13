@@ -167,9 +167,11 @@
   showcase.innerHTML = tiles.map((t) => `
     <div class="project-tile" data-slot="${t.slot}">
       <img class="project-tile-img layer-a active" src="${t.current.src}" alt="${escapeHtml(t.current.alt)}" loading="lazy">
-      <img class="project-tile-img layer-b" alt="">
-      <div class="project-tile-overlay"></div>
-      <span class="project-tile-title">${escapeHtml(t.current.alt)}</span>
+      <img class="project-tile-img layer-b" alt="" data-empty="1">
+      <!-- brak atrybutu src celowo: pusty src="" powoduje w przeglądarce
+           błędne pobranie bieżącej strony jako "obrazka" (błąd w konsoli,
+           zbędny request). src ustawiany jest dopiero w JS, gdy warstwa
+           zostanie faktycznie użyta. -->
     </div>
   `).join("");
 
@@ -199,7 +201,6 @@
       const imgs      = tileEl.querySelectorAll(".project-tile-img");
       const activeImg = tileEl.querySelector(".project-tile-img.active");
       const hiddenImg = [...imgs].find(el => el !== activeImg);
-      const titleEl   = tileEl.querySelector(".project-tile-title");
 
       const next = pickFor(state.targetRatio, state.current.src);
       hiddenImg.src = next.src;
@@ -210,8 +211,15 @@
         hiddenImg.classList.remove("kb-in");
         void hiddenImg.offsetWidth; // wymuś reflow, żeby animacja odpaliła od nowa
         hiddenImg.classList.add("active", "kb-in");
-        activeImg.classList.remove("active", "kb-in");
-        if (titleEl) titleEl.textContent = next.alt;
+        // Ważne: NIE zdejmujemy tu "kb-in" ze znikającego zdjęcia —
+        // jest ono w trakcie 7-sekundowego zoomu (zmiana zdjęć następuje
+        // co 3.8–6.8s, czyli prawie zawsze w połowie animacji). Zdjęcie
+        // tej klasy w tym momencie powodowałoby natychmiastowy "skok"
+        // skali z powrotem do 1.055, bo transform straciłby przejście,
+        // zanim opacity zdąży dojść do 0. "kb-in" zostaje — reset skali
+        // nastąpi dopiero wtedy, gdy to zdjęcie znów stanie się warstwą
+        // docelową (patrz reset na początku tej funkcji, kilka linii wyżej).
+        activeImg.classList.remove("active");
         state.current = next;
         cycleTile(tileEl, state);
       };
