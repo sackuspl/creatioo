@@ -826,6 +826,7 @@ document.addEventListener('keydown', e => {
 const GALLERY_CATS = {
   logo:      'Logotyp',
   banner:    'Banner',
+  miniatura: 'miniatury',
   wizytowka: 'Wizytówka',
   produkt:   'Produkt',
 };

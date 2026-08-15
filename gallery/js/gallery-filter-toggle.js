@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     all: "Wszystkie",
     logo: "Logotypy",
     banner: "Bannery",
+    miniatura: "Miniatury",
     wizytowka: "Wizytówki",
     produkt: "Produkty",
   };

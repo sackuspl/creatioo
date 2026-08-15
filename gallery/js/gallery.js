@@ -76,7 +76,7 @@ function updateCounts() {
   const all = document.getElementById('count-all');
   if (all) all.textContent = projects.length;
 
-  ['logo', 'banner', 'wizytowka', 'produkt'].forEach(cat => {
+  ['logo', 'banner', 'wizytowka', 'miniatura', 'produkt'].forEach(cat => {
     const el = document.getElementById(`count-${cat}`);
     if (el) el.textContent = projects.filter(p => p.cat === cat).length;
   });
