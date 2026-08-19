@@ -22,9 +22,20 @@
   const MAX_INTERVAL   = 6800;   // ms
   const FADE_MS        = 1200;
   const MAX_TO_MEASURE = 100;    // limit wstępnego mierzenia proporcji (wydajność)
-  const TOP_N_CHOICES  = 4;      // spośród ilu najbliższych dopasowań losujemy
+
+  // Spośród ilu najbliższych dopasowań losujemy — NIE stała liczba, tylko
+  // procent dostępnych kandydatów. Dzięki temu przy dużej galerii (50+
+  // zdjęć) pula wyboru realnie rośnie zamiast zawsze kręcić tymi samymi
+  // 4 "najidealniej" pasującymi zdjęciami.
+  const TOP_N_PERCENT  = 0.35;   // do 35% najlepiej dopasowanych kandydatów
+  const TOP_N_MIN      = 6;      // ale nigdy mniej niż tyle (gdy pula jest mała)
 
   const SLOTS = ["wide", "square1", "tall", "square2", "square3", "square4"];
+
+  // "Chłodzenie": zdjęcie, które właśnie zniknęło z ramki, nie powinno
+  // wrócić (w tej samej lub innej ramce) zbyt szybko. Pamiętamy N ostatnio
+  // pokazanych zdjęć i domyślnie je omijamy — rozmiar chłodzenia skaluje
+  // się z wielkością galerii, żeby przy małej puli nie zablokować wyboru.
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -77,6 +88,19 @@
 
   const shuffledPool = shuffle(pool);
 
+  // Rozmiar "chłodni": ~40% puli, min. 2x liczba ramek, ale zawsze
+  // zostawiamy przynajmniej kilka zdjęć poza chłodzeniem do wyboru.
+  const COOLDOWN_SIZE = Math.max(
+    SLOTS.length * 2,
+    Math.min(pool.length - SLOTS.length - 1, Math.ceil(pool.length * 0.4))
+  );
+  let recentlyShown = []; // kolejka FIFO ostatnio pokazanych src
+
+  function markShown(src) {
+    recentlyShown.push(src);
+    while (recentlyShown.length > COOLDOWN_SIZE) recentlyShown.shift();
+  }
+
   /* ── Mierzenie realnych proporcji zdjęć (naturalWidth/naturalHeight) ── */
   function measure(item) {
     if (item.ratio) return Promise.resolve(item); // już zmierzone
@@ -124,15 +148,23 @@
       return any.length ? any[Math.floor(Math.random() * any.length)] : pool[0];
     }
 
-    // Wolimy zdjęcia jeszcze nie użyte w innych kafelkach w tym cyklu.
-    const fresh = avoidSrcs ? usable.filter(p => !avoidSrcs.has(p.src)) : usable;
-    const candidates = fresh.length > 0 ? fresh : usable;
+    // Wolimy zdjęcia jeszcze nie użyte w innych kafelkach w tym cyklu
+    // ORAZ nie pokazywane niedawno (chłodzenie). Jeśli po odfiltrowaniu
+    // zostaje zbyt mało kandydatów (mała galeria), łagodnie cofamy się
+    // do pełnej puli — lepiej rzadka powtórka niż brak zdjęcia pasującego
+    // kształtem.
+    const cooling = new Set(recentlyShown);
+    const combinedAvoid = avoidSrcs ? new Set([...avoidSrcs, ...cooling]) : cooling;
+    const fresh = usable.filter(p => !combinedAvoid.has(p.src));
+    const candidates = fresh.length > 0 ? fresh : usable.filter(p => !(avoidSrcs && avoidSrcs.has(p.src)));
+    const finalCandidates = candidates.length > 0 ? candidates : usable;
 
-    const ranked = candidates
+    const ranked = finalCandidates
       .map(p => ({ item: p, dist: Math.abs(Math.log(p.ratio) - targetLog) }))
       .sort((a, b) => a.dist - b.dist);
 
-    const top = ranked.slice(0, Math.min(TOP_N_CHOICES, ranked.length));
+    const n = Math.max(TOP_N_MIN, Math.ceil(ranked.length * TOP_N_PERCENT));
+    const top = ranked.slice(0, Math.min(n, ranked.length));
     return top[Math.floor(Math.random() * top.length)].item;
   }
 
@@ -161,6 +193,7 @@
   const tiles = SLOTS.map((slot) => {
     const chosen = pickFor(slotRatios[slot], null, usedNow);
     usedNow.add(chosen.src);
+    markShown(chosen.src);
     return { slot, targetRatio: slotRatios[slot], current: chosen };
   });
 
@@ -202,7 +235,14 @@
       const activeImg = tileEl.querySelector(".project-tile-img.active");
       const hiddenImg = [...imgs].find(el => el !== activeImg);
 
-      const next = pickFor(state.targetRatio, state.current.src);
+      // Nie pokazuj zdjęcia, które w tej chwili jest już widoczne
+      // w INNEJ ramce (dzięki temu nigdy nie ma dwóch takich samych
+      // zdjęć na ekranie jednocześnie).
+      const visibleElsewhere = new Set(
+        tiles.filter(t => t !== state).map(t => t.current.src)
+      );
+      const next = pickFor(state.targetRatio, state.current.src, visibleElsewhere);
+      markShown(next.src);
       hiddenImg.src = next.src;
       hiddenImg.alt = escapeHtml(next.alt);
 

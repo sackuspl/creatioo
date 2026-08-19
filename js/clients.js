@@ -52,72 +52,48 @@
     }
 
     /* Zacznij od pozycji -itemsWidth żeby pierwszy zestaw był na środku */
-    let x         = 0;
-    let velocity  = 0;
-    let lastTs    = null;
-    let rafId     = null;
-    let isWheel   = false;
-    let wheelTimer = null;
+    let x      = 0;
+    let lastTs = null;
+    let rafId  = null;
 
     const AUTO_PX_S = 60; /* px na sekundę auto-scroll */
 
     function setX(val) {
       /* Zawijaj: gdy wyjdziesz poza jeden zestaw, wróć o dokładnie itemsWidth */
-      if (val <= -itemsWidth) val += itemsWidth;
-      if (val >  0)           val -= itemsWidth;
+      while (val <= -itemsWidth) val += itemsWidth;
+      while (val >  0)           val -= itemsWidth;
       x = val;
       track.style.transform = `translateX(${x}px)`;
     }
 
+    let isVisible = true; /* aktualizowane przez IntersectionObserver poniżej */
+
+    /* Karuzela porusza się WYŁĄCZNIE automatycznie — kursor, scroll ani
+       wheel nie mają na nią żadnego wpływu. Jedyna interakcja to hover
+       na pojedynczych logotypach (obsługiwany w całości przez CSS). */
     function loop(ts) {
       if (lastTs == null) lastTs = ts;
       const dt = Math.min(ts - lastTs, 64);
       lastTs = ts;
 
-      if (isWheel) {
-        velocity *= Math.pow(0.88, dt / 16);
-        setX(x + velocity * dt / 16);
+      setX(x - AUTO_PX_S * dt / 1000);
 
-        if (Math.abs(velocity) < 0.1) {
-          velocity  = 0;
-          isWheel   = false;
-          lastTs    = null;
-        }
-      } else {
-        /* Auto: jedź w prawo (x maleje) */
-        setX(x - AUTO_PX_S * dt / 1000);
-      }
-
-      rafId = requestAnimationFrame(loop);
+      /* Nie planuj kolejnej klatki, gdy karuzela jest poza ekranem —
+         oszczędza CPU i nie obciąża strony podczas scrollowania */
+      rafId = isVisible ? requestAnimationFrame(loop) : null;
     }
 
     rafId = requestAnimationFrame(loop);
 
-    wrap.addEventListener('wheel', function (e) {
-      e.preventDefault();
-      isWheel = true;
-      clearTimeout(wheelTimer);
-
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      velocity -= delta * 0.5;
-      /* cap */
-      const cap = itemsWidth * 0.3;
-      velocity  = Math.max(-cap, Math.min(cap, velocity));
-
-      /* Jeśli raf nie leci — uruchom */
-      if (!rafId) {
+    /* Pauzuj animację, gdy karuzela nie jest widoczna na ekranie */
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+      if (isVisible && !rafId) {
         lastTs = null;
         rafId  = requestAnimationFrame(loop);
       }
-
-      /* Po 1s bez wheela wróć do auto */
-      wheelTimer = setTimeout(() => {
-        isWheel  = false;
-        velocity = 0;
-        lastTs   = null;
-      }, 1000);
-
-    }, { passive: false });
+    }, { threshold: 0 });
+    visibilityObserver.observe(wrap);
 
   })();
 })();

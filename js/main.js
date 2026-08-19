@@ -9,39 +9,13 @@ window.addEventListener('load', () => {
 
 
 
-// ── REVEAL ON SCROLL ────────────────────────────────────────
-const revealEls = document.querySelectorAll('.reveal');
-
-
-
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      // lekkie opóźnienie kaskadowe dla kart w gridzie
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, i * 60);
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
-
-
-
-revealEls.forEach(el => revealObserver.observe(el));
-
-
-
 // ── COUNTERS ─────────────────────────────────────────────────
-// Poprawka: niższy threshold (0.5 → 0.15) + zapasowe sprawdzenie
-// widoczności na starcie. Na mobile .hero-stats bywa widoczny od
-// razu po wczytaniu strony i observer z threshold 0.5 nie zawsze
-// zdążył złapać moment przejścia przez 50% widoczności — licznik
-// zostawał na 0.
+// Zdefiniowane PRZED revealObserver, bo revealObserver odwołuje się
+// do statsSection i runCounters (funkcje/const są dostępne w momencie
+// wywołania callbacku, ale kolejność w pliku niech będzie czytelna).
 const counters   = document.querySelectorAll('.counter');
 const statsSection = document.querySelector('.hero-stats');
 let counterStarted = false;
-
 
 function runCounters() {
   if (counterStarted) return;
@@ -64,24 +38,34 @@ function runCounters() {
 }
 
 
-const counterObserver = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) {
-    runCounters();
-  }
-}, { threshold: 0.15 });
+// ── REVEAL ON SCROLL ────────────────────────────────────────
+// Poprawka: licznik w .hero-stats startował dotąd NIEZALEŻNIE od
+// animacji pojawienia się panelu (osobny counterObserver reagował
+// na samą geometrię, bez patrzenia na opacity/transform). Na mobile
+// .hero-stats jest widoczny w viewport od razu po wejściu na stronę,
+// więc liczenie 0→300 kończyło się W TLE, zanim panel w ogóle zdążył
+// się odsłonić (fade-in .reveal trwa 0.6s) — użytkownik widział od
+// razu gotową liczbę, bez animacji. Rozwiązanie: liczenie startuje
+// dokładnie w momencie, gdy panel dostaje klasę "visible", czyli
+// razem z jego faktycznym pojawieniem się na ekranie.
+const revealEls = document.querySelectorAll('.reveal');
 
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      // lekkie opóźnienie kaskadowe dla kart w gridzie
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+        if (entry.target === statsSection) {
+          runCounters();
+        }
+      }, i * 60);
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
 
-if (statsSection) {
-  counterObserver.observe(statsSection);
-
-
-  // Zapasowe sprawdzenie: jeśli pasek jest już w widoku w momencie
-  // wczytania strony, ręcznie odpalamy animację od razu.
-  const rect = statsSection.getBoundingClientRect();
-  if (rect.top < window.innerHeight && rect.bottom > 0) {
-    runCounters();
-  }
-}
+revealEls.forEach(el => revealObserver.observe(el));
 
 
 
