@@ -1,0 +1,55 @@
+/* ═══════════════════════════════════════════════════════════
+   POLITYKA PRYWATNOŚCI — style mobilne
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .policy-hero {
+    padding: 130px 0 24px;
+  }
+
+  .policy-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .policy-toc {
+    padding: 20px 20px;
+  }
+
+  .policy-toc ol {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .policy-section {
+    padding: 24px 0;
+  }
+
+  .policy-section h2 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-hero {
+    padding: 120px 0 20px;
+  }
+
+  .policy-hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .policy-back {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+
+  .policy-toc {
+    padding: 18px 16px;
+    margin: 24px 0 8px;
+  }
+
+  .policy-section p,
+  .policy-section ul li {
+    font-size: 0.95rem;
+  }
+}

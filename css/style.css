@@ -1993,6 +1993,17 @@ h3 { font-size: 20px; font-weight: 700; }
 }
 
 /* SOCIAL — płaskie, bez glow/liftu, tylko zmiana koloru obramowania */
+.footer-policy-line { margin-top: 16px; }
+.footer-policy-line a {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+.footer-policy-line a:hover { color: var(--accent); }
+.footer-bottom a { color: var(--text-muted); text-decoration: none; transition: color var(--dur) var(--ease); }
+.footer-bottom a:hover { color: var(--accent); }
+
 .footer-social { display: flex; gap: 10px; }
 
 .social-link {
