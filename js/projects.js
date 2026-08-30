@@ -39,13 +39,13 @@
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const fallbackIcons = ["fa-star", "fa-image", "fa-address-card", "fa-box", "fa-palette", "fa-brush"];
+  const fallbackIcons = ["star", "image", "address-card", "box", "palette", "brush"];
 
   function renderFallback() {
     showcase.innerHTML = SLOTS.map((slot, i) => `
       <div class="project-tile project-tile--empty" data-slot="${slot}">
         <div class="project-tile-empty-icon">
-          <i class="fa-solid ${fallbackIcons[i % fallbackIcons.length]}"></i>
+          <i class="icon--fa6-solid icon--fa6-solid--${fallbackIcons[i % fallbackIcons.length]}"></i>
         </div>
       </div>
     `).join("");

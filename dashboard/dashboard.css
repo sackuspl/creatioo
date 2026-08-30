@@ -307,7 +307,7 @@ body {
 }
 
 .nav-item i {
-  width: 18px;
+  width: 18px !important;
   text-align: center;
   font-size: 0.85rem;
   flex-shrink: 0;
@@ -1274,7 +1274,7 @@ a:hover { text-decoration: underline; }
   }
 
   .nav-item i {
-    width: auto;
+    width: auto !important;
     font-size: 1rem;
     text-align: center;
   }
@@ -1569,6 +1569,7 @@ a:hover { text-decoration: underline; }
 .btn-upload:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
 .btn-upload:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-upload i.fa-spin { color: var(--accent); }
+.fa-spin { animation: spin 1s linear infinite; }
 
 .upload-sep {
   font-size: 0.75rem;

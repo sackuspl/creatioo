@@ -33,7 +33,7 @@ async function initGallery() {
   /* Pokaż loader */
   grid.innerHTML = `
     <div class="gallery-loader">
-      <i class="fa-solid fa-spinner fa-spin"></i>
+      <i class="icon--fa6-solid icon--fa6-solid--spinner fa-spin"></i>
       <span>Wczytywanie projektów…</span>
     </div>`;
 
@@ -60,7 +60,7 @@ async function initGallery() {
     projects = [];
     grid.innerHTML = `
       <div class="gallery-error">
-        <i class="fa-solid fa-triangle-exclamation"></i>
+        <i class="icon--fa6-solid icon--fa6-solid--triangle-exclamation"></i>
         <p>Nie udało się załadować projektów.</p>
       </div>`;
     return;
@@ -135,7 +135,7 @@ function buildGrid(filter) {
         <div class="gallery-item-overlay">
     
         </div>
-        <div class="gallery-item-icon"><i class="fa-solid fa-expand"></i></div>
+        <div class="gallery-item-icon"><i class="icon--fa6-solid icon--fa6-solid--expand"></i></div>
       `;
       el.addEventListener('click', () => openLightbox(p.id, filter));
       grid.appendChild(el);
@@ -236,15 +236,15 @@ function renderLightbox(direction = 'none') {
      wiersz. Dzięki temu pasek informacji nigdy nie "znika" ani nie
      wygląda jakby się nie wczytał. */
   const metaFields = [
-    { icon: 'fa-wrench',   label: 'Narzędzia:',       value: p.tools },
-    { icon: 'fa-clock',    label: 'Czas realizacji:', value: p.time  },
-    { icon: 'fa-calendar', label: 'Rok:',              value: p.year  },
+    { icon: 'wrench',   label: 'Narzędzia:',       value: p.tools },
+    { icon: 'clock',    label: 'Czas realizacji:', value: p.time  },
+    { icon: 'calendar', label: 'Rok:',              value: p.year  },
   ];
 
   lbMeta.innerHTML = metaFields
     .map(f => `
       <div class="project-modal-meta-item">
-        <i class="fa-solid ${f.icon}"></i>
+        <i class="icon--fa6-solid icon--fa6-solid--${f.icon}"></i>
         <span><strong>${f.label}</strong> ${escapeHtml(f.value) || '—'}</span>
       </div>
     `)

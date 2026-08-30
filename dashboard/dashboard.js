@@ -22,7 +22,7 @@ function toast(msg, type = 'success') {
   const wrap = document.getElementById('toast');
   const el   = document.createElement('div');
   el.className = `toast-msg ${type}`;
-  el.innerHTML = `<i class="fa-solid fa-${type === 'success' ? 'circle-check' : 'circle-exclamation'}"></i><span>${msg}</span>`;
+  el.innerHTML = `<i class="icon--fa6-solid icon--fa6-solid--${type === 'success' ? 'circle-check' : 'circle-exclamation'}"></i><span>${msg}</span>`;
   wrap.appendChild(el);
   setTimeout(() => {
     el.style.animation = 'toastOut 0.25s ease forwards';
@@ -41,14 +41,14 @@ function confirm(message, onConfirm, options = {}) {
 
   const {
     variant      = 'danger',           // 'danger' | 'success'
-    icon         = 'fa-trash',
+    icon         = 'trash',
     title        = 'Potwierdź usunięcie',
     confirmLabel = 'Usuń',
   } = options;
 
   msgEl.textContent   = message;
   titleEl.textContent = title;
-  iconEl.innerHTML    = `<i class="fa-solid ${icon}"></i>`;
+  iconEl.innerHTML    = `<i class="icon--fa6-solid icon--fa6-solid--${icon}"></i>`;
   okBtn.textContent   = confirmLabel;
 
   iconEl.classList.toggle('confirm-icon--success', variant === 'success');
@@ -170,7 +170,7 @@ async function loadAll() {
    ═══════════════════════════════════════════════════════════ */
 async function loadReviews() {
   const listEl = document.getElementById('reviewsList');
-  listEl.innerHTML = `<div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
 
   try {
     const snap = await db.collection('reviews').orderBy('order').get();
@@ -190,7 +190,7 @@ function renderReviews() {
   if (!State.reviews.length) {
     listEl.innerHTML = `
       <div class="empty-state">
-        <i class="fa-regular fa-comment-dots"></i>
+        <i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i>
         <p>Brak opinii. Dodaj pierwszą!</p>
       </div>`;
     return;
@@ -207,19 +207,19 @@ function renderReviews() {
     el.draggable = true;
 
     const starsHtml = Array.from({length: 5}, (_, si) =>
-      `<i class="fa-${si < r.stars ? 'solid' : 'regular'} fa-star${si < r.stars ? '' : ' empty'}"></i>`
+      `<i class="${si < r.stars ? 'icon--fa6-solid icon--fa6-solid--star' : 'icon--fa6-regular icon--fa6-regular--star'}${si < r.stars ? '' : ' empty'}"></i>`
     ).join('');
 
     el.innerHTML = `
-      <div class="drag-handle"><i class="fa-solid fa-grip-dots-vertical"></i></div>
-      <div class="drag-thumb-placeholder"><i class="fa-regular fa-user"></i></div>
+      <div class="drag-handle"><i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i></div>
+      <div class="drag-thumb-placeholder"><i class="icon--fa6-regular icon--fa6-regular--user"></i></div>
       <div class="drag-info">
         <div class="drag-name">${escHtml(r.name)}</div>
         <div class="drag-meta">${escHtml(r.role || '')} · <span class="stars-preview">${starsHtml}</span></div>
       </div>
       <div class="drag-actions">
-        <button class="btn-icon edit" title="Edytuj" onclick="openReviewModal('${r.id}')"><i class="fa-regular fa-pen"></i></button>
-        <button class="btn-icon del"  title="Usuń"   onclick="deleteReview('${r.id}')"><i class="fa-regular fa-trash"></i></button>
+        <button class="btn-icon edit" title="Edytuj" onclick="openReviewModal('${r.id}')"><i class="icon--fa6-solid icon--fa6-solid--pen"></i></button>
+        <button class="btn-icon del"  title="Usuń"   onclick="deleteReview('${r.id}')"><i class="icon--fa6-solid icon--fa6-solid--trash"></i></button>
       </div>`;
 
     setupDrag(el, 'reviews');
@@ -263,7 +263,7 @@ function setStars(n) {
   reviewStars = n;
   document.querySelectorAll('.star-btn').forEach((btn, i) => {
     btn.classList.toggle('active', i < n);
-    btn.innerHTML = `<i class="fa-${i < n ? 'solid' : 'regular'} fa-star"></i>`;
+    btn.innerHTML = `<i class="${i < n ? 'icon--fa6-solid icon--fa6-solid--star' : 'icon--fa6-regular icon--fa6-regular--star'}"></i>`;
   });
 }
 
@@ -271,7 +271,7 @@ document.querySelectorAll('.star-btn').forEach((btn, i) => {
   btn.addEventListener('click', () => setStars(i + 1));
   btn.addEventListener('mouseover', () => {
     document.querySelectorAll('.star-btn').forEach((b, j) => {
-      b.innerHTML = `<i class="fa-${j <= i ? 'solid' : 'regular'} fa-star"></i>`;
+      b.innerHTML = `<i class="${j <= i ? 'icon--fa6-solid icon--fa6-solid--star' : 'icon--fa6-regular icon--fa6-regular--star'}"></i>`;
     });
   });
   btn.addEventListener('mouseleave', () => setStars(reviewStars));
@@ -330,7 +330,7 @@ function deleteReview(id) {
    ═══════════════════════════════════════════════════════════ */
 async function loadPending() {
   const listEl = document.getElementById('pendingList');
-  listEl.innerHTML = `<div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
 
   try {
     const snap = await db.collection('pendingReviews').orderBy('createdAt', 'desc').get();
@@ -356,7 +356,7 @@ function renderPending() {
   if (!State.pending.length) {
     listEl.innerHTML = `
       <div class="empty-state">
-        <i class="fa-regular fa-circle-check"></i>
+        <i class="icon--fa6-regular icon--fa6-regular--circle-check"></i>
         <p>Brak oczekujących opinii.</p>
       </div>`;
     return;
@@ -371,19 +371,19 @@ function renderPending() {
     el.dataset.id = r.id;
 
     const starsHtml = Array.from({ length: 5 }, (_, si) =>
-      `<i class="fa-${si < r.stars ? 'solid' : 'regular'} fa-star${si < r.stars ? '' : ' empty'}"></i>`
+      `<i class="${si < r.stars ? 'icon--fa6-solid icon--fa6-solid--star' : 'icon--fa6-regular icon--fa6-regular--star'}${si < r.stars ? '' : ' empty'}"></i>`
     ).join('');
 
     el.innerHTML = `
-      <div class="drag-thumb-placeholder"><i class="fa-regular fa-user"></i></div>
+      <div class="drag-thumb-placeholder"><i class="icon--fa6-regular icon--fa6-regular--user"></i></div>
       <div class="drag-info">
         <div class="drag-name">${escHtml(r.name)}</div>
         <div class="drag-meta">${escHtml(r.role || '')} · <span class="stars-preview">${starsHtml}</span></div>
         <div class="drag-meta" style="margin-top:4px;">${escHtml(r.text || '')}</div>
       </div>
       <div class="drag-actions">
-        <button class="btn-icon" title="Zatwierdź" onclick="approvePending('${r.id}')"><i class="fa-solid fa-check" style="color:#27ae60;"></i></button>
-        <button class="btn-icon del" title="Odrzuć" onclick="rejectPending('${r.id}')"><i class="fa-solid fa-xmark"></i></button>
+        <button class="btn-icon" title="Zatwierdź" onclick="approvePending('${r.id}')"><i class="icon--fa6-solid icon--fa6-solid--check" style="color:#27ae60;"></i></button>
+        <button class="btn-icon del" title="Odrzuć" onclick="rejectPending('${r.id}')"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
       </div>`;
 
     listEl.appendChild(el);
@@ -414,7 +414,7 @@ async function approvePending(id) {
     } catch (err) {
       toast('Błąd zatwierdzania: ' + err.message, 'error');
     }
-  }, { variant: 'success', icon: 'fa-check', title: 'Zatwierdź opinię', confirmLabel: 'Zatwierdź' });
+  }, { variant: 'success', icon: 'check', title: 'Zatwierdź opinię', confirmLabel: 'Zatwierdź' });
 }
 
 function rejectPending(id) {
@@ -436,7 +436,7 @@ function rejectPending(id) {
    ═══════════════════════════════════════════════════════════ */
 async function loadClients() {
   const listEl = document.getElementById('clientsList');
-  listEl.innerHTML = `<div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
 
   try {
     const snap = await db.collection('clients').orderBy('order').get();
@@ -456,7 +456,7 @@ function renderClients() {
   if (!State.clients.length) {
     listEl.innerHTML = `
       <div class="empty-state">
-        <i class="fa-regular fa-building"></i>
+        <i class="icon--fa6-regular icon--fa6-regular--building"></i>
         <p>Brak logotypów. Dodaj pierwszy!</p>
       </div>`;
     return;
@@ -474,18 +474,18 @@ function renderClients() {
 
     const thumbHtml = c.imageUrl
       ? `<img class="drag-thumb" src="${escHtml(c.imageUrl)}" alt="${escHtml(c.alt || '')}" loading="lazy">`
-      : `<div class="drag-thumb-placeholder"><i class="fa-regular fa-image"></i></div>`;
+      : `<div class="drag-thumb-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i></div>`;
 
     el.innerHTML = `
-      <div class="drag-handle"><i class="fa-solid fa-grip-dots-vertical"></i></div>
+      <div class="drag-handle"><i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i></div>
       ${thumbHtml}
       <div class="drag-info">
         <div class="drag-name">${escHtml(c.alt || 'Klient')}</div>
-        <div class="drag-meta">${c.imageUrl ? '<i class="fa-solid fa-link"></i> URL wklejony' : 'Brak URL'}</div>
+        <div class="drag-meta">${c.imageUrl ? '<i class="icon--fa6-solid icon--fa6-solid--link"></i> URL wklejony' : 'Brak URL'}</div>
       </div>
       <div class="drag-actions">
-        <button class="btn-icon edit" title="Edytuj" onclick="openClientModal('${c.id}')"><i class="fa-regular fa-pen"></i></button>
-        <button class="btn-icon del"  title="Usuń"   onclick="deleteClient('${c.id}')"><i class="fa-regular fa-trash"></i></button>
+        <button class="btn-icon edit" title="Edytuj" onclick="openClientModal('${c.id}')"><i class="icon--fa6-solid icon--fa6-solid--pen"></i></button>
+        <button class="btn-icon del"  title="Usuń"   onclick="deleteClient('${c.id}')"><i class="icon--fa6-solid icon--fa6-solid--trash"></i></button>
       </div>`;
 
     setupDrag(el, 'clients');
@@ -529,7 +529,7 @@ function updateClientPreview(url) {
   if (url) {
     wrap.innerHTML = `<img src="${escHtml(url)}" alt="podgląd" onerror="this.style.display='none'">`;
   } else {
-    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="fa-regular fa-image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
+    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
   }
 }
 
@@ -583,7 +583,7 @@ function deleteClient(id) {
    ═══════════════════════════════════════════════════════════ */
 async function loadProjects() {
   const listEl = document.getElementById('projectsList');
-  listEl.innerHTML = `<div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
 
   try {
     const snap = await db.collection('projects').orderBy('order').get();
@@ -603,7 +603,7 @@ function renderProjects() {
   if (!State.projects.length) {
     listEl.innerHTML = `
       <div class="empty-state">
-        <i class="fa-regular fa-folder-open"></i>
+        <i class="icon--fa6-regular icon--fa6-regular--folder-open"></i>
         <p>Brak projektów. Dodaj pierwszy!</p>
       </div>`;
     return;
@@ -621,18 +621,18 @@ function renderProjects() {
 
     const thumbHtml = p.imageUrl
       ? `<img class="drag-thumb" src="${escHtml(p.imageUrl)}" alt="${escHtml(p.alt || '')}" loading="lazy">`
-      : `<div class="drag-thumb-placeholder"><i class="fa-regular fa-image"></i></div>`;
+      : `<div class="drag-thumb-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i></div>`;
 
     el.innerHTML = `
-      <div class="drag-handle"><i class="fa-solid fa-grip-dots-vertical"></i></div>
+      <div class="drag-handle"><i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i></div>
       ${thumbHtml}
       <div class="drag-info">
         <div class="drag-name">${escHtml(p.alt || 'Projekt')}</div>
-        <div class="drag-meta">${p.imageUrl ? '<i class="fa-solid fa-link"></i> URL wklejony' : 'Brak URL'}</div>
+        <div class="drag-meta">${p.imageUrl ? '<i class="icon--fa6-solid icon--fa6-solid--link"></i> URL wklejony' : 'Brak URL'}</div>
       </div>
       <div class="drag-actions">
-        <button class="btn-icon edit" title="Edytuj" onclick="openProjectModal('${p.id}')"><i class="fa-regular fa-pen"></i></button>
-        <button class="btn-icon del"  title="Usuń"   onclick="deleteProject('${p.id}')"><i class="fa-regular fa-trash"></i></button>
+        <button class="btn-icon edit" title="Edytuj" onclick="openProjectModal('${p.id}')"><i class="icon--fa6-solid icon--fa6-solid--pen"></i></button>
+        <button class="btn-icon del"  title="Usuń"   onclick="deleteProject('${p.id}')"><i class="icon--fa6-solid icon--fa6-solid--trash"></i></button>
       </div>`;
 
     setupDrag(el, 'projects');
@@ -676,7 +676,7 @@ function updateProjectPreview(url) {
   if (url) {
     wrap.innerHTML = `<img src="${escHtml(url)}" alt="podgląd" onerror="this.style.display='none'">`;
   } else {
-    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="fa-regular fa-image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
+    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
   }
 }
 
@@ -851,7 +851,7 @@ document.querySelectorAll('.gallery-dash-tab').forEach(btn => {
 /* ── LOAD ───────────────────────────────────────────────── */
 async function loadGallery() {
   const listEl = document.getElementById('galleryList');
-  listEl.innerHTML = `<div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
 
   try {
     const snap = await db.collection('gallery').get(); // ← bez orderBy
@@ -890,7 +890,7 @@ function renderGallery() {
   if (!items.length) {
     listEl.innerHTML = `
       <div class="empty-state">
-        <i class="fa-regular fa-images"></i>
+        <i class="icon--fa6-regular icon--fa6-regular--images"></i>
         <p>${cat === 'all' ? 'Galeria jest pusta. Dodaj pierwsze zdjęcie!' : 'Brak zdjęć w tej kategorii.'}</p>
       </div>`;
     return;
@@ -924,13 +924,13 @@ function renderGallery() {
 
     const thumbHtml = g.imageUrl
       ? `<img class="drag-thumb" src="${escHtml(g.imageUrl)}" alt="${escHtml(g.title || '')}" loading="lazy">`
-      : `<div class="drag-thumb-placeholder"><i class="fa-regular fa-image"></i></div>`;
+      : `<div class="drag-thumb-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i></div>`;
 
     const catLabel  = GALLERY_CATS[g.cat] || g.cat || '';
     const catClass  = `gallery-cat-badge gallery-cat-${g.cat}`;
     const handleHtml = cat !== 'all'
-      ? `<div class="drag-handle"><i class="fa-solid fa-grip-dots-vertical"></i></div>`
-      : `<div class="drag-handle" style="opacity:0.2;cursor:default"><i class="fa-solid fa-grip-dots-vertical"></i></div>`;
+      ? `<div class="drag-handle"><i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i></div>`
+      : `<div class="drag-handle" style="opacity:0.2;cursor:default"><i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i></div>`;
 
     el.innerHTML = `
       ${handleHtml}
@@ -946,11 +946,11 @@ function renderGallery() {
       <div class="drag-actions">
         <button class="btn-icon edit" title="Edytuj"
           onclick="openGalleryModal('${g.id}')">
-          <i class="fa-regular fa-pen"></i>
+          <i class="icon--fa6-solid icon--fa6-solid--pen"></i>
         </button>
         <button class="btn-icon del" title="Usuń"
           onclick="deleteGalleryItem('${g.id}')">
-          <i class="fa-regular fa-trash"></i>
+          <i class="icon--fa6-solid icon--fa6-solid--trash"></i>
         </button>
       </div>`;
 
@@ -1089,10 +1089,10 @@ function updateGalleryPreview(url) {
   if (!wrap) return;
   if (url) {
     wrap.innerHTML = `<img src="${escHtml(url)}" alt="podgląd"
-      onerror="this.parentElement.innerHTML='<div class=\\'img-preview-placeholder\\'><i class=\\'fa-regular fa-triangle-exclamation\\'></i>Nie można załadować obrazu</div>'">`;
+      onerror="this.parentElement.innerHTML='<div class=\\'img-preview-placeholder\\'><i class=\\'icon--fa6-solid icon--fa6-solid--triangle-exclamation\\'></i>Nie można załadować obrazu</div>'">`;
   } else {
     wrap.innerHTML = `<div class="img-preview-placeholder">
-      <i class="fa-regular fa-image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
+      <i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
   }
 }
 
@@ -1206,7 +1206,7 @@ function setupCloudinaryUpload({ fileInputId, urlInputId, btnId, previewFn }) {
     }
 
     btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Wysyłanie…';
+    btn.innerHTML = '<i class="icon--fa6-solid icon--fa6-solid--spinner fa-spin"></i> Wysyłanie…';
 
     try {
       const url = await uploadToCloudinary(file);

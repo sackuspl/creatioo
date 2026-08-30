@@ -44,13 +44,10 @@
 <script src="../js/firebase-init.js"></script>
 
 
-  <!-- FontAwesome Pro -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/fontawesome.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/sharp-solid.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/duotone.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/solid.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/regular.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/brands.css"/>
+  <!-- Iconify (zamiennik Font Awesome Pro) -->
+  <link rel="stylesheet" href="https://api.iconify.design/fa6-solid.css?icons=address-card,arrow-left,arrow-right,arrow-up,arrow-up-right-from-square,bolt,border-all,box,brush,calendar,check,chevron-down,chevron-left,chevron-right,circle-check,circle-exclamation,clock,comment,comments,crown,envelope,expand,grip-vertical,house,image,images,link,lock,magnifying-glass,mobile-screen,mobile-screen-button,moon,palette,paper-plane,pen,pen-nib,pen-to-square,plus,print,rectangle-ad,right-from-bracket,sliders,spinner,star,sun,table-cells,tag,trash,triangle-exclamation,upload,user,wrench,xmark">
+  <link rel="stylesheet" href="https://api.iconify.design/fa6-regular.css?icons=building,circle-check,comment-dots,envelope,folder-open,hourglass-half,image,images,star,user">
+  <link rel="stylesheet" href="https://api.iconify.design/fa6-brands.css?icons=discord">
 
 
   <!-- Fonts -->
@@ -68,7 +65,7 @@
 
 
 <button class="scroll-top" id="scrollTopBtn" aria-label="Wróć na górę">
-  <i class="fa-solid fa-arrow-up"></i>
+  <i class="icon--fa6-solid icon--fa6-solid--arrow-up"></i>
 </button>
 
 
@@ -95,10 +92,10 @@
 
       <div class="nav-actions">
 <button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
-  <i class="fa-solid fa-moon icon-moon"></i>
-  <i class="fa-solid fa-sun icon-sun"></i>
+  <i class="icon--fa6-solid icon--fa6-solid--moon icon-moon"></i>
+  <i class="icon--fa6-solid icon--fa6-solid--sun icon-sun"></i>
 </button>
-        <a href="../index.html#contact" class="btn btn-sm">Skontaktuj się <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="../index.html#contact" class="btn btn-sm">Skontaktuj się <i class="icon--fa6-solid icon--fa6-solid--arrow-right"></i></a>
       </div>
     </div>
   </header>
@@ -119,35 +116,35 @@
 
 <div class="gallery-controls">
 <button class="btn2 reveal" onclick="window.location.href='../'">
-  <i class="fa-solid fa-arrow-left"></i> Strona Główna
+  <i class="icon--fa6-solid icon--fa6-solid--arrow-left"></i> Strona Główna
 </button>
 
   <div class="gallery-filters-wrap">
 
     <button type="button" class="gallery-filter-toggle" id="filterToggleBtn" aria-expanded="false">
-      <i class="fa-solid fa-sliders"></i>
+      <i class="icon--fa6-solid icon--fa6-solid--sliders"></i>
       <span id="filterToggleLabel">Wybierz kategorię</span>
-      <i class="fa-solid fa-chevron-down gallery-filter-toggle-arrow"></i>
+      <i class="icon--fa6-solid icon--fa6-solid--chevron-down gallery-filter-toggle-arrow"></i>
     </button>
 
     <div class="gallery-filters" role="group" aria-label="Filtruj projekty" id="galleryFiltersPanel">
       <button class="filter-btn active" data-filter="all">
-        <i class="fa-solid fa-border-all"></i> Wszystkie <span class="count" id="count-all">12</span>
+        <i class="icon--fa6-solid icon--fa6-solid--border-all"></i> Wszystkie <span class="count" id="count-all">12</span>
       </button>
       <button class="filter-btn" data-filter="logo">
-        <i class="fa-solid fa-star"></i> Logotypy <span class="count" id="count-logo">4</span>
+        <i class="icon--fa6-solid icon--fa6-solid--star"></i> Logotypy <span class="count" id="count-logo">4</span>
       </button>
       <button class="filter-btn" data-filter="banner">
-        <i class="fa-solid fa-image"></i> Bannery <span class="count" id="count-banner">3</span>
+        <i class="icon--fa6-solid icon--fa6-solid--image"></i> Bannery <span class="count" id="count-banner">3</span>
       </button>
       <button class="filter-btn" data-filter="miniatura">
-        <i class="fa-solid fa-images"></i> Miniatury <span class="count" id="count-miniatura">0</span>
+        <i class="icon--fa6-solid icon--fa6-solid--images"></i> Miniatury <span class="count" id="count-miniatura">0</span>
       </button>
       <button class="filter-btn" data-filter="wizytowka">
-        <i class="fa-solid fa-address-card"></i> Wizytówki & Ulotki <span class="count" id="count-wizytowka">2</span>
+        <i class="icon--fa6-solid icon--fa6-solid--address-card"></i> Wizytówki & Ulotki <span class="count" id="count-wizytowka">2</span>
       </button>
       <button class="filter-btn" data-filter="produkt">
-        <i class="fa-solid fa-box"></i> Produkty <span class="count" id="count-produkt">3</span>
+        <i class="icon--fa6-solid icon--fa6-solid--box"></i> Produkty <span class="count" id="count-produkt">3</span>
       </button>
     </div>
 
@@ -157,7 +154,7 @@
     <div class="gallery-grid" id="galleryGrid"></div>
  
     <div class="gallery-empty" id="galleryEmpty">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <i class="icon--fa6-solid icon--fa6-solid--magnifying-glass"></i>
       <p>Brak projektów w tej kategorii</p>
     </div>
  
@@ -169,7 +166,7 @@
   <div class="project-modal-backdrop" id="projectModalBackdrop"></div>
 
   <button class="project-modal-close" id="projectModalClose" aria-label="Zamknij">
-    <i class="fa-solid fa-xmark"></i>
+    <i class="icon--fa6-solid icon--fa6-solid--xmark"></i>
   </button>
 
   <div class="project-modal-panel">
@@ -182,10 +179,10 @@
 
     <div class="project-modal-nav">
       <button class="project-modal-nav-btn" id="projectModalPrev" aria-label="Poprzedni">
-        <i class="fa-solid fa-arrow-left"></i>
+        <i class="icon--fa6-solid icon--fa6-solid--arrow-left"></i>
       </button>
       <button class="project-modal-nav-btn" id="projectModalNext" aria-label="Następny">
-        <i class="fa-solid fa-arrow-right"></i>
+        <i class="icon--fa6-solid icon--fa6-solid--arrow-right"></i>
       </button>
     </div>
 
@@ -211,10 +208,10 @@
       <p class="footer-tagline">Tworzymy, by wyróżniać.<br>Projekty tworzone z pasją i precyzją.</p>
       <div class="footer-social">
         <a href="https://discord.com/users/662788934266388510" target="_blank" class="social-link" aria-label="Instagram">
-          <i class="fa-brands fa-discord"></i>
+          <i class="icon--fa6-brands icon--fa6-brands--discord"></i>
         </a>
         <a href="mailto:creatioopl@gmail.com" class="social-link" aria-label="Email">
-          <i class="fa-solid fa-envelope"></i>
+          <i class="icon--fa6-solid icon--fa6-solid--envelope"></i>
         </a>
       </div>
     </div>

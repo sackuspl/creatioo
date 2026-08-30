@@ -6,13 +6,10 @@
   <title>creatioo.pl - Dashboard</title>
   <meta name="robots" content="noindex, nofollow">
 
-  <!-- FontAwesome Pro -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/fontawesome.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/sharp-solid.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/duotone.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/solid.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/regular.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.2.0/css/brands.css">
+  <!-- Iconify (zamiennik Font Awesome Pro) -->
+  <link rel="stylesheet" href="https://api.iconify.design/fa6-solid.css?icons=address-card,arrow-left,arrow-right,arrow-up,arrow-up-right-from-square,bolt,border-all,box,brush,calendar,check,chevron-down,chevron-left,chevron-right,circle-check,circle-exclamation,clock,comment,comments,crown,envelope,expand,grip-vertical,house,image,images,link,lock,magnifying-glass,mobile-screen,mobile-screen-button,moon,palette,paper-plane,pen,pen-nib,pen-to-square,plus,print,rectangle-ad,right-from-bracket,sliders,spinner,star,sun,table-cells,tag,trash,triangle-exclamation,upload,user,wrench,xmark">
+  <link rel="stylesheet" href="https://api.iconify.design/fa6-regular.css?icons=building,circle-check,comment-dots,envelope,folder-open,hourglass-half,image,images,star,user">
+  <link rel="stylesheet" href="https://api.iconify.design/fa6-brands.css?icons=discord">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,14 +41,14 @@
         <div class="field">
           <label for="loginEmail">Adres e-mail</label>
           <div class="field-wrap">
-            <i class="fa-regular fa-envelope"></i>
+            <i class="icon--fa6-regular icon--fa6-regular--envelope"></i>
             <input type="email" id="loginEmail" placeholder="twoj@email.com" autocomplete="email" required>
           </div>
         </div>
         <div class="field">
           <label for="loginPass">Hasło</label>
           <div class="field-wrap">
-            <i class="fa-regular fa-lock"></i>
+            <i class="icon--fa6-solid icon--fa6-solid--lock"></i>
             <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" required>
           </div>
         </div>
@@ -71,30 +68,30 @@
       <nav class="sidebar-nav">
         <div class="nav-label">Ogólne</div>
         <button class="nav-item active" data-section="sectionOverview" data-title="Przegląd" data-sub="Podsumowanie zawartości strony">
-          <i class="fa-regular fa-house"></i> Przegląd
+          <i class="icon--fa6-solid icon--fa6-solid--house"></i> Przegląd
         </button>
 
         <div class="nav-label">Sekcje</div>
         <button class="nav-item" data-section="sectionReviews" data-title="Opinie" data-sub="Dodawaj, edytuj i zmieniaj kolejność opinii klientów">
-          <i class="fa-regular fa-comment-dots"></i> Opinie
+          <i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i> Opinie
         </button>
         <button class="nav-item" data-section="sectionPending" data-title="Opinie oczekujące" data-sub="Zatwierdź lub odrzuć przesłane opinie">
-          <i class="fa-regular fa-hourglass-half"></i> Oczekujące
+          <i class="icon--fa6-regular icon--fa6-regular--hourglass-half"></i> Oczekujące
           <span class="badge" id="pendingNavBadge" style="margin-left:auto"></span>
         </button>
         <button class="nav-item" data-section="sectionClients" data-title="Zaufali mi" data-sub="Zarządzaj logotypami klientów w sekcji Zaufali mi">
-          <i class="fa-regular fa-building"></i> Klienci
+          <i class="icon--fa6-regular icon--fa6-regular--building"></i> Klienci
         </button>
         <button class="nav-item" data-section="sectionProjects" data-title="Wykonane projekty" data-sub="Dodawaj i sortuj grafiki w sekcji projektów">
-          <i class="fa-regular fa-folder-open"></i> Projekty
+          <i class="icon--fa6-regular icon--fa6-regular--folder-open"></i> Projekty
         </button>
         <button class="nav-item" data-section="gallerySection" data-title="Galeria" data-sub="Zarządzaj zdjęciami galerii">
-          <i class="fa-regular fa-images"></i> Galeria
+          <i class="icon--fa6-regular icon--fa6-regular--images"></i> Galeria
         </button>
 
         <div class="nav-label">Strona</div>
         <a class="nav-item" href="../index.html" target="_blank">
-          <i class="fa-regular fa-arrow-up-right-from-square"></i> Podgląd strony
+          <i class="icon--fa6-solid icon--fa6-solid--arrow-up-right-from-square"></i> Podgląd strony
         </a>
       </nav>
 
@@ -106,7 +103,7 @@
           </div>
         </div>
         <button class="btn-logout" id="logoutBtn">
-          <i class="fa-regular fa-right-from-bracket"></i> Wyloguj
+          <i class="icon--fa6-solid icon--fa6-solid--right-from-bracket"></i> Wyloguj
         </button>
       </div>
     </aside>
@@ -122,28 +119,28 @@
       <div class="section active" id="sectionOverview">
         <div class="overview-grid">
           <div class="overview-card">
-            <div class="overview-icon"><i class="fa-regular fa-comment-dots"></i></div>
+            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i></div>
             <div>
               <div class="overview-num" id="overviewReviews">0</div>
               <div class="overview-label">Opinie</div>
             </div>
           </div>
           <div class="overview-card">
-            <div class="overview-icon"><i class="fa-regular fa-building"></i></div>
+            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--building"></i></div>
             <div>
               <div class="overview-num" id="overviewClients">0</div>
               <div class="overview-label">Logotypy klientów</div>
             </div>
           </div>
           <div class="overview-card">
-            <div class="overview-icon"><i class="fa-regular fa-folder-open"></i></div>
+            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--folder-open"></i></div>
             <div>
               <div class="overview-num" id="overviewProjects">0</div>
               <div class="overview-label">Projekty</div>
             </div>
           </div>
           <div class="overview-card">
-            <div class="overview-icon"><i class="fa-regular fa-images"></i></div>
+            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--images"></i></div>
             <div>
               <div class="overview-num" id="overviewGallery">0</div>
               <div class="overview-label">Galeria</div>
@@ -156,10 +153,10 @@
       <div class="section" id="sectionReviews">
         <div class="card">
           <div class="card-head">
-            <div class="card-title"><i class="fa-regular fa-comment-dots"></i> Opinie <span class="badge" id="reviewCount">0</span></div>
-            <button class="btn-add" onclick="openReviewModal()"><i class="fa-solid fa-plus"></i> Dodaj opinię</button>
+            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i> Opinie <span class="badge" id="reviewCount">0</span></div>
+            <button class="btn-add" onclick="openReviewModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj opinię</button>
           </div>
-          <div id="reviewsList"><div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div></div>
+          <div id="reviewsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
         </div>
       </div>
 
@@ -167,9 +164,9 @@
       <div class="section" id="sectionPending">
         <div class="card">
           <div class="card-head">
-            <div class="card-title"><i class="fa-regular fa-hourglass-half"></i> Opinie oczekujące <span class="badge" id="pendingCount">0</span></div>
+            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--hourglass-half"></i> Opinie oczekujące <span class="badge" id="pendingCount">0</span></div>
           </div>
-          <div id="pendingList"><div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div></div>
+          <div id="pendingList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
         </div>
       </div>
 
@@ -177,10 +174,10 @@
       <div class="section" id="sectionClients">
         <div class="card">
           <div class="card-head">
-            <div class="card-title"><i class="fa-regular fa-building"></i> Zaufali mi <span class="badge" id="clientCount">0</span></div>
-            <button class="btn-add" onclick="openClientModal()"><i class="fa-solid fa-plus"></i> Dodaj logotyp</button>
+            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--building"></i> Zaufali mi <span class="badge" id="clientCount">0</span></div>
+            <button class="btn-add" onclick="openClientModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj logotyp</button>
           </div>
-          <div id="clientsList"><div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div></div>
+          <div id="clientsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
         </div>
       </div>
 
@@ -188,10 +185,10 @@
       <div class="section" id="sectionProjects">
         <div class="card">
           <div class="card-head">
-            <div class="card-title"><i class="fa-regular fa-folder-open"></i> Wykonane projekty <span class="badge" id="projectCount">0</span></div>
-            <button class="btn-add" onclick="openProjectModal()"><i class="fa-solid fa-plus"></i> Dodaj projekt</button>
+            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--folder-open"></i> Wykonane projekty <span class="badge" id="projectCount">0</span></div>
+            <button class="btn-add" onclick="openProjectModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj projekt</button>
           </div>
-          <div id="projectsList"><div class="loader"><i class="fa-solid fa-spinner"></i> Wczytywanie…</div></div>
+          <div id="projectsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
         </div>
       </div>
 
@@ -199,23 +196,23 @@
       <div class="section" id="gallerySection">
         <div class="card">
           <div class="card-head">
-            <div class="card-title"><i class="fa-regular fa-images"></i> Galeria <span class="badge" id="galleryCount">0</span></div>
-            <button class="btn-add" onclick="openGalleryModal()"><i class="fa-solid fa-plus"></i> Dodaj zdjęcie</button>
+            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--images"></i> Galeria <span class="badge" id="galleryCount">0</span></div>
+            <button class="btn-add" onclick="openGalleryModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj zdjęcie</button>
           </div>
 
           <!-- Zakładki kategorii -->
           <div class="gallery-dash-tabs" id="galleryDashTabs">
-            <button class="gallery-dash-tab active" data-cat="all"><i class="fa-solid fa-border-all"></i> Wszystkie <span class="badge" id="gCount-all">0</span></button>
-            <button class="gallery-dash-tab" data-cat="logo"><i class="fa-solid fa-star"></i> Logotypy <span class="badge" id="gCount-logo">0</span></button>
-            <button class="gallery-dash-tab" data-cat="banner"><i class="fa-solid fa-image"></i> Bannery <span class="badge" id="gCount-banner">0</span></button>
-            <button class="gallery-dash-tab" data-cat="miniatura"><i class="fa-solid fa-images"></i> Miniatury<span class="badge" id="gCount-miniatura">0</span></button>
-            <button class="gallery-dash-tab" data-cat="wizytowka"><i class="fa-solid fa-address-card"></i> Wizytówki & Ulotki<span class="badge" id="gCount-wizytowka">0</span></button>
-            <button class="gallery-dash-tab" data-cat="produkt"><i class="fa-solid fa-box"></i> Produkty <span class="badge" id="gCount-produkt">0</span></button>
+            <button class="gallery-dash-tab active" data-cat="all"><i class="icon--fa6-solid icon--fa6-solid--border-all"></i> Wszystkie <span class="badge" id="gCount-all">0</span></button>
+            <button class="gallery-dash-tab" data-cat="logo"><i class="icon--fa6-solid icon--fa6-solid--star"></i> Logotypy <span class="badge" id="gCount-logo">0</span></button>
+            <button class="gallery-dash-tab" data-cat="banner"><i class="icon--fa6-solid icon--fa6-solid--image"></i> Bannery <span class="badge" id="gCount-banner">0</span></button>
+            <button class="gallery-dash-tab" data-cat="miniatura"><i class="icon--fa6-solid icon--fa6-solid--images"></i> Miniatury<span class="badge" id="gCount-miniatura">0</span></button>
+            <button class="gallery-dash-tab" data-cat="wizytowka"><i class="icon--fa6-solid icon--fa6-solid--address-card"></i> Wizytówki & Ulotki<span class="badge" id="gCount-wizytowka">0</span></button>
+            <button class="gallery-dash-tab" data-cat="produkt"><i class="icon--fa6-solid icon--fa6-solid--box"></i> Produkty <span class="badge" id="gCount-produkt">0</span></button>
           </div>
 
           <!-- Info o drag&drop -->
           <div class="gallery-drag-info" id="galleryDragInfo" style="display:none">
-            <i class="fa-solid fa-grip-dots-vertical"></i> Przeciągnij elementy, aby zmienić kolejność w tej kategorii
+            <i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i> Przeciągnij elementy, aby zmienić kolejność w tej kategorii
           </div>
 
           <div id="galleryList"></div>
@@ -230,7 +227,7 @@
     <div class="modal">
       <div class="modal-head">
         <div class="modal-title" id="reviewModalTitle">Dodaj opinię</div>
-        <button class="btn-close" onclick="closeReviewModal()"><i class="fa-solid fa-xmark"></i></button>
+        <button class="btn-close" onclick="closeReviewModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
       </div>
       <form id="reviewForm" novalidate>
         <div class="modal-field">
@@ -244,11 +241,11 @@
         <div class="modal-field">
           <label>Ocena</label>
           <div class="stars-select">
-            <button type="button" class="star-btn"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
+            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
+            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
+            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
+            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
           </div>
         </div>
         <div class="modal-field">
@@ -268,7 +265,7 @@
     <div class="modal">
       <div class="modal-head">
         <div class="modal-title" id="clientModalTitle">Dodaj logotyp</div>
-        <button class="btn-close" onclick="closeClientModal()"><i class="fa-solid fa-xmark"></i></button>
+        <button class="btn-close" onclick="closeClientModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
       </div>
       <form id="clientForm" novalidate>
         <div class="modal-field">
@@ -281,13 +278,13 @@
         <div class="upload-row">
           <input type="file" id="cFile" accept="image/jpeg,image/png,image/webp" hidden>
           <button type="button" class="btn-upload" id="cUploadBtn">
-            <i class="fa-solid fa-upload"></i> Prześlij plik
+            <i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik
           </button>
           <span class="upload-sep">lub wklej URL powyżej</span>
         </div>
 
         <div class="img-preview-wrap" id="clientImgPreview">
-          <div class="img-preview-placeholder"><i class="fa-regular fa-image"></i>Wklej URL, aby zobaczyć podgląd</div>
+          <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>
         </div>
 
         <div class="modal-field" style="margin-top:16px">
@@ -308,7 +305,7 @@
     <div class="modal">
       <div class="modal-head">
         <div class="modal-title" id="projectModalTitle">Dodaj projekt</div>
-        <button class="btn-close" onclick="closeProjectModal()"><i class="fa-solid fa-xmark"></i></button>
+        <button class="btn-close" onclick="closeProjectModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
       </div>
       <form id="projectForm" novalidate>
         <div class="modal-field">
@@ -321,13 +318,13 @@
         <div class="upload-row">
           <input type="file" id="pFile" accept="image/jpeg,image/png,image/webp" hidden>
           <button type="button" class="btn-upload" id="pUploadBtn">
-            <i class="fa-solid fa-upload"></i> Prześlij plik
+            <i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik
           </button>
           <span class="upload-sep">lub wklej URL powyżej</span>
         </div>
 
         <div class="img-preview-wrap" id="projectImgPreview">
-          <div class="img-preview-placeholder"><i class="fa-regular fa-image"></i>Wklej URL, aby zobaczyć podgląd</div>
+          <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>
         </div>
 
         <div class="modal-field" style="margin-top:16px">
@@ -348,7 +345,7 @@
     <div class="modal" style="max-width:560px">
       <div class="modal-head">
         <h2 class="modal-title" id="galleryModalTitle">Dodaj zdjęcie</h2>
-        <button class="btn-close" onclick="closeGalleryModal()"><i class="fa-solid fa-xmark"></i></button>
+        <button class="btn-close" onclick="closeGalleryModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
       </div>
       <form id="galleryForm">
         <div class="modal-field">
@@ -359,13 +356,13 @@
           <div class="upload-row">
             <input type="file" id="gFile" accept="image/jpeg,image/png,image/webp" hidden>
             <button type="button" class="btn-upload" id="gUploadBtn">
-              <i class="fa-solid fa-upload"></i> Prześlij plik
+              <i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik
             </button>
             <span class="upload-sep">lub wklej URL powyżej</span>
           </div>
 
           <div class="img-preview-wrap" id="galleryImgPreview" style="margin-top:10px">
-            <div class="img-preview-placeholder"><i class="fa-regular fa-image"></i>Wklej URL, aby zobaczyć podgląd</div>
+            <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>
           </div>
         </div>
 
@@ -417,7 +414,7 @@
   <!-- DIALOG POTWIERDZENIA USUNIĘCIA -->
   <div class="confirm-overlay" id="confirmOverlay">
     <div class="confirm-box">
-      <div class="confirm-icon" id="confirmIcon"><i class="fa-solid fa-trash"></i></div>
+      <div class="confirm-icon" id="confirmIcon"><i class="icon--fa6-solid icon--fa6-solid--trash"></i></div>
       <h3 id="confirmTitle">Potwierdź usunięcie</h3>
       <p id="confirmMsg">Czy na pewno chcesz usunąć ten element?</p>
       <div class="confirm-btns">

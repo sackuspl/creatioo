@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>${r.role}</span>
         </div>
         <div class="review-stars">
-          ${'<i class="fa-solid fa-star"></i>'.repeat(r.stars)}
-          ${r.stars < 5 ? '<i class="fa-regular fa-star"></i>'.repeat(5 - r.stars) : ''}
+          ${'<i class="icon--fa6-solid icon--fa6-solid--star"></i>'.repeat(r.stars)}
+          ${r.stars < 5 ? '<i class="icon--fa6-regular icon--fa6-regular--star"></i>'.repeat(5 - r.stars) : ''}
         </div>
       </div>
       <p>${r.text}</p>

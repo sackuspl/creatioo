@@ -3,6 +3,9 @@
    Dark theme is DEFAULT. Light theme applied via [data-theme="light"]
    ═══════════════════════════════════════════════════════════ */
 
+@keyframes spin { to { transform: rotate(360deg); } }
+.fa-spin { animation: spin 1s linear infinite; }
+
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
 
 
@@ -372,8 +375,8 @@ h3 { font-size: 20px; font-weight: 700; }
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1438,7 +1441,7 @@ h3 { font-size: 20px; font-weight: 700; }
   width: fit-content;
 }
 .contact-link i {
-  width: 38px; height: 38px;
+  width: 38px !important; height: 38px !important;
   background: var(--accent-subtle);
   border: 1px solid var(--border);
   border-radius: var(--r-xs);
@@ -3262,15 +3265,17 @@ h3 { font-size: 20px; font-weight: 700; }
   background: var(--border-soft);
 }
 
-.project-modal-meta-item i {
-  width: 28px; height: 28px;
+.project-modal-meta-icon {
+  width: 28px !important; height: 28px !important;
   border-radius: 50%;
   background: var(--accent-subtle);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.project-modal-meta-item i {
   color: var(--accent);
   font-size: 11px;
-  flex-shrink: 0;
 }
 
 .project-modal-meta-item strong { color: var(--text); font-weight: 700; }
@@ -3300,8 +3305,10 @@ h3 { font-size: 20px; font-weight: 700; }
     font-size: 11.5px;
     gap: 8px;
   }
+  .project-modal-meta-icon {
+    width: 24px !important; height: 24px !important;
+  }
   .project-modal-meta-item i {
-    width: 24px; height: 24px;
     font-size: 10px;
   }
 }

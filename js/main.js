@@ -437,7 +437,7 @@ function buildGrid(filter) {
         <div class="gallery-item-cat">${p.catLabel}</div>
         <div class="gallery-item-title">${p.title}</div>
       </div>
-      <div class="gallery-item-icon"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-item-icon"><i class="icon--fa6-solid icon--fa6-solid--expand"></i></div>
     `;
     el.addEventListener('click', () => openLightbox(p.id, filter));
     grid.appendChild(el);
@@ -501,9 +501,9 @@ function renderLightbox() {
     .replace(/^/, '<p>')
     .replace(/$/, '</p>');
   lbMeta.innerHTML = `
-    <div class="lightbox-meta-item"><i class="fa-solid fa-wrench"></i><span><strong>Narzędzia:</strong> ${p.tools}</span></div>
-    <div class="lightbox-meta-item"><i class="fa-solid fa-clock"></i><span><strong>Czas realizacji:</strong> ${p.time}</span></div>
-    <div class="lightbox-meta-item"><i class="fa-solid fa-calendar"></i><span><strong>Rok:</strong> ${p.year}</span></div>
+    <div class="lightbox-meta-item"><span class="lightbox-meta-icon"><i class="icon--fa6-solid icon--fa6-solid--wrench"></i></span><span><strong>Narzędzia:</strong> ${p.tools}</span></div>
+    <div class="lightbox-meta-item"><span class="lightbox-meta-icon"><i class="icon--fa6-solid icon--fa6-solid--clock"></i></span><span><strong>Czas realizacji:</strong> ${p.time}</span></div>
+    <div class="lightbox-meta-item"><span class="lightbox-meta-icon"><i class="icon--fa6-solid icon--fa6-solid--calendar"></i></span><span><strong>Rok:</strong> ${p.year}</span></div>
   `;
   lbPrev.disabled      = currentIndex === 0;
   lbNext.disabled      = currentIndex === currentList.length - 1;
