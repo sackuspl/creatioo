@@ -17,13 +17,14 @@
   <link rel="stylesheet" href="https://api.iconify.design/fa6-regular.css?icons=building,circle-check,comment-dots,envelope,folder-open,hourglass-half,image,images,star,user">
   <link rel="stylesheet" href="https://api.iconify.design/fa6-brands.css?icons=discord">
 
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/mobile.css">
 
   <!-- Firebase (musi się wczytać przed innymi skryptami korzystającymi z bazy) -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
@@ -374,7 +375,6 @@ cb.addEventListener('change', () => {
 
       <div class="reviews-dots" id="reviews-dots"></div>
 
-      <!-- NOWE: przycisk otwierający formularz -->
       <div class="review-submit-wrap">
 <button class="btn" id="openReviewFormBtn" type="button">
   Prześlij opinię
@@ -384,7 +384,6 @@ cb.addEventListener('change', () => {
     </div>
   </section>
 
-  <!-- NOWE: modal formularza opinii (publiczny) -->
   <div class="review-form-overlay" id="publicReviewOverlay">
     <div class="review-form-box">
       <button class="review-form-close" id="closePublicReviewForm" aria-label="Zamknij">
@@ -645,10 +644,6 @@ cb.addEventListener('change', () => {
 
   <script src="js/main.js"></script>
   <script src="js/reviews.js"></script>
-
-<!-- MOBILE STYLE -->
-
-<link rel="stylesheet" href="css/mobile.css">
 
 </body>
 </html>

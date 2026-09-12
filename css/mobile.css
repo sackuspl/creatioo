@@ -690,7 +690,7 @@ html, body {
   .footer-col a { font-size: 15px !important; }
 
   .newsletter-input { font-size: 16px !important; }
-  .footer-bottom { padding: 18px 0 !important; text-align: left !important; }
+  .footer-bottom { padding: 18px 0 !important; padding-right: 60px !important; text-align: left !important; }
   .footer-bottom p { font-size: 12px !important; }
 
   /* Wymuszony niski, jednoznaczny z-index na stopce, żeby panel
