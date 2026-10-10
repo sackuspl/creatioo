@@ -1,249 +1,142 @@
 <!DOCTYPE html>
-<html lang="pl" data-theme="dark">
+<html lang="pl" data-theme="light">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galeria prac | creatioo</title>
+<meta name="description" content="Wybrane realizacje creatioo: logotypy, bannery, wizytówki, ulotki i grafiki produktowe.">
+<link rel="canonical" href="https://creatioo.pl/gallery/">
 
-  <link rel="icon" type="image/png" href="assets/images/creatioo-icon.png">
-<link rel="icon" type="image/svg+xml" href="assets/images/creatioo-icon.png">
-
-<link rel="icon" type="image/x-icon" href="assets/images/creatioo-icon.png">
-
-<link rel="apple-touch-icon" href="assets/images/creatioo-icon.png">
-
-  <meta property="og:title" content="creatioo.pl - Tworzymy, by wyróżniać.">
-<meta property="og:description" content="Kreatywne projekty, które przyciągają wzrok. Od identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
-<meta property="og:url" content="https://creatioo.pl">
+<meta property="og:title" content="Galeria prac | creatioo">
+<meta property="og:description" content="Wybrane realizacje creatioo: logotypy, bannery, wizytówki, ulotki i grafiki produktowe.">
+<meta property="og:image" content="https://creatioo.pl/assets/images/og-image.png">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://sackuspl.github.io/creatioo/assets/images/og-image.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="creatioo.pl - Tworzymy, by wyróżniać.">
-<meta name="twitter:description" content="Kreatywne projekty, które przyciągają wzrok. Od identyfikacji wizualnej, przez banery i materiały gotowe do druku, po profesjonalny montaż wideo.">
-<meta name="twitter:image" content="https://sackuspl.github.io/creatioo/assets/images/og-image.png">
-<meta name="twitter:url" content="https://creatioo.pl">
-
-
-
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>creatioo.pl - Tworzymy, by wyróżniać.</title>
-
-
-
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-<script src="../js/firebase-init.js"></script>
-
-
-    <link rel="stylesheet" href="https://api.iconify.design/fa6-solid.css?icons=address-card,arrow-left,arrow-right,arrow-up,arrow-up-right-from-square,bolt,border-all,box,brush,calendar,check,chevron-down,chevron-left,chevron-right,circle-check,circle-exclamation,clock,comment,comments,crown,envelope,expand,grip-vertical,house,image,images,link,lock,magnifying-glass,mobile-screen,mobile-screen-button,moon,palette,paper-plane,pen,pen-nib,pen-to-square,plus,print,rectangle-ad,right-from-bracket,sliders,spinner,star,sun,table-cells,tag,trash,triangle-exclamation,upload,user,wrench,xmark">
-  <link rel="stylesheet" href="https://api.iconify.design/fa6-regular.css?icons=building,circle-check,comment-dots,envelope,folder-open,hourglass-half,image,images,star,user">
-  <link rel="stylesheet" href="https://api.iconify.design/fa6-brands.css?icons=discord">
-
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
-
-
-  <link rel="stylesheet" href="css/style.css" />
-
-
-
+<link rel="icon" type="image/png" href="../assets/images/creatioo-icon.png">
+<link rel="apple-touch-icon" href="../assets/images/creatioo-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/pages.css">
+<script>try{const r=document.documentElement;const q=new URLSearchParams(location.search).get('lang');r.dataset.lang=(q==='en'||q==='pl')?q:(localStorage.getItem('language')==='en'?'en':'pl');r.lang=r.dataset.lang;document.documentElement.dataset.theme=localStorage.getItem('theme')==='dark'?'dark':'light'}catch(e){}</script>
 </head>
-<body>
-
-
-<button class="scroll-top" id="scrollTopBtn" aria-label="Wróć na górę">
-  <i class="icon--fa6-solid icon--fa6-solid--arrow-up"></i>
-</button>
-
-
-    <header class="navbar" id="navbar">
-    <div class="container nav-content">
-      <a href="../" class="nav-logo">
-  <img src="assets/images/logo2.png" alt="creatioo" class="nav-logo-dark">
-  <img src="assets/images/logo.png"  alt="creatioo" class="nav-logo-light">
-</a>
-
-
-      <nav>
-        <ul class="nav-links">
-          <li><a href="../">Strona Główna</a></li>
-          <li><a href="../index.html#about">Informacje</a></li>
-          <li><a href="../index.html#features">Oferta</a></li>
-          <li><a href="../index.html#reviews">Opinie</a></li>
-          <li><a href="../index.html#projects">Projekty</a></li>
-          <li><a href="../index.html#contact">Kontakt</a></li>
-        </ul>
-      </nav>
-
-
-      <div class="nav-actions">
-<button id="theme-toggle" class="theme-toggle" aria-label="Przełącz motyw">
-  <i class="icon--fa6-solid icon--fa6-solid--moon icon-moon"></i>
-  <i class="icon--fa6-solid icon--fa6-solid--sun icon-sun"></i>
-</button>
-        <a href="../index.html#contact" class="btn btn-sm">Skontaktuj się <i class="icon--fa6-solid icon--fa6-solid--arrow-right"></i></a>
-      </div>
+<body id="pageTop">
+<a class="skip" href="#main">Przejdź do treści</a>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="../" aria-label="creatioo, strona główna">
+      <img class="l-light" src="../assets/images/logo.png" alt="creatioo" width="119" height="26">
+      <img class="l-dark" src="../assets/images/logo2.png" alt="creatioo" width="119" height="26">
+    </a>
+    <nav class="links" id="links" aria-label="Główna nawigacja">
+      <a href="../#offer">Oferta</a>
+      <a href="../gallery/" aria-current="page">Galeria</a>
+      <a href="../#about">O mnie</a>
+      <a href="../#process">Współpraca</a>
+      <a href="../#reviews">Opinie</a>
+      <a href="../#contact">Kontakt</a>
+    </nav>
+    <div class="acts">
+      <button class="language-toggle" id="language" type="button" aria-label="Switch to English" title="English" data-no-translate><span>PL</span><span>EN</span></button>
+      <button class="round" id="theme" type="button" aria-label="Przełącz motyw jasny i ciemny"><span class="ico-theme"></span></button>
+      <a class="btn sm" href="../#contact">Napisz do mnie<span class="ar" aria-hidden="true"></span></a>
+      <button class="round burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="links"><i></i><i></i></button>
     </div>
-  </header>
-
-
-<section class="gallery-section" id="gallery">
-  <div class="container">
- 
-<div class="gallery-header">
-  <div class="gallery-header-left">
-
-    <h2>Wykonane projekty<br></h2>
-    <p>Wybrane realizacje, które najlepiej pokazują mój styl, podejście i zakres możliwości.</p>
   </div>
-</div>
+</header>
 
-
-<div class="gallery-controls">
-<button class="btn2 reveal" onclick="window.location.href='../'">
-  <i class="icon--fa6-solid icon--fa6-solid--arrow-left"></i> Strona Główna
-</button>
-
-  <div class="gallery-filters-wrap">
-
-    <button type="button" class="gallery-filter-toggle" id="filterToggleBtn" aria-expanded="false">
-      <i class="icon--fa6-solid icon--fa6-solid--sliders"></i>
-      <span id="filterToggleLabel">Wybierz kategorię</span>
-      <i class="icon--fa6-solid icon--fa6-solid--chevron-down gallery-filter-toggle-arrow"></i>
-    </button>
-
-    <div class="gallery-filters" role="group" aria-label="Filtruj projekty" id="galleryFiltersPanel">
-      <button class="filter-btn active" data-filter="all">
-        <i class="icon--fa6-solid icon--fa6-solid--border-all"></i> Wszystkie <span class="count" id="count-all">12</span>
-      </button>
-      <button class="filter-btn" data-filter="logo">
-        <i class="icon--fa6-solid icon--fa6-solid--star"></i> Logotypy <span class="count" id="count-logo">4</span>
-      </button>
-      <button class="filter-btn" data-filter="banner">
-        <i class="icon--fa6-solid icon--fa6-solid--image"></i> Bannery <span class="count" id="count-banner">3</span>
-      </button>
-      <button class="filter-btn" data-filter="miniatura">
-        <i class="icon--fa6-solid icon--fa6-solid--images"></i> Miniatury <span class="count" id="count-miniatura">0</span>
-      </button>
-      <button class="filter-btn" data-filter="wizytowka">
-        <i class="icon--fa6-solid icon--fa6-solid--address-card"></i> Wizytówki & Ulotki <span class="count" id="count-wizytowka">2</span>
-      </button>
-      <button class="filter-btn" data-filter="produkt">
-        <i class="icon--fa6-solid icon--fa6-solid--box"></i> Produkty <span class="count" id="count-produkt">3</span>
-      </button>
+<main id="main" tabindex="-1">
+<section class="pg-head">
+  <div class="wrap pg-head-in">
+    <div>
+      <p class="tag">Galeria</p>
+      <h1>Wykonane projekty</h1>
+      <p class="lead">Wybrane realizacje, które najlepiej pokazują mój styl, podejście i zakres możliwości.</p>
     </div>
-
-  </div>
-    </div>
- 
-    <div class="gallery-grid" id="galleryGrid"></div>
- 
-    <div class="gallery-empty" id="galleryEmpty">
-      <i class="icon--fa6-solid icon--fa6-solid--magnifying-glass"></i>
-      <p>Brak projektów w tej kategorii</p>
-    </div>
- 
+    <p class="g-count" id="gCount" aria-live="polite"></p>
   </div>
 </section>
- 
- 
-<div class="project-modal" id="project-modal" role="dialog" aria-modal="true" aria-label="Podgląd projektu">
-  <div class="project-modal-backdrop" id="projectModalBackdrop"></div>
 
-  <button class="project-modal-close" id="projectModalClose" aria-label="Zamknij">
-    <i class="icon--fa6-solid icon--fa6-solid--xmark"></i>
-  </button>
-
-  <div class="project-modal-panel">
-
-    <div class="project-modal-stage">
-      <div class="project-modal-img-wrap">
-        <img id="projectModalImg" src="" alt="">
-      </div>
-    </div>
-
-    <div class="project-modal-nav">
-      <button class="project-modal-nav-btn" id="projectModalPrev" aria-label="Poprzedni">
-        <i class="icon--fa6-solid icon--fa6-solid--arrow-left"></i>
-      </button>
-      <button class="project-modal-nav-btn" id="projectModalNext" aria-label="Następny">
-        <i class="icon--fa6-solid icon--fa6-solid--arrow-right"></i>
-      </button>
-    </div>
-
+<div class="fbar" id="fbar">
+  <div class="wrap">
+    <div class="fbar-in" id="chips" role="group" aria-label="Kategorie projektów"></div>
   </div>
-
-  <div class="project-modal-info" id="projectModalInfo">
-    <div class="project-modal-meta" id="projectModalMeta"></div>
-  </div>
-
 </div>
 
-
-
-
- <footer class="footer">
-  <div class="footer-main">
-
-    <div class="footer-brand">
-      <a href="#" class="footer-logo">
-        <img src="assets/images/logo2.png" alt="creatioo" class="footer-logo-dark">
-        <img src="assets/images/logo.png"  alt="creatioo" class="footer-logo-light">
-      </a>
-      <p class="footer-tagline">Tworzymy, by wyróżniać.<br>Projekty tworzone z pasją i precyzją.</p>
-      <div class="footer-social">
-        <a href="https://discord.com/users/662788934266388510" target="_blank" class="social-link" aria-label="Instagram">
-          <i class="icon--fa6-brands icon--fa6-brands--discord"></i>
-        </a>
-        <a href="mailto:creatioopl@gmail.com" class="social-link" aria-label="Email">
-          <i class="icon--fa6-solid icon--fa6-solid--envelope"></i>
-        </a>
-      </div>
-    </div>
-
-    <div class="footer-col">
-      <span class="footer-col-title">Nawigacja</span>
-      <ul>
-          <li><a href="../index.html">Strona Główna</a></li>
-          <li><a href="../index.html#about">Informacje</a></li>
-          <li><a href="../index.html#features">Oferta</a></li>
-          <li><a href="../index.html#reviews">Opinie</a></li>
-          <li><a href="../index.html#projects">Projekty</a></li>
-          <li><a href="../index.html#contact">Kontakt</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-col">
-      <span class="footer-col-title">Kontakt</span>
-      <ul>
-        <li><a href="mailto:creatioopl@gmail.com">creatioopl@gmail.com</a></li>
-        <li><a href="https://discord.com/users/662788934266388510" target="_blank">sackypl</a></li>
-      </ul>
-    </div>
-
+<section class="g-main">
+  <div class="wrap">
+    <div class="mas" id="mas" aria-live="polite"></div>
+    <noscript><p class="g-state">Galeria wymaga włączonego JavaScriptu.</p></noscript>
   </div>
+</section>
 
-  <div class="footer-bottom">
-    <p>© 2026 <strong>creatioo</strong> · Wszystkie prawa zastrzeżone · <a href="../privacy-policy/">Polityka prywatności</a></p>
+<section class="alt cta-band">
+  <div class="wrap">
+    <div>
+      <h2>Masz własny pomysł?</h2>
+      <p>Opisz swój projekt, a wspólnie sprawdzimy, jak mogę pomóc.</p>
+    </div>
+    <a class="btn" href="../#contact">Napisz do mnie<span class="ar" aria-hidden="true"></span></a>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <a class="logo" href="../" aria-label="creatioo"><img class="l-light" src="../assets/images/logo.png" alt="creatioo" width="119" height="26"><img class="l-dark" src="../assets/images/logo2.png" alt="creatioo" width="119" height="26"></a>
+      <p class="foot-tagline">Tworzymy, by wyróżniać.</p>
+      <p class="foot-description">Grafika dla marek, serwerów i twórców.</p>
+      <a class="text-link foot-cta" href="../#contact">Porozmawiajmy o projekcie<span class="ar" aria-hidden="true"></span></a>
+    </div>
+    <div class="foot-nav">
+      <h3>Na stronie</h3>
+      <ul><li><a href="../#offer">Oferta</a></li><li><a href="../gallery/">Galeria</a></li><li><a href="../#about">O mnie</a></li><li><a href="../#process">Współpraca</a></li><li><a href="../#reviews">Opinie</a></li><li><a href="../#contact">Kontakt</a></li></ul>
+    </div>
+    <div class="foot-contact">
+      <h3>Bądźmy w kontakcie</h3>
+      <ul><li><a href="mailto:creatioopl@gmail.com">creatioopl@gmail.com<span class="ar" aria-hidden="true"></span></a></li><li><a href="https://discord.com/users/662788934266388510" target="_blank" rel="noopener">Discord: sackypl<span class="ar" aria-hidden="true"></span></a></li></ul>
+    </div>
+  </div>
+  <div class="wrap foot-bot">
+    <span>© 2026 creatioo. Wszystkie prawa zastrzeżone.</span>
+    <div class="foot-legal"><a href="../privacy-policy/">Polityka prywatności</a><a href="#pageTop" class="foot-top">Na górę<span class="ar" aria-hidden="true"></span></a></div>
   </div>
 </footer>
 
+<button class="back-top" id="backTop" type="button" aria-label="Wróć na górę strony" title="Wróć na górę strony" aria-hidden="true" tabindex="-1"><span class="ar r" aria-hidden="true"></span></button>
 
-  <script src="js/main.js"></script>
-  <script src="js/gallery.js"></script>
-  <script src="js/gallery-filter-toggle.js"></script>
+<dialog class="lb" id="lb" aria-label="Podgląd projektu">
+  <div class="lb-wrap">
+    <div class="lb-top">
+      <span class="lb-count" id="lbCount" aria-live="polite"></span>
+      <div class="lb-btns">
+        <button class="round" id="lbPrev" type="button" aria-label="Poprzedni projekt"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5L5.5 9 11 14.5"/></svg></button>
+        <button class="round" id="lbNext" type="button" aria-label="Następny projekt"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5L12.5 9 7 14.5"/></svg></button>
+        <button class="round" id="lbClose" type="button" aria-label="Zamknij podgląd"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg></button>
+      </div>
+    </div>
+    <div class="lb-stage" id="lbStage"><img id="lbImg" alt="" draggable="false"></div>
+    <aside class="lb-info">
+      <span class="cat" id="lbCat"></span>
+      <h2 id="lbTitle"></h2>
+      <p id="lbDesc"></p>
+      <div class="lb-meta" id="lbMeta"></div>
+      <div class="lb-act">
+        <a class="btn sm lb-cta" href="../#contact">Zamów podobny projekt<span class="ar" aria-hidden="true"></span></a>
+        <button class="lb-copy" id="lbCopy" type="button">Kopiuj link do projektu</button>
+      </div>
+    </aside>
+  </div>
+</dialog>
 
-
-  
-
-<link rel="stylesheet" href="../css/mobile.css">
-
-
+<script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script defer src="../js/firebase-init.js"></script>
+<script defer src="../js/i18n.js"></script>
+<script defer src="../js/common.js"></script>
+<script defer src="../js/gallery-page.js"></script>
 </body>
 </html>

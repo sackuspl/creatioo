@@ -1,15 +1,5 @@
-/* ============================================================
-   FIREBASE — KONFIGURACJA I INICJALIZACJA
-   ============================================================
-   Ten plik łączy stronę główną ORAZ dashboard z Twoją bazą Firebase.
-   Musi być wczytany (w obu plikach HTML) PO bibliotekach Firebase
-   i PRZED innymi skryptami, które korzystają z bazy (reviews.js,
-   projects.js, dashboard.js) — to podłączymy w Etapie 2.
-
-   Skąd wziąć wartości poniżej:
-   Firebase Console → ⚙️ Project settings → General
-   → sekcja "Your apps" → Twoja aplikacja webowa → "SDK setup and configuration"
-   ============================================================ */
+// Firebase setup shared by the public pages and the dashboard.
+// Load after the Firebase SDK scripts and before any script that uses db or auth.
 
 const firebaseConfig = {
   apiKey:            "AIzaSyAR0AAe0fhzIvZbrMeQXY1ujG9VHgZuHgA",
@@ -22,12 +12,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-// Firestore — baza danych (opinie, klienci, projekty)
 const db = firebase.firestore();
-
-// Auth — logowanie do dashboardu
 const auth = firebase.auth();
 
-// Sesja logowania ma być pamiętana między wizytami w przeglądarce
-// (wymóg: "logowanie zapisuje się i zapamiętuje się").
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);

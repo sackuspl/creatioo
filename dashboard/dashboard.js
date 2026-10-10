@@ -1,9 +1,6 @@
-/* ═══════════════════════════════════════════════════════════
-   CREATIOO DASHBOARD — dashboard.js
-   Firebase Auth + Firestore CRUD + Drag & Drop
-   ═══════════════════════════════════════════════════════════ */
+/* Dashboard: Firebase Auth, Firestore CRUD, drag and drop ordering, Cloudinary uploads */
 
-/* ── STAN APLIKACJI ─────────────────────────────────────── */
+/* State */
 const State = {
   reviews: [],
   clients: [],
@@ -12,12 +9,12 @@ const State = {
   pending: [],
 };
 
-/* ── DRAG & DROP ────────────────────────────────────────── */
+/* Drag and drop */
 let dragSrc  = null;
 let dragList = null;
 
 
-/* ── TOAST ──────────────────────────────────────────────── */
+/* Toast */
 function toast(msg, type = 'success') {
   const wrap = document.getElementById('toast');
   const el   = document.createElement('div');
@@ -30,7 +27,7 @@ function toast(msg, type = 'success') {
   }, 3200);
 }
 
-/* ── CONFIRM ────────────────────────────────────────────── */
+/* Confirm dialog */
 function confirm(message, onConfirm, options = {}) {
   const overlay   = document.getElementById('confirmOverlay');
   const msgEl     = document.getElementById('confirmMsg');
@@ -72,7 +69,7 @@ function confirm(message, onConfirm, options = {}) {
   cancelBtn.addEventListener('click', handleCancel);
 }
 
-/* ── MODAL ──────────────────────────────────────────────── */
+/* Modal */
 const Modal = {
   el: null,
   init(id) {
@@ -88,7 +85,7 @@ const Modal = {
   }
 };
 
-/* ── AUTH ───────────────────────────────────────────────── */
+/* Auth */
 auth.onAuthStateChanged(user => {
   if (user) {
     showApp(user);
@@ -119,7 +116,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
   errEl.style.display = 'none';
   btn.disabled = true;
-  btn.textContent = 'Logowanie…';
+  btn.textContent = 'Logowanie...';
 
   try {
     await auth.signInWithEmailAndPassword(email, pass);
@@ -146,31 +143,42 @@ function mapAuthError(code) {
   return map[code] || 'Błąd logowania. Spróbuj ponownie.';
 }
 
-/* ── NAWIGACJA ──────────────────────────────────────────── */
+/* Navigation */
+function openSection(btn) {
+  const target = btn.dataset.section;
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(target).classList.add('active');
+  document.getElementById('pageTitle').textContent   = btn.dataset.title || '';
+  document.getElementById('pageSubtitle').textContent = btn.dataset.sub || '';
+  window.scrollTo(0, 0);
+  btn.scrollIntoView({ block: 'nearest', inline: 'center' });
+}
+
 document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const target = btn.dataset.section;
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(target).classList.add('active');
-    document.getElementById('pageTitle').textContent   = btn.dataset.title || '';
-    document.getElementById('pageSubtitle').textContent = btn.dataset.sub || '';
+  btn.addEventListener('click', () => openSection(btn));
+});
+
+/* Overview cards link to their section */
+document.querySelectorAll('[data-go]').forEach(el => {
+  el.addEventListener('click', () => {
+    const btn = document.querySelector(`.nav-item[data-section="${el.dataset.go}"]`);
+    if (btn) openSection(btn);
   });
 });
 
-/* ── LOAD ALL ───────────────────────────────────────────── */
+/* Load all */
 async function loadAll() {
   await Promise.all([loadReviews(), loadClients(), loadGallery(), loadProjects(), loadPending()]);
   updateOverview();
 }
 
-/* ═══════════════════════════════════════════════════════════
-   OPINIE (reviews)
-   ═══════════════════════════════════════════════════════════ */
+/* Reviews */
+
 async function loadReviews() {
   const listEl = document.getElementById('reviewsList');
-  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div>`;
 
   try {
     const snap = await db.collection('reviews').orderBy('order').get();
@@ -188,6 +196,7 @@ function renderReviews() {
   document.getElementById('reviewCount').textContent = State.reviews.length;
 
   if (!State.reviews.length) {
+    listEl.className = '';
     listEl.innerHTML = `
       <div class="empty-state">
         <i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i>
@@ -227,7 +236,7 @@ function renderReviews() {
   });
 }
 
-/* ── MODAL OPINIE ───────────────────────────────────────── */
+/* Review modal */
 const reviewModal = { el: null };
 let   reviewStars = 5;
 let   editReviewId = null;
@@ -281,7 +290,7 @@ document.getElementById('reviewForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = document.getElementById('reviewSaveBtn');
   btn.disabled = true;
-  btn.textContent = 'Zapisuję…';
+  btn.textContent = 'Zapisuję...';
 
   const data = {
     name:  document.getElementById('rName').value.trim(),
@@ -325,12 +334,11 @@ function deleteReview(id) {
 }
 
 
-/* ═══════════════════════════════════════════════════════════
-   OPINIE OCZEKUJĄCE (pendingReviews)
-   ═══════════════════════════════════════════════════════════ */
+/* Pending reviews */
+
 async function loadPending() {
   const listEl = document.getElementById('pendingList');
-  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div>`;
 
   try {
     const snap = await db.collection('pendingReviews').orderBy('createdAt', 'desc').get();
@@ -354,6 +362,7 @@ function renderPending() {
   }
 
   if (!State.pending.length) {
+    listEl.className = '';
     listEl.innerHTML = `
       <div class="empty-state">
         <i class="icon--fa6-regular icon--fa6-regular--circle-check"></i>
@@ -382,7 +391,7 @@ function renderPending() {
         <div class="drag-meta" style="margin-top:4px;">${escHtml(r.text || '')}</div>
       </div>
       <div class="drag-actions">
-        <button class="btn-icon" title="Zatwierdź" onclick="approvePending('${r.id}')"><i class="icon--fa6-solid icon--fa6-solid--check" style="color:#27ae60;"></i></button>
+        <button class="btn-icon ok" title="Zatwierdź" onclick="approvePending('${r.id}')"><i class="icon--fa6-solid icon--fa6-solid--check"></i></button>
         <button class="btn-icon del" title="Odrzuć" onclick="rejectPending('${r.id}')"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
       </div>`;
 
@@ -396,7 +405,7 @@ async function approvePending(id) {
 
   confirm(`Zatwierdzić opinię od „${r.name}"?`, async () => {
     try {
-      // znajdź najwyższy istniejący "order" i dodaj 1 — gwarantuje koniec listy
+      // next order value puts the new item at the end of the list
       const maxOrder = State.reviews.reduce((max, rv) => Math.max(max, rv.order ?? -1), -1);
 
       await db.collection('reviews').add({
@@ -431,12 +440,11 @@ function rejectPending(id) {
 }
 
 
-/* ═══════════════════════════════════════════════════════════
-   KLIENCI (clients)
-   ═══════════════════════════════════════════════════════════ */
+/* Clients */
+
 async function loadClients() {
   const listEl = document.getElementById('clientsList');
-  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div>`;
 
   try {
     const snap = await db.collection('clients').orderBy('order').get();
@@ -454,6 +462,7 @@ function renderClients() {
   document.getElementById('clientCount').textContent = State.clients.length;
 
   if (!State.clients.length) {
+    listEl.className = '';
     listEl.innerHTML = `
       <div class="empty-state">
         <i class="icon--fa6-regular icon--fa6-regular--building"></i>
@@ -481,7 +490,7 @@ function renderClients() {
       ${thumbHtml}
       <div class="drag-info">
         <div class="drag-name">${escHtml(c.alt || 'Klient')}</div>
-        <div class="drag-meta">${c.imageUrl ? '<i class="icon--fa6-solid icon--fa6-solid--link"></i> URL wklejony' : 'Brak URL'}</div>
+        <div class="drag-meta is-host">${c.imageUrl ? escHtml(hostOf(c.imageUrl)) : 'Brak adresu'}</div>
       </div>
       <div class="drag-actions">
         <button class="btn-icon edit" title="Edytuj" onclick="openClientModal('${c.id}')"><i class="icon--fa6-solid icon--fa6-solid--pen"></i></button>
@@ -529,7 +538,7 @@ function updateClientPreview(url) {
   if (url) {
     wrap.innerHTML = `<img src="${escHtml(url)}" alt="podgląd" onerror="this.style.display='none'">`;
   } else {
-    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
+    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej adres, aby zobaczyć podgląd</div>`;
   }
 }
 
@@ -537,7 +546,7 @@ document.getElementById('clientForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = document.getElementById('clientSaveBtn');
   btn.disabled = true;
-  btn.textContent = 'Zapisuję…';
+  btn.textContent = 'Zapisuję...';
 
   const data = {
     imageUrl: document.getElementById('cUrl').value.trim(),
@@ -578,19 +587,18 @@ function deleteClient(id) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   PROJEKTY (projects)
-   ═══════════════════════════════════════════════════════════ */
+/* Featured projects */
+
 async function loadProjects() {
   const listEl = document.getElementById('projectsList');
-  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div>`;
 
   try {
     const snap = await db.collection('projects').orderBy('order').get();
     State.projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
     State.projects = [];
-    toast('Błąd wczytywania projektów', 'error');
+    toast('Błąd wczytywania prac', 'error');
   }
 
   renderProjects();
@@ -601,10 +609,11 @@ function renderProjects() {
   document.getElementById('projectCount').textContent = State.projects.length;
 
   if (!State.projects.length) {
+    listEl.className = '';
     listEl.innerHTML = `
       <div class="empty-state">
         <i class="icon--fa6-regular icon--fa6-regular--folder-open"></i>
-        <p>Brak projektów. Dodaj pierwszy!</p>
+        <p>Brak prac. Strona pokazuje teraz domyślny zestaw.</p>
       </div>`;
     return;
   }
@@ -627,8 +636,8 @@ function renderProjects() {
       <div class="drag-handle"><i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i></div>
       ${thumbHtml}
       <div class="drag-info">
-        <div class="drag-name">${escHtml(p.alt || 'Projekt')}</div>
-        <div class="drag-meta">${p.imageUrl ? '<i class="icon--fa6-solid icon--fa6-solid--link"></i> URL wklejony' : 'Brak URL'}</div>
+        <div class="drag-name">${escHtml(p.alt || 'Praca')}</div>
+        <div class="drag-meta is-host">${p.imageUrl ? escHtml(hostOf(p.imageUrl)) : 'Brak adresu'}</div>
       </div>
       <div class="drag-actions">
         <button class="btn-icon edit" title="Edytuj" onclick="openProjectModal('${p.id}')"><i class="icon--fa6-solid icon--fa6-solid--pen"></i></button>
@@ -651,12 +660,12 @@ function openProjectModal(id = null) {
     const p = State.projects.find(x => x.id === id);
     document.getElementById('pUrl').value = p.imageUrl || '';
     document.getElementById('pAlt').value = p.alt      || '';
-    document.getElementById('projectModalTitle').textContent = 'Edytuj projekt';
+    document.getElementById('projectModalTitle').textContent = 'Edytuj pracę';
     updateProjectPreview(p.imageUrl);
   } else {
     document.getElementById('projectForm').reset();
     updateProjectPreview('');
-    document.getElementById('projectModalTitle').textContent = 'Dodaj projekt';
+    document.getElementById('projectModalTitle').textContent = 'Dodaj pracę';
   }
 
   setTimeout(() => document.getElementById('pUrl').focus(), 100);
@@ -676,7 +685,7 @@ function updateProjectPreview(url) {
   if (url) {
     wrap.innerHTML = `<img src="${escHtml(url)}" alt="podgląd" onerror="this.style.display='none'">`;
   } else {
-    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
+    wrap.innerHTML = `<div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej adres, aby zobaczyć podgląd</div>`;
   }
 }
 
@@ -684,7 +693,7 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = document.getElementById('projectSaveBtn');
   btn.disabled = true;
-  btn.textContent = 'Zapisuję…';
+  btn.textContent = 'Zapisuję...';
 
   const data = {
     imageUrl: document.getElementById('pUrl').value.trim(),
@@ -694,11 +703,11 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
   try {
     if (editProjectId) {
       await db.collection('projects').doc(editProjectId).update(data);
-      toast('Projekt zaktualizowany');
+      toast('Praca zaktualizowana');
     } else {
       data.order = State.projects.length;
       await db.collection('projects').add(data);
-      toast('Projekt dodany');
+      toast('Praca dodana');
     }
     closeProjectModal();
     await loadProjects();
@@ -713,10 +722,10 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
 
 function deleteProject(id) {
   const p = State.projects.find(x => x.id === id);
-  confirm(`Usunąć projekt „${p?.alt || 'projekt'}"?`, async () => {
+  confirm(`Usunąć pracę „${p?.alt || 'bez tytułu'}"?`, async () => {
     try {
       await db.collection('projects').doc(id).delete();
-      toast('Projekt usunięty');
+      toast('Praca usunięta');
       await loadProjects();
       updateOverview();
     } catch (e) {
@@ -725,9 +734,8 @@ function deleteProject(id) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   DRAG & DROP — wspólna logika
-   ═══════════════════════════════════════════════════════════ */
+/* Shared drag and drop logic */
+
 function setupDrag(el, collection) {
   el.addEventListener('dragstart', e => {
     dragSrc  = el;
@@ -767,14 +775,14 @@ function setupDrag(el, collection) {
 
     if (fromIdx === -1 || toIdx === -1) return;
 
-    // Przenieś w DOM
+    // Move in the DOM
     if (fromIdx < toIdx) {
       listEl.insertBefore(dragSrc, el.nextSibling);
     } else {
       listEl.insertBefore(dragSrc, el);
     }
 
-    // Zaktualizuj State + Firestore
+    // Update state and Firestore
     await reorderCollection(collection);
   });
 }
@@ -784,12 +792,12 @@ async function reorderCollection(collection) {
   const items   = [...listEl.querySelectorAll('.drag-item')];
   const ids     = items.map(el => el.dataset.id);
 
-  // Aktualizuj State
+  // Update state
   const stateArr = State[collection];
   const reordered = ids.map(id => stateArr.find(x => x.id === id)).filter(Boolean);
   State[collection] = reordered;
 
-  // Batch write do Firestore
+  // Batch write to Firestore
   try {
     const batch = db.batch();
     ids.forEach((id, i) => {
@@ -802,27 +810,39 @@ async function reorderCollection(collection) {
   }
 }
 
-/* ── OVERVIEW ───────────────────────────────────────────── */
+/* Overview */
 function updateOverview() {
   document.getElementById('overviewReviews').textContent  = State.reviews.length;
   document.getElementById('overviewClients').textContent  = State.clients.length;
   document.getElementById('overviewProjects').textContent = State.projects.length;
-  document.getElementById('overviewGallery').textContent  = State.gallery.length;  // ← to
+  document.getElementById('overviewGallery').textContent  = State.gallery.length;
+
+  const pending = State.pending.length;
+  const callout = document.getElementById('pendingCallout');
+  if (callout) {
+    callout.hidden = !pending;
+    document.getElementById('pendingCalloutText').textContent =
+      pending === 1 ? '1 opinia czeka na zatwierdzenie' : `${pending} ${pending >= 2 && pending <= 4 ? 'opinie czekają' : 'opinii czeka'} na zatwierdzenie`;
+  }
 }
 
-/* ── ESCAPE HTML ────────────────────────────────────────── */
+/* Escape HTML */
+function hostOf(u) {
+  try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; }
+}
+
 function escHtml(str) {
   if (!str) return '';
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ── KEYBOARD ESC ───────────────────────────────────────── */
+/* Close modals on Escape */
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
 });
 
-/* ── STAŁE ──────────────────────────────────────────────── */
+/* Constants */
 const GALLERY_CATS = {
   logo:      'Logotyp',
   banner:    'Banner',
@@ -835,26 +855,26 @@ let activeGalleryCat = 'all';
 let editGalleryId    = null;
 let galleryDragSrc   = null;
 
-/* ── ZAKŁADKI KATEGORII ─────────────────────────────────── */
+/* Category tabs */
 document.querySelectorAll('.gallery-dash-tab').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.gallery-dash-tab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     activeGalleryCat = btn.dataset.cat;
     renderGallery();
-    // Pokaż info o drag tylko gdy wybrana konkretna kategoria
+    // Show the drag hint only for a single category
     const info = document.getElementById('galleryDragInfo');
     if (info) info.style.display = activeGalleryCat !== 'all' ? 'flex' : 'none';
   });
 });
 
-/* ── LOAD ───────────────────────────────────────────────── */
+/* Load */
 async function loadGallery() {
   const listEl = document.getElementById('galleryList');
-  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div>`;
+  listEl.innerHTML = `<div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div>`;
 
   try {
-    const snap = await db.collection('gallery').get(); // ← bez orderBy
+    const snap = await db.collection('gallery').get(); // no orderBy, sorted on the client
     State.gallery = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
     State.gallery = [];
@@ -865,17 +885,17 @@ async function loadGallery() {
   renderGallery();
 }
 
-/* ── RENDER ─────────────────────────────────────────────── */
+/* Render */
 function renderGallery() {
   updateGalleryCounts();
 
   const listEl = document.getElementById('galleryList');
   const cat    = activeGalleryCat;
 
-  /* Pobierz i posortuj elementy */
+  /* Sort items */
   let items;
   if (cat === 'all') {
-    // Grupuj po kategorii, w ramach kategorii sortuj po order
+    // Group by category, then by order
     items = [...State.gallery].sort((a, b) => {
       if (a.cat < b.cat) return -1;
       if (a.cat > b.cat) return 1;
@@ -888,6 +908,7 @@ function renderGallery() {
   }
 
   if (!items.length) {
+    listEl.className = '';
     listEl.innerHTML = `
       <div class="empty-state">
         <i class="icon--fa6-regular icon--fa6-regular--images"></i>
@@ -899,11 +920,11 @@ function renderGallery() {
   listEl.innerHTML = '';
   listEl.className = 'drag-list';
 
-  /* W widoku "wszystkie" wstawiaj nagłówki kategorii */
+  /* Category headings in the "all" view */
   let lastCat = null;
 
   items.forEach(g => {
-    /* Separator kategorii w widoku "all" */
+    /* Category separator */
     if (cat === 'all' && g.cat !== lastCat) {
       lastCat = g.cat;
       const sep = document.createElement('div');
@@ -917,7 +938,7 @@ function renderGallery() {
     el.dataset.id  = g.id;
     el.dataset.cat = g.cat;
 
-    /* Tylko w widoku kategorii włącz drag */
+    /* Dragging only inside a single category */
     if (cat !== 'all') {
       el.draggable = true;
     }
@@ -959,7 +980,7 @@ function renderGallery() {
   });
 }
 
-/* ── COUNTS ─────────────────────────────────────────────── */
+/* Counts */
 function updateGalleryCounts() {
   const total = State.gallery.length;
   const cnt = document.getElementById('galleryCount');
@@ -977,7 +998,7 @@ function updateGalleryCounts() {
   if (ov) ov.textContent = total;
 }
 
-/* ── DRAG & DROP (per kategoria) ────────────────────────── */
+/* Drag and drop (per category) */
 function setupGalleryDrag(el) {
   el.addEventListener('dragstart', e => {
     galleryDragSrc = el;
@@ -1027,7 +1048,7 @@ async function reorderGalleryCategory(cat) {
   const items  = [...listEl.querySelectorAll('.drag-item')];
   const ids    = items.map(el => el.dataset.id);
 
-  /* Zaktualizuj State — tylko elementy danej kategorii */
+  /* Update state for this category only */
   const others     = State.gallery.filter(g => g.cat !== cat);
   const reordered  = ids
     .map(id => State.gallery.find(g => g.id === id))
@@ -1049,7 +1070,7 @@ async function reorderGalleryCategory(cat) {
   }
 }
 
-/* ── MODAL ──────────────────────────────────────────────── */
+/* Modal */
 function openGalleryModal(id = null) {
   editGalleryId = id;
   const m = document.getElementById('galleryModal');
@@ -1092,16 +1113,16 @@ function updateGalleryPreview(url) {
       onerror="this.parentElement.innerHTML='<div class=\\'img-preview-placeholder\\'><i class=\\'icon--fa6-solid icon--fa6-solid--triangle-exclamation\\'></i>Nie można załadować obrazu</div>'">`;
   } else {
     wrap.innerHTML = `<div class="img-preview-placeholder">
-      <i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>`;
+      <i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej adres, aby zobaczyć podgląd</div>`;
   }
 }
 
-/* ── SAVE ───────────────────────────────────────────────── */
+/* Save */
 document.getElementById('galleryForm').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.getElementById('gallerySaveBtn');
   btn.disabled    = true;
-  btn.textContent = 'Zapisuję…';
+  btn.textContent = 'Zapisuję...';
 
   const cat = document.getElementById('gCat').value;
 
@@ -1121,7 +1142,7 @@ document.getElementById('galleryForm').addEventListener('submit', async e => {
       await db.collection('gallery').doc(editGalleryId).update(data);
       toast('Zdjęcie zaktualizowane');
     } else {
-      /* Nowy element dostaje kolejny numer w swojej kategorii */
+      /* New item gets the next order number in its category */
       const catItems = State.gallery.filter(g => g.cat === cat);
       data.order = catItems.length;
       await db.collection('gallery').add(data);
@@ -1138,7 +1159,7 @@ document.getElementById('galleryForm').addEventListener('submit', async e => {
   btn.textContent = 'Zapisz';
 });
 
-/* ── DELETE ─────────────────────────────────────────────── */
+/* Delete */
 function deleteGalleryItem(id) {
   const g = State.gallery.find(x => x.id === id);
   confirm(`Usunąć „${g?.title || 'to zdjęcie'}"?`, async () => {
@@ -1156,9 +1177,8 @@ function deleteGalleryItem(id) {
 
 
 
-/* ═══════════════════════════════════════════════════════════
-   CLOUDINARY UPLOAD (unsigned preset)
-═══════════════════════════════════════════════════════════ */
+/* Cloudinary upload (unsigned preset) */
+
 const CLOUDINARY_CLOUD_NAME = 'dafgacxhm';
 const CLOUDINARY_UPLOAD_PRESET = 'dashboard_unsigned';
 const MAX_UPLOAD_MB = 5;
@@ -1206,7 +1226,7 @@ function setupCloudinaryUpload({ fileInputId, urlInputId, btnId, previewFn }) {
     }
 
     btn.disabled = true;
-    btn.innerHTML = '<i class="icon--fa6-solid icon--fa6-solid--spinner fa-spin"></i> Wysyłanie…';
+    btn.innerHTML = '<i class="icon--fa6-solid icon--fa6-solid--spinner fa-spin"></i> Wysyłanie...';
 
     try {
       const url = await uploadToCloudinary(file);

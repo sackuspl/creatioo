@@ -1,433 +1,417 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>creatioo.pl - Dashboard</title>
-  <meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard | creatioo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#faf9f6">
+<link rel="icon" type="image/png" href="../assets/images/creatioo-icon.png">
 
-  <!-- Iconify (zamiennik Font Awesome Pro) -->
-  <link rel="stylesheet" href="https://api.iconify.design/fa6-solid.css?icons=address-card,arrow-left,arrow-right,arrow-up,arrow-up-right-from-square,bolt,border-all,box,brush,calendar,check,chevron-down,chevron-left,chevron-right,circle-check,circle-exclamation,clock,comment,comments,crown,envelope,expand,grip-vertical,house,image,images,link,lock,magnifying-glass,mobile-screen,mobile-screen-button,moon,palette,paper-plane,pen,pen-nib,pen-to-square,plus,print,rectangle-ad,right-from-bracket,sliders,spinner,star,sun,table-cells,tag,trash,triangle-exclamation,upload,user,wrench,xmark">
-  <link rel="stylesheet" href="https://api.iconify.design/fa6-regular.css?icons=building,circle-check,comment-dots,envelope,folder-open,hourglass-half,image,images,star,user">
-  <link rel="stylesheet" href="https://api.iconify.design/fa6-brands.css?icons=discord">
+<link rel="stylesheet" href="https://api.iconify.design/fa6-solid.css?icons=address-card,arrow-left,arrow-right,arrow-up,arrow-up-right-from-square,bolt,border-all,box,brush,calendar,check,chevron-down,chevron-left,chevron-right,circle-check,circle-exclamation,clock,comment,comments,crown,envelope,expand,grip-vertical,house,image,images,link,lock,magnifying-glass,mobile-screen,mobile-screen-button,moon,palette,paper-plane,pen,pen-nib,pen-to-square,plus,print,rectangle-ad,right-from-bracket,sliders,spinner,star,sun,table-cells,tag,trash,triangle-exclamation,upload,user,wrench,xmark">
+<link rel="stylesheet" href="https://api.iconify.design/fa6-regular.css?icons=building,circle-check,comment-dots,envelope,folder-open,hourglass-half,image,images,star,user">
+<link rel="stylesheet" href="https://api.iconify.design/fa6-brands.css?icons=discord">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-  <!-- UWAGA: sprawdź, czy ta ścieżka zgadza się z Twoją strukturą plików -->
-  <script src="../js/firebase-init.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-init.js"></script>
 
-  <!-- Dashboard styles -->
-  <link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
-  <!-- EKRAN LOGOWANIA -->
-  <div id="loginScreen" style="display:none">
-    <div class="login-card">
-      <div class="login-logo" style="justify-content:center">
-        <img src="../assets/images/logo2.png" alt="creatioo" style="height:28px">
+<!-- Login -->
+<div id="loginScreen" style="display:none">
+  <div class="login-card">
+    <img class="login-logo" src="../assets/images/logo.png" alt="creatioo" width="119" height="26">
+    <h1>Zaloguj się</h1>
+    <p>Panel do zarządzania treścią strony creatioo.pl.</p>
+    <div id="loginError" role="alert"></div>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="loginEmail">Adres e-mail</label>
+        <div class="field-wrap">
+          <i class="icon--fa6-regular icon--fa6-regular--envelope"></i>
+          <input type="email" id="loginEmail" placeholder="twoj@email.com" autocomplete="email" required>
+        </div>
       </div>
-      <h1 style="text-align:center">Dashboard</h1>
-      <p style="text-align:center">Zaloguj się, aby zarządzać treściami strony.</p>
-      <div id="loginError"></div>
-      <form id="loginForm" novalidate>
-        <div class="field">
-          <label for="loginEmail">Adres e-mail</label>
-          <div class="field-wrap">
-            <i class="icon--fa6-regular icon--fa6-regular--envelope"></i>
-            <input type="email" id="loginEmail" placeholder="twoj@email.com" autocomplete="email" required>
-          </div>
+      <div class="field">
+        <label for="loginPass">Hasło</label>
+        <div class="field-wrap">
+          <i class="icon--fa6-solid icon--fa6-solid--lock"></i>
+          <input type="password" id="loginPass" placeholder="Hasło" autocomplete="current-password" required>
         </div>
-        <div class="field">
-          <label for="loginPass">Hasło</label>
-          <div class="field-wrap">
-            <i class="icon--fa6-solid icon--fa6-solid--lock"></i>
-            <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" required>
-          </div>
-        </div>
-        <button type="submit" id="loginBtn" class="btn-primary" style="margin-top:8px">Zaloguj się</button>
-      </form>
-    </div>
+      </div>
+      <button type="submit" id="loginBtn" class="btn-primary">Zaloguj się</button>
+    </form>
   </div>
+</div>
 
-  <!-- APLIKACJA ukryta przed logowaniem -->
-  <div id="app">
+<!-- App, shown after login -->
+<div id="app">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <img src="../assets/images/logo2.png" alt="creatioo" style="height:18px">
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="../" target="_blank" rel="noopener" aria-label="creatioo, podgląd strony">
+      <img src="../assets/images/logo.png" alt="creatioo" width="119" height="26">
+    </a>
+    <nav class="sidebar-nav" aria-label="Sekcje panelu">
+      <div class="nav-label">Ogólne</div>
+      <button class="nav-item active" data-section="sectionOverview" data-title="Przegląd" data-sub="Podsumowanie zawartości strony">
+        <i class="icon--fa6-solid icon--fa6-solid--house"></i><span>Przegląd</span>
+      </button>
+
+      <div class="nav-label">Treści</div>
+      <button class="nav-item" data-section="sectionReviews" data-title="Opinie" data-sub="Dodawaj, edytuj i zmieniaj kolejność opinii klientów">
+        <i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i><span>Opinie</span>
+      </button>
+      <button class="nav-item" data-section="sectionPending" data-title="Opinie oczekujące" data-sub="Zatwierdź lub odrzuć opinie przesłane przez odwiedzających">
+        <i class="icon--fa6-regular icon--fa6-regular--hourglass-half"></i><span>Oczekujące</span>
+        <span class="badge" id="pendingNavBadge"></span>
+      </button>
+      <button class="nav-item" data-section="sectionClients" data-title="Zaufali mi" data-sub="Logotypy klientów w sekcji Zaufali mi">
+        <i class="icon--fa6-regular icon--fa6-regular--building"></i><span>Klienci</span>
+      </button>
+      <button class="nav-item" data-section="sectionProjects" data-title="Wybrane prace" data-sub="Grafiki, które zmieniają się w sekcji Wykonane projekty">
+        <i class="icon--fa6-regular icon--fa6-regular--folder-open"></i><span>Wybrane prace</span>
+      </button>
+      <button class="nav-item" data-section="gallerySection" data-title="Galeria" data-sub="Zdjęcia i opisy projektów na stronie Galeria">
+        <i class="icon--fa6-regular icon--fa6-regular--images"></i><span>Galeria</span>
+      </button>
+
+      <div class="nav-label">Strona</div>
+      <a class="nav-item" href="../" target="_blank" rel="noopener">
+        <i class="icon--fa6-solid icon--fa6-solid--arrow-up-right-from-square"></i><span>Podgląd strony</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="userAvatar">A</div>
+        <div class="user-info"><div class="user-email" id="userEmail"></div></div>
       </div>
-      <nav class="sidebar-nav">
-        <div class="nav-label">Ogólne</div>
-        <button class="nav-item active" data-section="sectionOverview" data-title="Przegląd" data-sub="Podsumowanie zawartości strony">
-          <i class="icon--fa6-solid icon--fa6-solid--house"></i> Przegląd
-        </button>
-
-        <div class="nav-label">Sekcje</div>
-        <button class="nav-item" data-section="sectionReviews" data-title="Opinie" data-sub="Dodawaj, edytuj i zmieniaj kolejność opinii klientów">
-          <i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i> Opinie
-        </button>
-        <button class="nav-item" data-section="sectionPending" data-title="Opinie oczekujące" data-sub="Zatwierdź lub odrzuć przesłane opinie">
-          <i class="icon--fa6-regular icon--fa6-regular--hourglass-half"></i> Oczekujące
-          <span class="badge" id="pendingNavBadge" style="margin-left:auto"></span>
-        </button>
-        <button class="nav-item" data-section="sectionClients" data-title="Zaufali mi" data-sub="Zarządzaj logotypami klientów w sekcji Zaufali mi">
-          <i class="icon--fa6-regular icon--fa6-regular--building"></i> Klienci
-        </button>
-        <button class="nav-item" data-section="sectionProjects" data-title="Wykonane projekty" data-sub="Dodawaj i sortuj grafiki w sekcji projektów">
-          <i class="icon--fa6-regular icon--fa6-regular--folder-open"></i> Projekty
-        </button>
-        <button class="nav-item" data-section="gallerySection" data-title="Galeria" data-sub="Zarządzaj zdjęciami galerii">
-          <i class="icon--fa6-regular icon--fa6-regular--images"></i> Galeria
-        </button>
-
-        <div class="nav-label">Strona</div>
-        <a class="nav-item" href="../index.html" target="_blank">
-          <i class="icon--fa6-solid icon--fa6-solid--arrow-up-right-from-square"></i> Podgląd strony
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-chip">
-          <div class="user-avatar" id="userAvatar">A</div>
-          <div class="user-info">
-            <div class="user-email" id="userEmail"></div>
-          </div>
-        </div>
-        <button class="btn-logout" id="logoutBtn">
-          <i class="icon--fa6-solid icon--fa6-solid--right-from-bracket"></i> Wyloguj
-        </button>
-      </div>
-    </aside>
-
-    <main class="main">
-
-      <div class="page-header">
-        <div class="page-title" id="pageTitle">Przegląd</div>
-        <div class="page-subtitle" id="pageSubtitle">Podsumowanie zawartości strony</div>
-      </div>
-
-      <!-- PRZEGLĄD -->
-      <div class="section active" id="sectionOverview">
-        <div class="overview-grid">
-          <div class="overview-card">
-            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i></div>
-            <div>
-              <div class="overview-num" id="overviewReviews">0</div>
-              <div class="overview-label">Opinie</div>
-            </div>
-          </div>
-          <div class="overview-card">
-            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--building"></i></div>
-            <div>
-              <div class="overview-num" id="overviewClients">0</div>
-              <div class="overview-label">Logotypy klientów</div>
-            </div>
-          </div>
-          <div class="overview-card">
-            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--folder-open"></i></div>
-            <div>
-              <div class="overview-num" id="overviewProjects">0</div>
-              <div class="overview-label">Projekty</div>
-            </div>
-          </div>
-          <div class="overview-card">
-            <div class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--images"></i></div>
-            <div>
-              <div class="overview-num" id="overviewGallery">0</div>
-              <div class="overview-label">Galeria</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SEKCJA OPINIE -->
-      <div class="section" id="sectionReviews">
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i> Opinie <span class="badge" id="reviewCount">0</span></div>
-            <button class="btn-add" onclick="openReviewModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj opinię</button>
-          </div>
-          <div id="reviewsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
-        </div>
-      </div>
-
-      <!-- SEKCJA OPINIE OCZEKUJĄCE -->
-      <div class="section" id="sectionPending">
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--hourglass-half"></i> Opinie oczekujące <span class="badge" id="pendingCount">0</span></div>
-          </div>
-          <div id="pendingList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
-        </div>
-      </div>
-
-      <!-- SEKCJA KLIENCI -->
-      <div class="section" id="sectionClients">
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--building"></i> Zaufali mi <span class="badge" id="clientCount">0</span></div>
-            <button class="btn-add" onclick="openClientModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj logotyp</button>
-          </div>
-          <div id="clientsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
-        </div>
-      </div>
-
-      <!-- SEKCJA PROJEKTY -->
-      <div class="section" id="sectionProjects">
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--folder-open"></i> Wykonane projekty <span class="badge" id="projectCount">0</span></div>
-            <button class="btn-add" onclick="openProjectModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj projekt</button>
-          </div>
-          <div id="projectsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie…</div></div>
-        </div>
-      </div>
-
-      <!-- SEKCJA GALERIA -->
-      <div class="section" id="gallerySection">
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title"><i class="icon--fa6-regular icon--fa6-regular--images"></i> Galeria <span class="badge" id="galleryCount">0</span></div>
-            <button class="btn-add" onclick="openGalleryModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj zdjęcie</button>
-          </div>
-
-          <!-- Zakładki kategorii -->
-          <div class="gallery-dash-tabs" id="galleryDashTabs">
-            <button class="gallery-dash-tab active" data-cat="all"><i class="icon--fa6-solid icon--fa6-solid--border-all"></i> Wszystkie <span class="badge" id="gCount-all">0</span></button>
-            <button class="gallery-dash-tab" data-cat="logo"><i class="icon--fa6-solid icon--fa6-solid--star"></i> Logotypy <span class="badge" id="gCount-logo">0</span></button>
-            <button class="gallery-dash-tab" data-cat="banner"><i class="icon--fa6-solid icon--fa6-solid--image"></i> Bannery <span class="badge" id="gCount-banner">0</span></button>
-            <button class="gallery-dash-tab" data-cat="miniatura"><i class="icon--fa6-solid icon--fa6-solid--images"></i> Miniatury<span class="badge" id="gCount-miniatura">0</span></button>
-            <button class="gallery-dash-tab" data-cat="wizytowka"><i class="icon--fa6-solid icon--fa6-solid--address-card"></i> Wizytówki & Ulotki<span class="badge" id="gCount-wizytowka">0</span></button>
-            <button class="gallery-dash-tab" data-cat="produkt"><i class="icon--fa6-solid icon--fa6-solid--box"></i> Produkty <span class="badge" id="gCount-produkt">0</span></button>
-          </div>
-
-          <!-- Info o drag&drop -->
-          <div class="gallery-drag-info" id="galleryDragInfo" style="display:none">
-            <i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i> Przeciągnij elementy, aby zmienić kolejność w tej kategorii
-          </div>
-
-          <div id="galleryList"></div>
-        </div>
-      </div>
-
-    </main>
-  </div><!-- /app -->
-
-  <!-- MODAL OPINIA -->
-  <div class="modal-overlay" id="reviewModal">
-    <div class="modal">
-      <div class="modal-head">
-        <div class="modal-title" id="reviewModalTitle">Dodaj opinię</div>
-        <button class="btn-close" onclick="closeReviewModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
-      </div>
-      <form id="reviewForm" novalidate>
-        <div class="modal-field">
-          <label for="rName">Imię i nazwisko *</label>
-          <input type="text" id="rName" placeholder="np. Marta Wiśniewska" required>
-        </div>
-        <div class="modal-field">
-          <label for="rRole">Stanowisko / Firma</label>
-          <input type="text" id="rRole" placeholder="np. CEO, BrandLab">
-        </div>
-        <div class="modal-field">
-          <label>Ocena</label>
-          <div class="stars-select">
-            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
-            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
-            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
-            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
-            <button type="button" class="star-btn"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
-          </div>
-        </div>
-        <div class="modal-field">
-          <label for="rText">Treść opinii *</label>
-          <textarea id="rText" rows="4" placeholder="Treść recenzji klienta" required></textarea>
-        </div>
-        <div class="modal-foot">
-          <button type="button" class="btn-ghost" onclick="closeReviewModal()">Anuluj</button>
-          <button type="submit" id="reviewSaveBtn" class="btn-save">Zapisz</button>
-        </div>
-      </form>
+      <button class="btn-logout" id="logoutBtn" type="button" aria-label="Wyloguj">
+        <i class="icon--fa6-solid icon--fa6-solid--right-from-bracket"></i><span>Wyloguj</span>
+      </button>
     </div>
-  </div>
+  </aside>
 
-  <!-- MODAL KLIENT -->
-  <div class="modal-overlay" id="clientModal">
-    <div class="modal">
-      <div class="modal-head">
-        <div class="modal-title" id="clientModalTitle">Dodaj logotyp</div>
-        <button class="btn-close" onclick="closeClientModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
-      </div>
-      <form id="clientForm" novalidate>
-        <div class="modal-field">
-          <label for="cUrl">URL logotypu *</label>
-          <input type="url" id="cUrl" placeholder="https://..." required>
-          <div class="hint">Wklej link do obrazka (PNG, SVG, WebP). Hostuj zdjęcia na swoim serwerze lub zewnętrznym CDN.</div>
-        </div>
+  <main class="main">
 
-        <!-- Upload na Cloudinary -->
-        <div class="upload-row">
-          <input type="file" id="cFile" accept="image/jpeg,image/png,image/webp" hidden>
-          <button type="button" class="btn-upload" id="cUploadBtn">
-            <i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik
-          </button>
-          <span class="upload-sep">lub wklej URL powyżej</span>
-        </div>
-
-        <div class="img-preview-wrap" id="clientImgPreview">
-          <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>
-        </div>
-
-        <div class="modal-field" style="margin-top:16px">
-          <label for="cAlt">Nazwa klienta</label>
-          <input type="text" id="cAlt" placeholder="np. BrandLab">
-        </div>
-
-        <div class="modal-foot">
-          <button type="button" class="btn-ghost" onclick="closeClientModal()">Anuluj</button>
-          <button type="submit" id="clientSaveBtn" class="btn-save">Zapisz</button>
-        </div>
-      </form>
+    <div class="page-header">
+      <h1 class="page-title" id="pageTitle">Przegląd</h1>
+      <p class="page-subtitle" id="pageSubtitle">Podsumowanie zawartości strony</p>
     </div>
-  </div>
 
-  <!-- MODAL PROJEKT -->
-  <div class="modal-overlay" id="projectModal">
-    <div class="modal">
-      <div class="modal-head">
-        <div class="modal-title" id="projectModalTitle">Dodaj projekt</div>
-        <button class="btn-close" onclick="closeProjectModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
+    <!-- Overview -->
+    <div class="section active" id="sectionOverview">
+      <button class="callout" id="pendingCallout" type="button" data-go="sectionPending" hidden>
+        <i class="icon--fa6-regular icon--fa6-regular--hourglass-half"></i>
+        <span id="pendingCalloutText"></span>
+        <span class="callout-go">Przejdź <i class="icon--fa6-solid icon--fa6-solid--arrow-right"></i></span>
+      </button>
+
+      <div class="overview-grid">
+        <button class="overview-card" type="button" data-go="sectionReviews">
+          <span class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--comment-dots"></i></span>
+          <span class="overview-num" id="overviewReviews">0</span>
+          <span class="overview-label">Opinie</span>
+        </button>
+        <button class="overview-card" type="button" data-go="sectionClients">
+          <span class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--building"></i></span>
+          <span class="overview-num" id="overviewClients">0</span>
+          <span class="overview-label">Logotypy klientów</span>
+        </button>
+        <button class="overview-card" type="button" data-go="sectionProjects">
+          <span class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--folder-open"></i></span>
+          <span class="overview-num" id="overviewProjects">0</span>
+          <span class="overview-label">Wybrane prace</span>
+        </button>
+        <button class="overview-card" type="button" data-go="gallerySection">
+          <span class="overview-icon"><i class="icon--fa6-regular icon--fa6-regular--images"></i></span>
+          <span class="overview-num" id="overviewGallery">0</span>
+          <span class="overview-label">Zdjęcia w galerii</span>
+        </button>
       </div>
-      <form id="projectForm" novalidate>
-        <div class="modal-field">
-          <label for="pUrl">URL grafiki *</label>
-          <input type="url" id="pUrl" placeholder="https://..." required>
-          <div class="hint">Wklej link do obrazka projektu (JPG, PNG, WebP).</div>
+
+      <div class="card quick">
+        <div class="card-title">Szybkie akcje</div>
+        <div class="quick-row">
+          <button class="btn-add" type="button" onclick="openGalleryModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj zdjęcie do galerii</button>
+          <button class="btn-soft" type="button" onclick="openReviewModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj opinię</button>
+          <button class="btn-soft" type="button" onclick="openClientModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj logotyp klienta</button>
         </div>
-
-        <!-- Upload na Cloudinary -->
-        <div class="upload-row">
-          <input type="file" id="pFile" accept="image/jpeg,image/png,image/webp" hidden>
-          <button type="button" class="btn-upload" id="pUploadBtn">
-            <i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik
-          </button>
-          <span class="upload-sep">lub wklej URL powyżej</span>
-        </div>
-
-        <div class="img-preview-wrap" id="projectImgPreview">
-          <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>
-        </div>
-
-        <div class="modal-field" style="margin-top:16px">
-          <label for="pAlt">Opis / tytuł projektu</label>
-          <input type="text" id="pAlt" placeholder="np. Logo dla BrandLab">
-        </div>
-
-        <div class="modal-foot">
-          <button type="button" class="btn-ghost" onclick="closeProjectModal()">Anuluj</button>
-          <button type="submit" id="projectSaveBtn" class="btn-save">Zapisz</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL GALERIA -->
-  <div class="modal-overlay" id="galleryModal">
-    <div class="modal" style="max-width:560px">
-      <div class="modal-head">
-        <h2 class="modal-title" id="galleryModalTitle">Dodaj zdjęcie</h2>
-        <button class="btn-close" onclick="closeGalleryModal()"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
-      </div>
-      <form id="galleryForm">
-        <div class="modal-field">
-          <label>URL zdjęcia *</label>
-          <input type="url" id="gUrl" placeholder="https://cdn.example.com/projekt.jpg" required>
-
-          <!-- Upload na Cloudinary -->
-          <div class="upload-row">
-            <input type="file" id="gFile" accept="image/jpeg,image/png,image/webp" hidden>
-            <button type="button" class="btn-upload" id="gUploadBtn">
-              <i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik
-            </button>
-            <span class="upload-sep">lub wklej URL powyżej</span>
-          </div>
-
-          <div class="img-preview-wrap" id="galleryImgPreview" style="margin-top:10px">
-            <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej URL, aby zobaczyć podgląd</div>
-          </div>
-        </div>
-
-        <div class="modal-field">
-          <label>Tytuł projektu *</label>
-          <input type="text" id="gTitle" placeholder="np. Studio Flux — identyfikacja wizualna" required>
-        </div>
-
-        <div class="modal-field">
-          <label>Kategoria *</label>
-          <select id="gCat" required>
-            <option value="">— Wybierz kategorię —</option>
-            <option value="logo">Logotypy</option>
-            <option value="banner">Bannery</option>
-            <option value="miniatura">Miniatury</option>
-            <option value="wizytowka">Wizytówki & Ulotki</option>
-            <option value="produkt">Produkty</option>
-          </select>
-        </div>
-
-        <div class="modal-field">
-          <label>Opis projektu</label>
-          <textarea id="gDesc" rows="4" placeholder="Opisz projekt — wyzwania, proces, efekty"></textarea>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-          <div class="modal-field">
-            <label>Narzędzia</label>
-            <input type="text" id="gTools" placeholder="Illustrator, Figma">
-          </div>
-          <div class="modal-field">
-            <label>Czas realizacji</label>
-            <input type="text" id="gTime" placeholder="np. 4 dni">
-          </div>
-          <div class="modal-field">
-            <label>Rok</label>
-            <input type="text" id="gYear" placeholder="2025">
-          </div>
-        </div>
-
-        <div class="modal-foot">
-          <button type="button" class="btn-ghost" onclick="closeGalleryModal()">Anuluj</button>
-          <button type="submit" class="btn-save" id="gallerySaveBtn">Zapisz</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- DIALOG POTWIERDZENIA USUNIĘCIA -->
-  <div class="confirm-overlay" id="confirmOverlay">
-    <div class="confirm-box">
-      <div class="confirm-icon" id="confirmIcon"><i class="icon--fa6-solid icon--fa6-solid--trash"></i></div>
-      <h3 id="confirmTitle">Potwierdź usunięcie</h3>
-      <p id="confirmMsg">Czy na pewno chcesz usunąć ten element?</p>
-      <div class="confirm-btns">
-        <button class="btn-confirm-cancel" id="confirmCancel">Anuluj</button>
-        <button class="btn-confirm-delete" id="confirmOk">Usuń</button>
       </div>
     </div>
+
+    <!-- Reviews -->
+    <div class="section" id="sectionReviews">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Opinie <span class="badge" id="reviewCount">0</span></div>
+          <button class="btn-add" type="button" onclick="openReviewModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj opinię</button>
+        </div>
+        <div id="reviewsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div></div>
+      </div>
+    </div>
+
+    <!-- Pending reviews -->
+    <div class="section" id="sectionPending">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Oczekujące na zatwierdzenie <span class="badge" id="pendingCount">0</span></div>
+        </div>
+        <div id="pendingList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div></div>
+      </div>
+    </div>
+
+    <!-- Clients -->
+    <div class="section" id="sectionClients">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Zaufali mi <span class="badge" id="clientCount">0</span></div>
+          <button class="btn-add" type="button" onclick="openClientModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj logotyp</button>
+        </div>
+        <p class="card-note">Sekcja jest ciemna, dlatego najlepiej sprawdzają się białe lub jasne logotypy na przezroczystym tle. Gdy lista jest pusta, sekcja nie wyświetla się na stronie.</p>
+        <div id="clientsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div></div>
+      </div>
+    </div>
+
+    <!-- Featured works -->
+    <div class="section" id="sectionProjects">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Wykonane projekty na stronie głównej <span class="badge" id="projectCount">0</span></div>
+          <button class="btn-add" type="button" onclick="openProjectModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj pracę</button>
+        </div>
+        <p class="card-note">Te grafiki zmieniają się w sekcji Wykonane projekty. Od sześciu prac w górę zastępują zestaw domyślny, przy mniejszej liczbie pojawiają się przed nim. Najlepiej sprawdzają się proporcje 4:3.</p>
+        <div id="projectsList"><div class="loader"><i class="icon--fa6-solid icon--fa6-solid--spinner"></i> Wczytywanie...</div></div>
+      </div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="section" id="gallerySection">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Galeria <span class="badge" id="galleryCount">0</span></div>
+          <button class="btn-add" type="button" onclick="openGalleryModal()"><i class="icon--fa6-solid icon--fa6-solid--plus"></i> Dodaj zdjęcie</button>
+        </div>
+
+        <div class="gallery-dash-tabs" id="galleryDashTabs">
+          <button class="gallery-dash-tab active" data-cat="all" type="button">Wszystkie <span class="badge" id="gCount-all">0</span></button>
+          <button class="gallery-dash-tab" data-cat="logo" type="button">Logotypy <span class="badge" id="gCount-logo">0</span></button>
+          <button class="gallery-dash-tab" data-cat="banner" type="button">Bannery <span class="badge" id="gCount-banner">0</span></button>
+          <button class="gallery-dash-tab" data-cat="miniatura" type="button">Miniatury <span class="badge" id="gCount-miniatura">0</span></button>
+          <button class="gallery-dash-tab" data-cat="wizytowka" type="button">Wizytówki i ulotki <span class="badge" id="gCount-wizytowka">0</span></button>
+          <button class="gallery-dash-tab" data-cat="produkt" type="button">Produkty <span class="badge" id="gCount-produkt">0</span></button>
+        </div>
+
+        <div class="gallery-drag-info" id="galleryDragInfo" style="display:none">
+          <i class="icon--fa6-solid icon--fa6-solid--grip-vertical"></i> Przeciągnij elementy, aby zmienić kolejność w tej kategorii
+        </div>
+
+        <div id="galleryList"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Review modal -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+    <div class="modal-head">
+      <h2 class="modal-title" id="reviewModalTitle">Dodaj opinię</h2>
+      <button class="btn-close" type="button" onclick="closeReviewModal()" aria-label="Zamknij"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
+    </div>
+    <form id="reviewForm" novalidate>
+      <div class="modal-field">
+        <label for="rName">Imię lub pseudonim *</label>
+        <input type="text" id="rName" placeholder="np. Marta" required>
+      </div>
+      <div class="modal-field">
+        <label for="rRole">Stanowisko lub firma</label>
+        <input type="text" id="rRole" placeholder="np. CEO, BrandLab">
+      </div>
+      <div class="modal-field">
+        <label id="rStarsLabel">Ocena</label>
+        <div class="stars-select" role="group" aria-labelledby="rStarsLabel">
+          <button type="button" class="star-btn" aria-label="Ocena 1"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button><button type="button" class="star-btn" aria-label="Ocena 2"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button><button type="button" class="star-btn" aria-label="Ocena 3"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button><button type="button" class="star-btn" aria-label="Ocena 4"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button><button type="button" class="star-btn" aria-label="Ocena 5"><i class="icon--fa6-solid icon--fa6-solid--star"></i></button>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label for="rText">Treść opinii *</label>
+        <textarea id="rText" rows="4" placeholder="Treść opinii klienta" required></textarea>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn-ghost" onclick="closeReviewModal()">Anuluj</button>
+        <button type="submit" id="reviewSaveBtn" class="btn-save">Zapisz</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <!-- TOASTY -->
-  <div id="toast"></div>
+<!-- Client modal -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="clientModalTitle">
+    <div class="modal-head">
+      <h2 class="modal-title" id="clientModalTitle">Dodaj logotyp</h2>
+      <button class="btn-close" type="button" onclick="closeClientModal()" aria-label="Zamknij"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
+    </div>
+    <form id="clientForm" novalidate>
+      <div class="modal-field">
+        <label for="cUrl">Adres obrazka *</label>
+        <input type="url" id="cUrl" placeholder="https://..." required>
+        <div class="hint">Wklej link do obrazka albo prześlij plik. Najlepiej jasny logotyp na przezroczystym tle.</div>
+      </div>
 
-  <!-- Dashboard JS -->
-  <script src="dashboard.js"></script>
+      <div class="upload-row">
+        <input type="file" id="cFile" accept="image/jpeg,image/png,image/webp" hidden>
+        <button type="button" class="btn-upload" id="cUploadBtn"><i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik</button>
+        <span class="upload-sep">lub wklej adres powyżej</span>
+      </div>
+
+      <div class="img-preview-wrap dark" id="clientImgPreview">
+        <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej adres, aby zobaczyć podgląd</div>
+      </div>
+
+      <div class="modal-field">
+        <label for="cAlt">Nazwa klienta</label>
+        <input type="text" id="cAlt" placeholder="np. BrandLab">
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-ghost" onclick="closeClientModal()">Anuluj</button>
+        <button type="submit" id="clientSaveBtn" class="btn-save">Zapisz</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Featured work modal -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+    <div class="modal-head">
+      <h2 class="modal-title" id="projectModalTitle">Dodaj pracę</h2>
+      <button class="btn-close" type="button" onclick="closeProjectModal()" aria-label="Zamknij"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
+    </div>
+    <form id="projectForm" novalidate>
+      <div class="modal-field">
+        <label for="pUrl">Adres grafiki *</label>
+        <input type="url" id="pUrl" placeholder="https://..." required>
+        <div class="hint">Wklej link do grafiki (JPG, PNG, WebP) albo prześlij plik.</div>
+      </div>
+
+      <div class="upload-row">
+        <input type="file" id="pFile" accept="image/jpeg,image/png,image/webp" hidden>
+        <button type="button" class="btn-upload" id="pUploadBtn"><i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik</button>
+        <span class="upload-sep">lub wklej adres powyżej</span>
+      </div>
+
+      <div class="img-preview-wrap" id="projectImgPreview">
+        <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej adres, aby zobaczyć podgląd</div>
+      </div>
+
+      <div class="modal-field">
+        <label for="pAlt">Tytuł pracy</label>
+        <input type="text" id="pAlt" placeholder="np. Logo dla BrandLab">
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-ghost" onclick="closeProjectModal()">Anuluj</button>
+        <button type="submit" id="projectSaveBtn" class="btn-save">Zapisz</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Gallery modal -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="galleryModalTitle">
+    <div class="modal-head">
+      <h2 class="modal-title" id="galleryModalTitle">Dodaj zdjęcie</h2>
+      <button class="btn-close" type="button" onclick="closeGalleryModal()" aria-label="Zamknij"><i class="icon--fa6-solid icon--fa6-solid--xmark"></i></button>
+    </div>
+    <form id="galleryForm">
+      <div class="modal-field">
+        <label for="gUrl">Adres zdjęcia *</label>
+        <input type="url" id="gUrl" placeholder="https://res.cloudinary.com/..." required>
+      </div>
+
+      <div class="upload-row">
+        <input type="file" id="gFile" accept="image/jpeg,image/png,image/webp" hidden>
+        <button type="button" class="btn-upload" id="gUploadBtn"><i class="icon--fa6-solid icon--fa6-solid--upload"></i> Prześlij plik</button>
+        <span class="upload-sep">lub wklej adres powyżej</span>
+      </div>
+
+      <div class="img-preview-wrap" id="galleryImgPreview">
+        <div class="img-preview-placeholder"><i class="icon--fa6-regular icon--fa6-regular--image"></i>Wklej adres, aby zobaczyć podgląd</div>
+      </div>
+
+      <div class="modal-field">
+        <label for="gTitle">Tytuł projektu *</label>
+        <input type="text" id="gTitle" placeholder="np. Logo - Nazwa klienta" required>
+      </div>
+
+      <div class="modal-field">
+        <label for="gCat">Kategoria *</label>
+        <select id="gCat" required>
+          <option value="">Wybierz kategorię</option>
+          <option value="logo">Logotypy</option>
+          <option value="banner">Bannery</option>
+          <option value="miniatura">Miniatury</option>
+          <option value="wizytowka">Wizytówki i ulotki</option>
+          <option value="produkt">Produkty</option>
+        </select>
+      </div>
+
+      <div class="modal-field">
+        <label for="gDesc">Opis projektu</label>
+        <textarea id="gDesc" rows="3" placeholder="Krótki opis: wyzwanie, proces, efekt"></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="modal-field">
+          <label for="gTools">Narzędzia</label>
+          <input type="text" id="gTools" placeholder="Photoshop">
+        </div>
+        <div class="modal-field">
+          <label for="gTime">Czas realizacji</label>
+          <input type="text" id="gTime" placeholder="np. 2 dni">
+        </div>
+        <div class="modal-field">
+          <label for="gYear">Rok</label>
+          <input type="text" id="gYear" placeholder="2026">
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-ghost" onclick="closeGalleryModal()">Anuluj</button>
+        <button type="submit" class="btn-save" id="gallerySaveBtn">Zapisz</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete and approve confirmation -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMsg">
+    <div class="confirm-icon" id="confirmIcon"><i class="icon--fa6-solid icon--fa6-solid--trash"></i></div>
+    <h3 id="confirmTitle">Potwierdź usunięcie</h3>
+    <p id="confirmMsg">Czy na pewno chcesz usunąć ten element?</p>
+    <div class="confirm-btns">
+      <button class="btn-confirm-cancel" id="confirmCancel" type="button">Anuluj</button>
+      <button class="btn-confirm-delete" id="confirmOk" type="button">Usuń</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="dashboard.js"></script>
 </body>
 </html>
