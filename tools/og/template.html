@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}" data-theme="{{THEME}}">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<title>creatioo | {{LABEL}}</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--bg:#faf9f6;--ink:#232323;--mut:#626260;--line:rgba(35,35,35,.13);--brand:#7a41dd;--panel:#f1f0ec}
+[data-theme=dark]{--bg:#181a1b;--ink:#efefed;--mut:#b0b2b2;--line:rgba(239,239,237,.15);--brand:#c4a8f2;--panel:#222425}
+*{box-sizing:border-box}
+html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:var(--bg);color:var(--ink)}
+body{font:400 20px/1.5 Geist,sans-serif;-webkit-font-smoothing:antialiased}
+.card{height:630px;width:1200px;padding:48px 56px 36px;position:relative;display:flex;flex-direction:column}
+.head{display:flex;align-items:center;min-height:43px}
+.logo{display:block;width:198px;height:auto}
+.content{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 450px;gap:32px;align-items:center;padding:26px 0 30px}
+.copy{min-width:0;position:relative;z-index:1}
+.label{margin:0 0 22px;color:var(--mut);font-size:21px}
+h1{margin:0;font:650 80px/1.1 Manrope,Geist,sans-serif;letter-spacing:-.045em}
+h1 span{display:block;white-space:nowrap}
+h1 .accent{color:var(--brand)}
+.subtitle{margin:26px 0 0;font-size:24px;color:var(--mut);max-width:580px}
+.visual{height:402px;min-width:0;position:relative}
+.hero-img{display:block;width:100%;height:100%;object-fit:cover;border-radius:14px}
+.gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px}
+.gallery img{display:block;width:100%;height:100%;min-height:0;object-fit:cover;border-radius:10px}
+.document{border-radius:14px;background:var(--panel);display:flex;align-items:center;justify-content:center}
+.document img{width:350px;height:350px;object-fit:contain}
+.error{display:flex;align-items:center;justify-content:center}
+.number{font:600 206px/1 Manrope,sans-serif;letter-spacing:-.07em;color:var(--brand);margin-left:-10px}
+.tail{display:flex;align-items:center;justify-content:space-between;gap:30px;padding-top:23px;border-top:1px solid var(--line);min-height:54px;font-size:17px;color:var(--mut)}
+.domain{color:var(--ink);font-weight:500;font-size:19px}
+</style>
+</head>
+<body>
+<article class="card {{LAYOUT}}-card">
+  <header class="head"><img class="logo" src="../../assets/images/{{LOGO}}" alt="creatioo"></header>
+  <main class="content">
+    <div class="copy"><p class="label">{{LABEL}}</p><h1>{{HEADLINE}}</h1><p class="subtitle">{{SUBTITLE}}</p></div>
+    {{VISUAL}}
+  </main>
+  <footer class="tail"><span>{{FOOTER}}</span><span class="domain">creatioo.pl{{DOMAIN_SUFFIX}}</span></footer>
+</article>
+</body>
+</html>

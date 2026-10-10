@@ -336,7 +336,8 @@
   const translateNode = node => {
     if (node.parentElement?.closest('script,style,noscript,code,[data-no-translate]')) return;
     const record = source(originals, node, node.nodeValue);
-    const result = language === 'en' ? translate(record.original, 'en') : record.original;
+    const custom = node.parentElement?.matches('title[data-en]') ? node.parentElement.dataset.en : undefined;
+    const result = language === 'en' ? (custom ?? translate(record.original, 'en')) : record.original;
     if (node.nodeValue !== result) node.nodeValue = result;
     record.applied = result;
   };
@@ -350,7 +351,8 @@
       const current = element.getAttribute(attribute);
       let record = saved.get(attribute);
       if (!record || current !== record.applied) record = { original: translate(current, 'pl'), applied: current };
-      const result = language === 'en' ? translate(record.original, 'en') : record.original;
+      const custom = attribute === 'content' ? element.dataset.en : undefined;
+      const result = language === 'en' ? (custom ?? translate(record.original, 'en')) : record.original;
       if (result !== current) element.setAttribute(attribute, result);
       record.applied = result; saved.set(attribute, record);
     });

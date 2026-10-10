@@ -1,0 +1,148 @@
+{
+  "site": "https://creatioo.pl",
+  "brand": "creatioo",
+  "theme": "light",
+  "pages": {
+    "home": {
+      "file": "index.html",
+      "path": "",
+      "layout": "home",
+      "image": "nexsite.webp",
+      "pl": {
+        "title": "creatioo | Logotypy, branding i grafiki dla marek",
+        "description": "Logotypy, identyfikacja wizualna, grafiki do social mediów i materiały do druku. Design dla marek, twórców gier i społeczności.",
+        "ogTitle": "creatioo | Tworzymy, by wyróżniać",
+        "label": "Design dla marek i twórców",
+        "headline": [
+          "Tworzymy,",
+          "by wyróżniać."
+        ],
+        "accentLine": 1,
+        "subtitle": "Logotypy, branding i grafika.",
+        "footer": "Od pomysłu do gotowego projektu.",
+        "alt": "Logo creatioo, hasło Tworzymy, by wyróżniać, oraz projekt szyldu Nexsite na jasnym tle."
+      },
+      "en": {
+        "title": "creatioo | Logos, branding and graphic design",
+        "description": "Logos, visual identities, social media graphics and print design. Design for brands, game developers and communities.",
+        "ogTitle": "creatioo | We create to stand out",
+        "label": "Design for brands and creators",
+        "headline": [
+          "We create",
+          "to stand out."
+        ],
+        "accentLine": 1,
+        "subtitle": "Logos, branding and graphic design.",
+        "footer": "From the first idea to the final design.",
+        "alt": "creatioo logo, the words We create to stand out, and the Nexsite sign design on a light background."
+      }
+    },
+    "gallery": {
+      "file": "gallery/index.html",
+      "path": "gallery/",
+      "layout": "gallery",
+      "images": [
+        "repsly.webp",
+        "vibe.webp",
+        "mallow.webp",
+        "klima.webp"
+      ],
+      "pl": {
+        "title": "Galeria prac | creatioo",
+        "description": "Zobacz wybrane realizacje creatioo: logotypy, branding, grafiki dla społeczności, opakowania oraz materiały do druku.",
+        "ogTitle": "Galeria prac | creatioo",
+        "label": "Portfolio",
+        "headline": [
+          "Wykonane",
+          "projekty."
+        ],
+        "accentLine": 1,
+        "subtitle": "Logotypy. Branding. Grafika.",
+        "footer": "Pomysły, które nabrały kształtu.",
+        "alt": "Logo creatioo i napis Wykonane projekty obok czterech prac: bluzy Repsly, logotypu Vibe Roleplay, opakowań Mallow i wizytówek Klima."
+      },
+      "en": {
+        "title": "Portfolio | creatioo",
+        "description": "Explore selected creatioo projects: logos, branding, community graphics, packaging and print design.",
+        "ogTitle": "Portfolio | creatioo",
+        "label": "Portfolio",
+        "headline": [
+          "Selected",
+          "work."
+        ],
+        "accentLine": 1,
+        "subtitle": "Logos. Branding. Graphic design.",
+        "footer": "Ideas brought to life through design.",
+        "alt": "creatioo logo and the words Selected work beside four projects: a Repsly hoodie, the Vibe Roleplay logo, Mallow packaging and Klima business cards."
+      }
+    },
+    "privacy": {
+      "file": "privacy-policy/index.html",
+      "path": "privacy-policy/",
+      "layout": "document",
+      "pl": {
+        "title": "Polityka prywatności | creatioo",
+        "description": "Informacje o danych z formularza kontaktowego i opinii, ustawieniach przeglądarki, usługach zewnętrznych oraz prawach użytkownika.",
+        "ogTitle": "Polityka prywatności | creatioo",
+        "label": "Dokumenty",
+        "headline": [
+          "Polityka",
+          "prywatności."
+        ],
+        "accentLine": 1,
+        "subtitle": "Informacje o Twoich danych.",
+        "footer": "Formularze, przechowywanie danych i Twoje prawa.",
+        "alt": "Logo creatioo i napis Polityka prywatności na jasnym tle, z dużym fioletowym symbolem marki."
+      },
+      "en": {
+        "title": "Privacy policy | creatioo",
+        "description": "Information about contact and review form data, browser settings, third-party services and your rights.",
+        "ogTitle": "Privacy policy | creatioo",
+        "label": "Documents",
+        "headline": [
+          "Privacy",
+          "policy."
+        ],
+        "accentLine": 1,
+        "subtitle": "How your data is handled.",
+        "footer": "Forms, data retention and your rights.",
+        "alt": "creatioo logo and the words Privacy policy on a light background, with a large purple brand symbol."
+      }
+    },
+    "404": {
+      "file": "404.html",
+      "path": "404.html",
+      "layout": "error",
+      "noindex": true,
+      "pl": {
+        "title": "Nie znaleziono strony | creatioo",
+        "description": "Ten adres nie prowadzi do strony. Wróć na creatioo.pl i zobacz portfolio lub porozmawiajmy o Twoim projekcie.",
+        "ogTitle": "Nie znaleziono strony | creatioo",
+        "label": "Błąd 404",
+        "headline": [
+          "Tej strony",
+          "tu nie ma."
+        ],
+        "accentLine": 1,
+        "subtitle": "Dobre projekty są pod innym adresem.",
+        "footer": "Wróć na creatioo.pl.",
+        "alt": "Logo creatioo, napis Tej strony tu nie ma oraz duży fioletowy numer 404 na jasnym tle."
+      },
+      "en": {
+        "title": "Page not found | creatioo",
+        "description": "This address doesn't lead to a page. Head back to creatioo.pl to explore the portfolio or discuss your project.",
+        "ogTitle": "Page not found | creatioo",
+        "label": "Error 404",
+        "headline": [
+          "This page",
+          "isn't here."
+        ],
+        "accentLine": 1,
+        "subtitle": "The good stuff is at another address.",
+        "footer": "Head back to creatioo.pl.",
+        "alt": "creatioo logo, the words This page isn't here, and a large purple 404 on a light background."
+      }
+    }
+  },
+  "imageVersion": 1
+}

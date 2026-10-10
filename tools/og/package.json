@@ -1,0 +1,13 @@
+{
+  "name": "creatioo-og",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "images": "node build.mjs --images",
+    "meta": "node build.mjs --meta"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}
