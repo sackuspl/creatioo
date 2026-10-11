@@ -58,6 +58,36 @@
     window.creatiooReviews?.mount();
   }
 
+  // Logo wall: flat marks become one-tone silhouettes, detailed artwork becomes a grayscale drawing
+  const tuneLogo = img => {
+    const w = img.naturalWidth, h = img.naturalHeight;
+    if (w && h) {
+      const ar = w / h;
+      img.style.setProperty('--ar', ar.toFixed(3));
+      img.style.setProperty('--k', Math.sqrt(ar).toFixed(3));
+      try {
+        const scale = Math.min(1, 96 / Math.max(w, h));
+        const cw = Math.max(1, Math.round(w * scale)), ch = Math.max(1, Math.round(h * scale));
+        const cv = document.createElement('canvas');
+        cv.width = cw; cv.height = ch;
+        const cx = cv.getContext('2d', { willReadFrequently: true });
+        cx.drawImage(img, 0, 0, cw, ch);
+        const px = cx.getImageData(0, 0, cw, ch).data, bins = new Map();
+        let solid = 0;
+        for (let i = 0; i < px.length; i += 4) {
+          if (px[i + 3] < 200) continue;
+          solid += 1;
+          const key = ((px[i] >> 5) << 6) | ((px[i + 1] >> 5) << 3) | (px[i + 2] >> 5);
+          bins.set(key, (bins.get(key) || 0) + 1);
+        }
+        let main = 0;
+        bins.forEach(n => { if (n / solid >= 0.01) main += 1; });
+        img.classList.toggle('is-art', solid > 0 && main >= 10);
+      } catch (e) { /* canvas blocked, keep the silhouette look */ }
+    }
+    img.classList.add('is-ready');
+  };
+
   async function clients() {
     const section = $('#clients');
     let list = [];
@@ -68,8 +98,22 @@
       } catch (e) { console.error(e); }
     }
     if (!list.length) { section.hidden = true; return; }
-    $('#clientGrid').innerHTML = list.map(c => `<div class="client-cell" role="listitem"><div class="client-mark"><img src="${esc(logoUrl(c.imageUrl))}" alt="${esc(c.alt || 'Logo klienta')}" loading="lazy" decoding="async"></div>${c.alt ? `<span class="client-name">${esc(c.alt)}</span>` : ''}</div>`).join('');
-    $$('#clientGrid img').forEach((img, i) => withFallback(img, list[i].imageUrl));
+    $('#clientGrid').innerHTML = list.map(c => `<div class="client-cell" role="listitem"><div class="client-mark"><img src="${esc(logoUrl(c.imageUrl))}" alt="${esc(c.alt || 'Logo klienta')}" crossorigin="anonymous" loading="lazy" decoding="async"></div>${c.alt ? `<span class="client-name">${esc(c.alt)}</span>` : ''}</div>`).join('');
+    $$('#clientGrid img').forEach((img, i) => {
+      let tries = 0;
+      img.addEventListener('load', () => tuneLogo(img));
+      img.addEventListener('error', () => {
+        tries += 1;
+        if (tries === 1) {
+          // retry without CORS, the logo is still shown (just not analysed)
+          const src = img.getAttribute('src');
+          img.removeAttribute('crossorigin');
+          img.removeAttribute('src');
+          img.src = src;
+        } else if (tries === 2 && img.getAttribute('src') !== list[i].imageUrl) img.src = list[i].imageUrl;
+      });
+      if (img.complete && img.naturalWidth) tuneLogo(img);
+    });
   }
 
   // Review dialog
