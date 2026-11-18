@@ -11,7 +11,7 @@ Ten folder generuje obrazki, które pojawiają się przy udostępnianiu linków 
 
 ## Uruchomienie
 
-Potrzebny jest Node.js 18 lub nowszy.
+Potrzebny jest Node.js 18 lub nowszy. Obrazki mają wygląd strony: ciemne tło (`theme` w `config.json`: `dark` albo `light`) i kroje Bricolage Grotesque, Geist oraz Geist Mono, pobierane z Google Fonts, więc podczas budowania potrzebny jest internet.
 
 ```
 cd tools/og
@@ -26,7 +26,7 @@ Opcje: `node build.mjs --page gallery --lang pl --theme dark`.
 ## Jak zmienić tekst lub obrazek
 
 1. Otwórz `config.json`, popraw `headline`, `subtitle`, `description` itd. w sekcji `pl` lub `en`.
-2. Zdjęcia na obrazku to pliki z `assets/images/featured/` (pole `image` lub `images`).
+2. Zdjęcia na obrazku galerii to pliki z `assets/images/featured/` (pole `images`). Strona główna ma znak „oo” z logo, polityka prywatności literę „o”, a 404 napis „4o4”.
 3. Zwiększ `imageVersion` o jeden, żeby serwisy społecznościowe pobrały nowy obrazek zamiast starego z pamięci podręcznej.
 4. Uruchom `npm run build` i wgraj zmienione pliki.
 

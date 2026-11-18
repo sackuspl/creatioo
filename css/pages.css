@@ -24,7 +24,7 @@
 
 /* gallery: category filter */
 .fbar{padding-top:clamp(20px,2.4vw,28px);border-top:1px solid var(--line)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
 .chip{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line-2);font-size:.9375rem;font-weight:500;white-space:nowrap;transition:background-color .35s var(--ease),border-color .35s var(--ease),color .35s var(--ease)}
 .chip small{font:500 .6875rem/1 var(--mono);color:var(--faint);transition:color .35s var(--ease)}
 @media (hover:hover){.chip:hover{border-color:var(--ink)}}

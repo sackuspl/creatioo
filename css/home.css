@@ -21,7 +21,7 @@
   color-scheme:dark;
 }
 [data-theme=light]{
-  --bg:#f3f1ec;--bg-2:#ebe8e1;--surf:#fbfaf7;--ink:#131312;--mut:#57554f;--faint:#75726b;
+  --bg:#f3f1ec;--bg-2:#ebe8e1;--surf:#fbfaf7;--ink:#131312;--mut:#57554f;--faint:#69665f;
   --line:rgba(19,19,18,.11);--line-2:rgba(19,19,18,.22);
   --brand:#7440d6;--on-brand:#fff;--btn:#131312;--on-btn:#f3f1ec;
   color-scheme:light;

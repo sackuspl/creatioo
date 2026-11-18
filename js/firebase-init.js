@@ -13,6 +13,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-const auth = firebase.auth();
+// Only the dashboard loads the auth SDK; the public pages just read and write Firestore.
+const auth = firebase.auth ? firebase.auth() : null;
 
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+if (auth) auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);

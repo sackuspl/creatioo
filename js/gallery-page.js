@@ -16,19 +16,38 @@
     }
     return u;
   };
+  // Thumbnail widths to choose from; the browser picks one for the column width and screen density
+  const THUMB_W = [480, 720, 900];
+  const SIZES = '(min-width: 1552px) 462px, (min-width: 1000px) 30vw, 45vw';
+  const srcset = u => (cdn(u, 900) === u ? '' : THUMB_W.map(w => `${cdn(u, w)} ${w}w`).join(', '));
   const abs = u => { try { return new URL(u, location.href).href; } catch (e) { return u; } };
   const withFallback = (img, original) => {
-    img.addEventListener('error', () => { if (img.src !== abs(original)) img.src = original; }, { once: true });
+    img.addEventListener('error', () => { if (img.src !== abs(original)) { img.removeAttribute('srcset'); img.src = original; } }, { once: true });
   };
 
   let items = [], filter = 'all', list = [], current = 0, opener = null, pushed = false;
 
   const colsNow = () => (innerWidth >= 1000 ? 3 : 2);
 
+  // Image proportions remembered from earlier visits, so the grid can be laid out without measuring every image again
+  const RATIOS = 'galleryRatios';
+  let ratios = {};
+  try { ratios = JSON.parse(localStorage.getItem(RATIOS)) || {}; } catch (e) {}
+  const known = r => typeof r === 'number' && r > .05 && r < 20;
+  const saveRatios = () => {
+    const keep = {};
+    items.forEach(p => { if (p.measured) keep[p.img] = +p.ar.toFixed(4); });
+    try { localStorage.setItem(RATIOS, JSON.stringify(keep)); } catch (e) {}
+  };
+
   const loadRatio = p => new Promise(res => {
     if (p.ar) return res();
     const im = new Image();
-    const done = () => { p.ar = im.naturalWidth && im.naturalHeight ? im.naturalWidth / im.naturalHeight : 4 / 3; res(); };
+    const done = () => {
+      p.measured = !!(im.naturalWidth && im.naturalHeight);
+      p.ar = p.measured ? im.naturalWidth / im.naturalHeight : 4 / 3;
+      res();
+    };
     const t = setTimeout(() => { p.ar = p.ar || 4 / 3; res(); }, 6000);
     im.onload = () => { clearTimeout(t); done(); };
     im.onerror = () => {
@@ -65,7 +84,7 @@
       const col = cols.reduce((a, b) => (b.h < a.h ? b : a));
       col.h += 1 / (p.ar || 4 / 3) + capH;
       const title = p.title || p.label;
-      col.html += `<button class="shot" type="button" data-i="${i}" style="--d:${col.c * 70}ms" aria-label="Powiększ: ${esc(p.alt)}"><span class="shot-img" style="--ar:${(p.ar || 4 / 3).toFixed(4)}"><img src="${esc(p.thumb)}" alt="${esc(p.alt)}" decoding="async"${i > 5 ? ' loading="lazy"' : ''}></span><span class="cap" aria-hidden="true"><b>${esc(title)}</b>${p.title ? `<small>${esc(p.label)}</small>` : ''}</span></button>`;
+      col.html += `<button class="shot" type="button" data-i="${i}" style="--d:${col.c * 70}ms" aria-label="Powiększ: ${esc(p.alt)}"><span class="shot-img" style="--ar:${(p.ar || 4 / 3).toFixed(4)}"><img src="${esc(p.thumb)}"${p.srcset ? ` srcset="${esc(p.srcset)}" sizes="${SIZES}"` : ''} alt="${esc(p.alt)}" decoding="async"${i > 5 ? ' loading="lazy"' : ''}></span><span class="cap" aria-hidden="true"><b>${esc(title)}</b>${p.title ? `<small>${esc(p.label)}</small>` : ''}</span></button>`;
     });
     io?.disconnect();
     mas.innerHTML = cols.map(c => `<div class="mas-col">${c.html}</div>`).join('');
@@ -85,7 +104,9 @@
     list = visible();
     count.textContent = `(${String(list.length).padStart(2, '0')})`;
     if (animate && !reduce) { mas.classList.add('swap'); await new Promise(r => setTimeout(r, 160)); }
+    const fresh = list.some(p => !p.ar);
     await Promise.all(list.map(loadRatio));
+    if (fresh) saveRatios();
     render();
     requestAnimationFrame(() => mas.classList.remove('swap'));
   };
@@ -133,7 +154,8 @@
       return {
         id: d.id, cat, label,
         title: d.title || '', desc: d.desc || '', tools: d.tools || '', time: d.time || '', year: d.year || '',
-        img: d.imageUrl, probe: cdn(d.imageUrl, 80), thumb: cdn(d.imageUrl, 900), full: cdn(d.imageUrl, 1800),
+        img: d.imageUrl, probe: cdn(d.imageUrl, 80), thumb: cdn(d.imageUrl, 900), srcset: srcset(d.imageUrl), full: cdn(d.imageUrl, 1800),
+        ...(known(ratios[d.imageUrl]) ? { ar: ratios[d.imageUrl], measured: true } : {}),
         alt: d.title || `${label}, projekt ${i + 1}`
       };
     });

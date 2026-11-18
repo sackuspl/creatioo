@@ -1,6 +1,5 @@
 // Builds the social preview images and the matching head tags for creatioo.pl.
 // Usage: node build.mjs [--images] [--meta] [--lang pl|en|all] [--theme light|dark] [--page home]
-import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -26,15 +25,19 @@ const imageName = (key, lang) => `og-${key}${lang === 'en' ? '-en' : ''}.png`;
 const imageUrl = (key, lang) => `${config.site}/assets/images/og/${imageName(key, lang)}?v=${config.imageVersion}`;
 const pageUrl = (page, lang) => `${config.site}/${lang === 'en' && page.layout !== 'error' ? 'en/' : ''}${page.path}`;
 
+// The "oo" of the logo and a single "o", the same outlines the site uses (index.html #mark-oo, 404.html)
+const MARK_OO = '<svg class="mark" viewBox="0 0 622 290"><path d="M0 0H165A145 145 0 1 1 24.3 110H84.3A88 88 0 1 0 165 57H25ZM312 0H477A145 145 0 1 1 336.3 110H396.3A88 88 0 1 0 477 57H337Z"/></svg>';
+const MARK_O = '<svg class="mark" viewBox="0 0 310 290"><path d="M0 0H165A145 145 0 1 1 24.3 110H84.3A88 88 0 1 0 165 57H25Z"/></svg>';
+
 function visualFor(page) {
   const img = name => `../../assets/images/featured/${name}`;
-  if (page.layout === 'home') return `<div class="visual"><img class="hero-img" src="${img(page.image)}" alt=""></div>`;
-  if (page.layout === 'gallery') return `<div class="visual gallery">${page.images.map(name => `<img src="${img(name)}" alt="">`).join('')}</div>`;
-  if (page.layout === 'document') return '<div class="visual document"><img src="../../assets/images/creatioo-icon.png" alt=""></div>';
-  return '<div class="visual document error"><span class="number">404</span></div>';
+  if (page.layout === 'home') return `<div class="dots"></div><div class="visual">${MARK_OO}</div>`;
+  if (page.layout === 'gallery') return `<div class="visual">${page.images.map(name => `<img src="${img(name)}" alt="">`).join('')}</div>`;
+  if (page.layout === 'document') return `<div class="dots"></div><div class="visual">${MARK_O}</div>`;
+  return `<div class="visual"><span>4</span>${MARK_O}<span>4</span></div>`;
 }
 
-function htmlFor(page, text, lang) {
+export function htmlFor(page, text, lang) {
   const headline = text.headline.map((line, i) => `<span${i === text.accentLine ? ' class="accent"' : ''}>${esc(line)}</span>`).join('');
   const template = fs.readFileSync(path.join(here, 'template.html'), 'utf8');
   const values = {
@@ -46,6 +49,7 @@ function htmlFor(page, text, lang) {
 }
 
 async function renderImages() {
+  const { chromium } = await import('playwright');
   fs.mkdirSync(outDir, { recursive: true });
   const browser = await chromium.launch({ headless: true, ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}) });
   const context = await browser.newContext({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
@@ -145,5 +149,10 @@ ${socialBlock(page, key, 'en', text, null)}
   }
 }
 
-if (doImages) await renderImages();
-if (doMeta) { pageKeys.forEach(updateHead); writeEnglishEntries(); }
+export { config, pageKeys, imageName };
+
+// Run only when called as a script, so other tools can import htmlFor
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  if (doImages) await renderImages();
+  if (doMeta) { pageKeys.forEach(updateHead); writeEnglishEntries(); }
+}

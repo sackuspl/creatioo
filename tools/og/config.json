@@ -1,18 +1,17 @@
 {
   "site": "https://creatioo.pl",
   "brand": "creatioo",
-  "theme": "light",
+  "theme": "dark",
   "pages": {
     "home": {
       "file": "index.html",
       "path": "",
       "layout": "home",
-      "image": "nexsite.webp",
       "pl": {
         "title": "creatioo | Logotypy, branding i grafiki dla marek",
         "description": "Logotypy, identyfikacja wizualna, grafiki do social mediów i materiały do druku. Design dla marek, twórców gier i społeczności.",
         "ogTitle": "creatioo | Tworzymy, by wyróżniać",
-        "label": "Design dla marek i twórców",
+        "label": "",
         "headline": [
           "Tworzymy,",
           "by wyróżniać."
@@ -20,13 +19,13 @@
         "accentLine": 1,
         "subtitle": "Logotypy, branding i grafika.",
         "footer": "Od pomysłu do gotowego projektu.",
-        "alt": "Logo creatioo, hasło Tworzymy, by wyróżniać, oraz projekt szyldu Nexsite na jasnym tle."
+        "alt": "Logo creatioo, hasło Tworzymy, by wyróżniać, oraz duży fioletowy znak oo na ciemnym tle."
       },
       "en": {
         "title": "creatioo | Logos, branding and graphic design",
         "description": "Logos, visual identities, social media graphics and print design. Design for brands, game developers and communities.",
         "ogTitle": "creatioo | We create to stand out",
-        "label": "Design for brands and creators",
+        "label": "",
         "headline": [
           "We create",
           "to stand out."
@@ -34,7 +33,7 @@
         "accentLine": 1,
         "subtitle": "Logos, branding and graphic design.",
         "footer": "From the first idea to the final design.",
-        "alt": "creatioo logo, the words We create to stand out, and the Nexsite sign design on a light background."
+        "alt": "creatioo logo, the words We create to stand out, and a large purple oo mark on a dark background."
       }
     },
     "gallery": {
@@ -92,7 +91,7 @@
         "accentLine": 1,
         "subtitle": "Informacje o Twoich danych.",
         "footer": "Formularze, przechowywanie danych i Twoje prawa.",
-        "alt": "Logo creatioo i napis Polityka prywatności na jasnym tle, z dużym fioletowym symbolem marki."
+        "alt": "Logo creatioo i napis Polityka prywatności na ciemnym tle, z dużą fioletową literą o ze znaku marki."
       },
       "en": {
         "title": "Privacy policy | creatioo",
@@ -106,7 +105,7 @@
         "accentLine": 1,
         "subtitle": "How your data is handled.",
         "footer": "Forms, data retention and your rights.",
-        "alt": "creatioo logo and the words Privacy policy on a light background, with a large purple brand symbol."
+        "alt": "creatioo logo and the words Privacy policy on a dark background, with a large purple o from the brand mark."
       }
     },
     "404": {
@@ -126,7 +125,7 @@
         "accentLine": 1,
         "subtitle": "Dobre projekty są pod innym adresem.",
         "footer": "Wróć na creatioo.pl.",
-        "alt": "Logo creatioo, napis Tej strony tu nie ma oraz duży fioletowy numer 404 na jasnym tle."
+        "alt": "Logo creatioo, napis Tej strony tu nie ma oraz duży numer 404 z fioletowym o na ciemnym tle."
       },
       "en": {
         "title": "Page not found | creatioo",
@@ -140,9 +139,9 @@
         "accentLine": 1,
         "subtitle": "The good stuff is at another address.",
         "footer": "Head back to creatioo.pl.",
-        "alt": "creatioo logo, the words This page isn't here, and a large purple 404 on a light background."
+        "alt": "creatioo logo, the words This page isn't here, and a large 404 with a purple o on a dark background."
       }
     }
   },
-  "imageVersion": 1
+  "imageVersion": 2
 }
