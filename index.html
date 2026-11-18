@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="pl" data-theme="light">
+<html lang="pl" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title data-en="creatioo | Logos, branding and graphic design">creatioo | Logotypy, branding i grafiki dla marek</title>
 <meta name="description" content="Logotypy, identyfikacja wizualna, grafiki do social mediów i materiały do druku. Design dla marek, twórców gier i społeczności." data-en="Logos, visual identities, social media graphics and print design. Design for brands, game developers and communities.">
 <link rel="canonical" href="https://creatioo.pl/">
+<meta name="theme-color" content="#0e0e0d">
 <!-- og:start -->
 <meta property="og:site_name" content="creatioo">
 <meta property="og:type" content="website">
@@ -29,163 +30,179 @@
 <link rel="apple-touch-icon" href="assets/images/creatioo-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/images/featured/nexsite.webp" type="image/webp">
-<link rel="stylesheet" href="css/site.css">
-<script>try{const r=document.documentElement;const q=new URLSearchParams(location.search).get('lang');r.dataset.lang=(q==='en'||q==='pl')?q:(localStorage.getItem('language')==='en'?'en':'pl');r.lang=r.dataset.lang;document.documentElement.dataset.theme=localStorage.getItem('theme')==='dark'?'dark':'light'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home.css">
+<script>try{const r=document.documentElement;const q=new URLSearchParams(location.search).get('lang');r.dataset.lang=(q==='en'||q==='pl')?q:(localStorage.getItem('language')==='en'?'en':'pl');r.lang=r.dataset.lang;r.dataset.theme=localStorage.getItem('theme')==='light'?'light':'dark';if(sessionStorage.getItem('intro'))r.classList.add('skip-intro','is-ready')}catch(e){}document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('is-ready')},6000)</script>
 </head>
 <body id="pageTop">
+<div class="loader" id="loader" aria-hidden="true" data-no-translate>
+  <svg class="loader-mark" viewBox="-20 -20 662 330">
+    <path pathLength="1" d="M0 0H165A145 145 0 1 1 24.3 110H84.3A88 88 0 1 0 165 57H25Z"/>
+    <path pathLength="1" d="M312 0H477A145 145 0 1 1 336.3 110H396.3A88 88 0 1 0 477 57H337Z"/>
+  </svg>
+  <div class="loader-foot"><span>creatioo / portfolio</span><span class="loader-num">000</span></div>
+  <div class="loader-bar"><i></i></div>
+</div>
+<script async src="js/intro.js"></script>
 <a class="skip" href="#main">Przejdź do treści</a>
-<header class="top">
-  <div class="wrap">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="mark-oo" d="M0 0H165A145 145 0 1 1 24.3 110H84.3A88 88 0 1 0 165 57H25ZM312 0H477A145 145 0 1 1 336.3 110H396.3A88 88 0 1 0 477 57H337Z"/>
+  </defs>
+</svg>
+
+<header class="top" id="top">
+  <div class="wrap top-row">
     <a class="logo" href="./" aria-label="creatioo, strona główna">
       <img class="l-light" src="assets/images/logo.png" alt="creatioo" width="119" height="26">
       <img class="l-dark" src="assets/images/logo2.png" alt="creatioo" width="119" height="26">
     </a>
     <nav class="links" id="links" aria-label="Główna nawigacja">
-      <a href="./#offer">Oferta</a>
-      <a href="gallery/">Galeria</a>
-      <a href="./#about">O mnie</a>
-      <a href="./#process">Współpraca</a>
-      <a href="./#reviews">Opinie</a>
-      <a href="./#contact">Kontakt</a>
+      <a href="#projects"><span>Projekty</span></a>
+      <a href="#offer"><span>Oferta</span></a>
+      <a href="#about"><span>O mnie</span></a>
+      <a href="#process"><span>Współpraca</span></a>
+      <a href="gallery/"><span>Galeria</span></a>
+      <a href="#contact" class="links-cta"><span>Kontakt</span></a>
     </nav>
     <div class="acts">
-      <button class="round language-toggle" id="language" type="button" aria-label="Switch to English" title="English" data-no-translate><span><img src="assets/images/flags/pl.svg" alt="" width="28" height="28"></span><span><img src="assets/images/flags/gb.svg" alt="" width="28" height="28"></span></button>
-      <button class="round" id="theme" type="button" aria-label="Przełącz motyw jasny i ciemny"><span class="ico-theme"></span></button>
-      <a class="btn sm" href="#contact">Napisz do mnie<span class="ar" aria-hidden="true"></span></a>
+      <button class="round language-toggle" id="language" type="button" aria-label="Switch to English" title="English" data-no-translate><span class="lang-pl">PL</span><span class="lang-en">EN</span></button>
+      <button class="round" id="theme" type="button" aria-label="Przełącz motyw jasny i ciemny"><span class="ico-theme" aria-hidden="true"></span></button>
+      <a class="btn sm" href="#contact"><span class="btn-label">Napisz do mnie</span><span class="ar" aria-hidden="true"></span></a>
       <button class="round burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="links"><i></i><i></i></button>
     </div>
   </div>
 </header>
 
 <main id="main" tabindex="-1">
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p class="tag">Grafika dla marek, serwerów i twórców</p>
-      <h1>Tworzymy,<br>by <span>wyróżniać.</span></h1>
-      <p class="lead">Dobra firma zasługuje na dobry wygląd. Skończmy wspólnie z tymczasowymi rozwiązaniami.</p>
-      <div class="cta">
-        <a class="btn" href="#contact">Zacznijmy projekt<span class="ar" aria-hidden="true"></span></a>
-        <a class="text-link" href="gallery/">Galeria prac<span class="ar r" aria-hidden="true"></span></a>
-      </div>
-      <ul class="hero-facts">
-        <li>Logo gotowe w 3 do 5 dni</li>
-        <li>Runda poprawek w cenie</li>
-        <li>Pliki gotowe do druku</li>
-      </ul>
-    </div>
-    <figure class="hero-work" id="heroShowcase">
-      <a class="hero-image" href="gallery/?projekt=UhOyFjNvTYIyCtt12lXo" aria-label="Zobacz projekt Nexsite w galerii">
-        <img src="assets/images/featured/nexsite.webp" alt="Logotyp Nexsite na szyldzie przy betonowej ścianie" width="1000" height="1000" fetchpriority="high" decoding="async">
-        <span class="image-arrow" aria-hidden="true"><span class="ar"></span></span>
-      </a>
-      <figcaption>
-        <div class="hero-label"><b>Nexsite</b><span>Projekt logotypu</span></div>
-        <div class="showcase-controls" hidden>
-          <button class="round" id="heroNext" type="button" aria-label="Następna praca w nagłówku"><span class="ar r" aria-hidden="true"></span></button>
-        </div>
-      </figcaption>
-    </figure>
+
+<section class="hero" id="hero">
+  <div class="hero-stage" aria-hidden="true">
+    <canvas id="mark3d"></canvas>
+    <svg class="mark-still" viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
   </div>
-  <div class="wrap stats" aria-label="creatioo w liczbach">
-    <div><b>300+</b><span>zrealizowanych projektów</span></div>
-    <div><b>140+</b><span>klientów</span></div>
-    <div><b>5 lat</b><span>doświadczenia</span></div>
-    <div><b>100%</b><span>pozytywnych opinii</span></div>
+  <div class="wrap hero-inner">
+    <h1 class="hero-title">
+      <span class="line"><span>Tworzymy,</span></span>
+      <span class="line"><span>by <em>wyróżniać<span class="stop">.</span></em></span></span>
+    </h1>
+    <div class="hero-foot">
+      <p class="lead" data-hero="2">Logotypy, branding i grafiki dla twórców gier, serwerów i firm, które nie chcą wyglądać jak wszyscy.</p>
+      <div class="cta" data-hero="3">
+        <a class="btn" href="#contact"><span class="btn-label">Zacznijmy projekt</span><span class="ar" aria-hidden="true"></span></a>
+        <a class="btn ghost" href="gallery/"><span class="btn-label">Galeria prac</span><span class="ar r" aria-hidden="true"></span></a>
+      </div>
+    </div>
+    <dl class="stats" data-hero="4" aria-label="creatioo w liczbach">
+      <div><dt>zrealizowanych projektów</dt><dd><b data-count="300">300</b>+</dd></div>
+      <div><dt>klientów</dt><dd><b data-count="140">140</b>+</dd></div>
+      <div><dt>doświadczenia</dt><dd><b>5 lat</b></dd></div>
+      <div><dt>Logo gotowe w 3 do 5 dni</dt><dd><b>3–5</b> <small>dni</small></dd></div>
+    </dl>
   </div>
 </section>
 
-<section id="projects" class="work-section">
-  <div class="wrap">
-    <div class="head">
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-group">
+      <span>Logotypy</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Identyfikacja wizualna</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Grafiki dla serwerów</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Social media</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Banery i okładki</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Materiały do druku</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+    </div>
+    <div class="marquee-group">
+      <span>Logotypy</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Identyfikacja wizualna</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Grafiki dla serwerów</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Social media</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Banery i okładki</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+      <span>Materiały do druku</span><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg>
+    </div>
+  </div>
+</div>
+
+<section id="projects" class="work">
+  <div class="work-pin">
+    <div class="wrap work-head">
       <div>
-        <p class="tag">01 / Projekty</p>
-        <h2>Wykonane projekty</h2>
+        <p class="label">Projekty <span class="label-count" id="workCount">(08)</span></p>
+        <h2 class="reveal">Wykonane projekty</h2>
       </div>
-      <div class="work-tools">
-        <div class="showcase-controls" id="workControls" hidden>
-          <button class="round" id="workNext" type="button" aria-label="Pokaż kolejną pracę"><span class="ar r" aria-hidden="true"></span></button>
-        </div>
-        <a class="text-link" href="gallery/">Pełna galeria prac<span class="ar" aria-hidden="true"></span></a>
-      </div>
+      <a class="text-link" href="gallery/">Pełna galeria prac<span class="ar" aria-hidden="true"></span></a>
     </div>
-    <div class="work-grid" id="workGrid">
-      <a class="work-card" href="gallery/?projekt=smNABKRHp8O2hNrnYgvM">
-        <div class="work-image"><img src="assets/images/featured/repsly.webp" alt="Bluza z logo Repsly na turkusowym tle" width="1200" height="900" loading="lazy" decoding="async"><span class="image-arrow" aria-hidden="true"><span class="ar"></span></span></div>
-        <div class="work-caption"><h3>Repsly</h3><span>Grafika na odzież</span></div>
-      </a>
-      <a class="work-card" href="gallery/?projekt=z2NUyF74LuQiu49ENVFv">
-        <div class="work-image"><img src="assets/images/featured/vibe.webp" alt="Różowy logotyp Vibe Roleplay na ciemnym tle" width="1200" height="900" loading="lazy" decoding="async"><span class="image-arrow" aria-hidden="true"><span class="ar"></span></span></div>
-        <div class="work-caption"><h3>Vibe Roleplay</h3><span>Projekt logotypu</span></div>
-      </a>
-      <a class="work-card" href="gallery/?projekt=VfRuQ4hxtB8L3HwCNwDW">
-        <div class="work-image"><img src="assets/images/featured/mallow.webp" alt="Opakowania Mallow Pancake Mix w kolorze złota" width="1200" height="900" loading="lazy" decoding="async"><span class="image-arrow" aria-hidden="true"><span class="ar"></span></span></div>
-        <div class="work-caption"><h3>Mallow</h3><span>Grafika produktowa</span></div>
-      </a>
-      <a class="work-card" href="gallery/?projekt=FrhNir1rybSpH8dsoOT3">
-        <div class="work-image"><img src="assets/images/featured/gtarealm.webp" alt="Zielone kubki z napisami GTArealm" width="1200" height="900" loading="lazy" decoding="async"><span class="image-arrow" aria-hidden="true"><span class="ar"></span></span></div>
-        <div class="work-caption"><h3>GTArealm</h3><span>Gadżety firmowe</span></div>
-      </a>
+    <div class="work-viewport">
+      <ol class="work-track" id="workTrack">
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=UhOyFjNvTYIyCtt12lXo"><div class="work-img"><img src="assets/images/featured/nexsite.webp" alt="Logotyp Nexsite na szyldzie przy betonowej ścianie" width="1000" height="1000" decoding="async"></div><div class="work-meta"><span class="work-no">01</span><h3>Nexsite</h3><span class="work-kind">Projekt logotypu</span></div></a></li>
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=c4z7HMS9geNWFmTeA4mD"><div class="work-img"><img src="assets/images/featured/nexus-konwoj.webp" alt="Baner Nexus Roleplay z ciężarówką i napisem Konwój" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">02</span><h3>Nexus Roleplay</h3><span class="work-kind">Baner na social media</span></div></a></li>
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=VfRuQ4hxtB8L3HwCNwDW"><div class="work-img"><img src="assets/images/featured/mallow.webp" alt="Opakowania Mallow Pancake Mix w kolorze złota" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">03</span><h3>Mallow</h3><span class="work-kind">Grafika produktowa</span></div></a></li>
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=z2NUyF74LuQiu49ENVFv"><div class="work-img"><img src="assets/images/featured/vibe.webp" alt="Różowy logotyp Vibe Roleplay na ciemnym tle" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">04</span><h3>Vibe Roleplay</h3><span class="work-kind">Projekt logotypu</span></div></a></li>
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=smNABKRHp8O2hNrnYgvM"><div class="work-img"><img src="assets/images/featured/repsly.webp" alt="Bluza z logo Repsly na turkusowym tle" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">05</span><h3>Repsly</h3><span class="work-kind">Grafika na odzież</span></div></a></li>
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=0zBg1OpqtxdLrV4tVZ4o"><div class="work-img"><img src="assets/images/featured/klima.webp" alt="Wizytówki firmy Klima na niebieskim tle" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">06</span><h3>Klima</h3><span class="work-kind">Materiały do druku</span></div></a></li>
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=FrhNir1rybSpH8dsoOT3"><div class="work-img"><img src="assets/images/featured/gtarealm.webp" alt="Zielone kubki z napisami GTArealm" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">07</span><h3>GTArealm</h3><span class="work-kind">Gadżety firmowe</span></div></a></li>
+        <li class="work-card"><a data-cursor="Zobacz projekt" href="gallery/?projekt=kmRbEgrG8CiibvZuRY5E"><div class="work-img"><img src="assets/images/featured/coffee.webp" alt="Projekt opakowania kawy Mallow" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">08</span><h3>Mallow Coffee</h3><span class="work-kind">Grafika produktowa</span></div></a></li>
+        <li class="work-card work-more"><a href="gallery/"><span class="more-mark" aria-hidden="true"><svg viewBox="-20 -20 662 330"><use href="#mark-oo"/></svg></span><span class="more-title">Pełna galeria prac</span><span class="more-sub">Ponad 300 projektów<span class="ar" aria-hidden="true"></span></span></a></li>
+      </ol>
     </div>
+    <div class="wrap work-progress" aria-hidden="true"><i id="workBar"></i></div>
   </div>
 </section>
 
-<section id="offer" class="alt">
-  <div class="wrap split">
-    <div class="split-head">
-      <p class="tag">02 / Oferta</p>
-      <h2>Oto, czym dokładnie się zajmuję</h2>
+<section id="offer" class="offer">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label">Oferta</p>
+      <h2 class="reveal">Oto, czym dokładnie się zajmuję</h2>
       <p class="sub">Charakteru dodaje człowiek, a design nadaje mu formę.</p>
     </div>
-    <div class="service-list">
-      <article class="service">
-        <span class="service-no">01</span>
-        <div>
+    <ul class="services" id="services">
+      <li class="service">
+        <a href="gallery/?kat=logo" aria-label="Zobacz logotypy w galerii">
+          <span class="service-no">01</span>
           <h3>Logo i identyfikacja</h3>
           <p>Profesjonalne logotypy i spójne systemy wizualne dopasowane do charakteru Twojej marki.</p>
           <span class="service-meta">Logotypy, branding, spójny system wizualny</span>
-        </div>
-        <a class="service-link" href="gallery/?kat=logo" aria-label="Zobacz logotypy w galerii"><span class="ar" aria-hidden="true"></span></a>
-      </article>
-      <article class="service">
-        <span class="service-no">02</span>
-        <div>
+          <span class="service-go" aria-hidden="true"><span class="ar"></span></span>
+        </a>
+      </li>
+      <li class="service">
+        <a href="gallery/?kat=banner" aria-label="Zobacz banery w galerii">
+          <span class="service-no">02</span>
           <h3>Social media</h3>
           <p>Posty, stories, banery i grafiki, które zatrzymują przewijanie i budują rozpoznawalność.</p>
           <span class="service-meta">Posty i stories, banery i okładki, grafiki dla serwerów i społeczności</span>
-        </div>
-        <a class="service-link" href="gallery/?kat=banner" aria-label="Zobacz banery w galerii"><span class="ar" aria-hidden="true"></span></a>
-      </article>
-      <article class="service">
-        <span class="service-no">03</span>
-        <div>
+          <span class="service-go" aria-hidden="true"><span class="ar"></span></span>
+        </a>
+      </li>
+      <li class="service">
+        <a href="gallery/?kat=wizytowka" aria-label="Zobacz wizytówki i ulotki w galerii">
+          <span class="service-no">03</span>
           <h3>Reklama i druk</h3>
           <p>Plakaty, ulotki, banery reklamowe i materiały do kampanii offline oraz online.</p>
           <span class="service-meta">Plakaty i ulotki, banery reklamowe, pliki gotowe do druku</span>
-        </div>
-        <a class="service-link" href="gallery/?kat=wizytowka" aria-label="Zobacz wizytówki i ulotki w galerii"><span class="ar" aria-hidden="true"></span></a>
-      </article>
-    </div>
+          <span class="service-go" aria-hidden="true"><span class="ar"></span></span>
+        </a>
+      </li>
+    </ul>
   </div>
 </section>
 
-<section id="about" class="about-section">
-  <div class="wrap split">
-    <div class="split-head">
-      <p class="tag">03 / O mnie</p>
-      <h2>A skoro już tutaj jesteś…</h2>
+<section id="about" class="about">
+  <div class="wrap about-grid">
+    <div class="sec-head">
+      <p class="label">O mnie</p>
+      <h2 class="reveal">A skoro już tutaj jesteś…</h2>
     </div>
     <div class="about-copy">
-      <p class="about-intro">Z pasją do minimalizmu i czystego designu od ponad 5 lat tworzę grafiki dla twórców gier, serwerów i gamingowych społeczności, pomagając im wyróżnić swoje projekty i nadać im własny charakter.</p>
-      <p>Na co dzień pracuję głównie w branży gamingowej, ale nie ograniczam się do niej. Chętnie podejmuję projekty z innych dziedzin, bo dobry design wszędzie odnajduje swoje miejsce.</p>
+      <p class="about-intro" id="aboutIntro">Z pasją do minimalizmu i czystego designu od ponad 5 lat tworzę grafiki dla twórców gier, serwerów i gamingowych społeczności, pomagając im wyróżnić swoje projekty i nadać im własny charakter.</p>
+      <p class="about-more">Na co dzień pracuję głównie w branży gamingowej, ale nie ograniczam się do niej. Chętnie podejmuję projekty z innych dziedzin, bo dobry design wszędzie odnajduje swoje miejsce.</p>
       <dl class="facts">
         <div><dt>Zakres</dt><dd>Logotypy, branding, social media, reklama, druk</dd></div>
         <div><dt>Branże</dt><dd>Gaming, serwery, społeczności, firmy</dd></div>
         <div><dt>Podejście</dt><dd>Szybka realizacja, stały kontakt i wysoka jakość. Bez kompromisów</dd></div>
       </dl>
-      <a class="btn" href="#contact">Napisz do mnie<span class="ar" aria-hidden="true"></span></a>
     </div>
   </div>
 </section>
@@ -193,90 +210,88 @@
 <section id="clients" class="clients" aria-labelledby="clientsTitle">
   <div class="wrap">
     <div class="clients-head">
-      <div>
-        <h2 id="clientsTitle">Zaufali mi</h2>
-        <p>Firmy, twórcy i społeczności, z którymi miałem okazję pracować.</p>
-      </div>
-      <a class="text-link" href="gallery/">Zobacz projekty<span class="ar" aria-hidden="true"></span></a>
+      <h2 id="clientsTitle" class="reveal">Zaufali mi</h2>
+      <p class="sub">Firmy, twórcy i społeczności, z którymi miałem okazję pracować.</p>
     </div>
     <div class="client-grid" id="clientGrid" role="list" aria-label="Klienci creatioo"></div>
   </div>
 </section>
 
-<section id="process" class="alt">
-  <div class="wrap split">
-    <div class="split-head">
-      <p class="tag">04 / Współpraca</p>
-      <h2>Cztery kroki od pomysłu do pliku</h2>
+<section id="process" class="process">
+  <div class="wrap process-grid">
+    <div class="sec-head process-head">
+      <p class="label">Współpraca</p>
+      <h2 class="reveal">Cztery kroki od pomysłu do pliku</h2>
+      <a class="btn" href="#contact"><span class="btn-label">Zacznijmy projekt</span><span class="ar" aria-hidden="true"></span></a>
     </div>
-    <ol class="steps">
-      <li><h3>Brief</h3><p>Opisujesz markę, pomysł i oczekiwania. Możesz napisać przez formularz albo na Discordzie.</p></li>
-      <li><h3>Propozycje</h3><p>Dostajesz kilka kierunków do wyboru i wspólnie wybieramy ten najlepszy.</p></li>
-      <li><h3>Poprawki</h3><p>Dopracowuję wybrany kierunek aż do Twojej pełnej satysfakcji. Runda poprawek jest w cenie.</p></li>
-      <li><h3>Pliki</h3><p>Odbierasz komplet plików gotowych do użycia w sieci i w druku.</p></li>
+    <ol class="steps" id="steps">
+      <li><span class="step-no">01</span><div><h3>Brief</h3><p>Opisujesz markę, pomysł i oczekiwania. Możesz napisać przez formularz albo na Discordzie.</p></div></li>
+      <li><span class="step-no">02</span><div><h3>Propozycje</h3><p>Dostajesz kilka kierunków do wyboru i wspólnie wybieramy ten najlepszy.</p></div></li>
+      <li><span class="step-no">03</span><div><h3>Poprawki</h3><p>Dopracowuję wybrany kierunek aż do Twojej pełnej satysfakcji. Runda poprawek jest w cenie.</p></div></li>
+      <li><span class="step-no">04</span><div><h3>Pliki</h3><p>Odbierasz komplet plików gotowych do użycia w sieci i w druku.</p></div></li>
+      <i class="steps-line" aria-hidden="true"><i id="stepsFill"></i></i>
     </ol>
   </div>
 </section>
 
-<section id="reviews">
+<section id="reviews" class="reviews">
   <div class="wrap">
-    <div class="head">
+    <div class="reviews-head">
       <div>
-        <p class="tag">05 / Opinie</p>
-        <h2>Co mówią klienci?</h2>
+        <p class="label">Opinie</p>
+        <h2 class="reveal">Co mówią klienci?</h2>
         <p class="sub">Opinie osób, które skorzystały z moich usług.</p>
       </div>
-      <div class="rv-ctl">
-        <button class="round" id="rvPrev" type="button" aria-label="Poprzednie opinie" hidden><span class="ar l" aria-hidden="true"></span></button>
-        <button class="round" id="rvNext" type="button" aria-label="Następne opinie" hidden><span class="ar r" aria-hidden="true"></span></button>
-        <button class="text-link" id="revOpen" type="button">Dodaj opinię<span class="ar" aria-hidden="true"></span></button>
-      </div>
+      <button class="text-link" id="revOpen" type="button">Dodaj opinię<span class="ar" aria-hidden="true"></span></button>
     </div>
-    <div class="rv" id="rvTrack" tabindex="0" role="region" aria-roledescription="karuzela" aria-label="Opinie klientów"><p class="empty" role="status">Wczytuję opinie…</p></div>
+    <div class="rv" id="rvTrack" role="list" aria-label="Opinie klientów"><p class="empty" role="status">Wczytuję opinie…</p></div>
   </div>
 </section>
 
-<section id="contact" class="alt">
-  <div class="wrap contact">
-    <div>
-      <p class="tag">06 / Kontakt</p>
-      <h2>Zacznijmy razem coś fajnego!</h2>
-      <p class="sub">Masz pytania albo myślisz o współpracy? Napisz w dowolnej, wygodnej dla Ciebie formie.</p>
-      <div class="rows">
-        <a href="mailto:creatioopl@gmail.com"><span>E-mail</span><b>creatioopl@gmail.com</b><i class="ar" aria-hidden="true"></i></a>
-        <a href="https://discord.com/users/662788934266388510" target="_blank" rel="noopener"><span>Discord</span><b>sackypl</b><i class="ar" aria-hidden="true"></i></a>
+<section id="contact" class="contact">
+  <div class="wrap">
+    <p class="label">Kontakt</p>
+    <h2 class="contact-title" data-split>Zacznijmy razem coś fajnego!</h2>
+    <div class="contact-grid">
+      <div class="contact-side">
+        <p class="sub">Masz pytania albo myślisz o współpracy? Napisz w dowolnej, wygodnej dla Ciebie formie.</p>
+        <div class="rows">
+          <a href="mailto:creatioopl@gmail.com"><span>E-mail</span><b>creatioopl@gmail.com</b><i class="ar" aria-hidden="true"></i></a>
+          <a href="https://discord.com/users/662788934266388510" target="_blank" rel="noopener"><span>Discord</span><b>sackypl</b><i class="ar" aria-hidden="true"></i></a>
+        </div>
       </div>
+      <form class="form" id="cform" action="https://formspree.io/f/mbgrgnye" method="POST">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+        <input type="hidden" name="_subject" value="Nowe zapytanie z formularza kontaktowego">
+        <div class="form-row">
+          <label>Imię<input type="text" name="name" placeholder="Jan Kowalski" required autocomplete="name"></label>
+          <label>Twój e-mail<input type="email" name="email" placeholder="jan@firma.pl" required autocomplete="email"></label>
+        </div>
+        <div class="field">
+          <span class="field-label" id="typeLabel">Rodzaj projektu</span>
+          <select name="type" required aria-labelledby="typeLabel">
+            <option value="">Wybierz</option>
+            <option>Pytanie lub inne</option>
+            <option>Logo i identyfikacja</option>
+            <option>Social media</option>
+            <option>Reklama i druk</option>
+            <option>Inny projekt</option>
+          </select>
+        </div>
+        <label>Wiadomość<textarea name="message" rows="5" placeholder="Opisz swój projekt" required></textarea></label>
+        <button class="btn" type="submit"><span class="btn-label">Wyślij wiadomość</span><span class="ar" aria-hidden="true"></span></button>
+        <p class="form-privacy">Informacje o przetwarzaniu danych znajdziesz w <a href="privacy-policy/">polityce prywatności</a>.</p>
+        <p class="note" id="cstatus" role="status"></p>
+      </form>
     </div>
-    <form class="form" id="cform" action="https://formspree.io/f/mbgrgnye" method="POST">
-      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
-      <input type="hidden" name="_subject" value="Nowe zapytanie z formularza kontaktowego">
-      <div class="form-row">
-        <label>Imię<input type="text" name="name" placeholder="Jan Kowalski" required autocomplete="name"></label>
-        <label>Twój e-mail<input type="email" name="email" placeholder="jan@firma.pl" required autocomplete="email"></label>
-      </div>
-      <label>Rodzaj projektu
-        <select name="type" required>
-          <option value="">Wybierz</option>
-          <option>Pytanie lub inne</option>
-          <option>Logo i identyfikacja</option>
-          <option>Social media</option>
-          <option>Reklama i druk</option>
-          <option>Inny projekt</option>
-        </select>
-      </label>
-      <label>Wiadomość<textarea name="message" rows="5" placeholder="Opisz swój projekt" required></textarea></label>
-      <button class="btn" type="submit">Wyślij wiadomość<span class="ar" aria-hidden="true"></span></button>
-      <p class="form-privacy">Informacje o przetwarzaniu danych znajdziesz w <a href="privacy-policy/">polityce prywatności</a>.</p>
-      <p class="note" id="cstatus" role="status"></p>
-    </form>
   </div>
 </section>
 
-<section class="faq-section">
-  <div class="wrap split">
-    <div class="split-head">
-      <p class="tag">Pytania i odpowiedzi</p>
-      <h2>Zanim napiszesz</h2>
+<section class="faq-section" id="faq">
+  <div class="wrap faq-grid">
+    <div class="sec-head">
+      <p class="label">Pytania i odpowiedzi</p>
+      <h2 class="reveal">Zanim napiszesz</h2>
     </div>
     <div class="faq">
       <details><summary>Ile trwa realizacja projektu?</summary><div class="faq-answer"><p>Zależy od zakresu. Logo zazwyczaj jest gotowe w 3 do 5 dni roboczych, przy większych identyfikacjach wizualnych mówimy o tygodniach.</p></div></details>
@@ -288,35 +303,37 @@
 </section>
 </main>
 
-<footer class="foot">
-  <div class="wrap foot-grid">
-    <div class="foot-brand">
-      <a class="logo" href="./" aria-label="creatioo"><img class="l-light" src="assets/images/logo.png" alt="creatioo" width="119" height="26"><img class="l-dark" src="assets/images/logo2.png" alt="creatioo" width="119" height="26"></a>
-      <p class="foot-tagline">Tworzymy, by wyróżniać.</p>
-      <p class="foot-description">Grafika dla marek, serwerów i twórców.</p>
-      <a class="text-link foot-cta" href="./#contact">Porozmawiajmy o projekcie<span class="ar" aria-hidden="true"></span></a>
+<footer class="foot" id="footer">
+  <div class="foot-in">
+    <div class="wrap foot-cta">
+      <h2 class="foot-title">Porozmawiajmy o&nbsp;Twoim projekcie.</h2>
+      <a class="btn" href="#contact"><span class="btn-label">Napisz do mnie</span><span class="ar" aria-hidden="true"></span></a>
     </div>
-    <div class="foot-nav">
-      <h3>Na stronie</h3>
-      <ul><li><a href="./#offer">Oferta</a></li><li><a href="gallery/">Galeria</a></li><li><a href="./#about">O mnie</a></li><li><a href="./#process">Współpraca</a></li><li><a href="./#reviews">Opinie</a></li><li><a href="./#contact">Kontakt</a></li></ul>
+    <div class="wrap foot-grid">
+      <div class="foot-mail">
+        <h3>E-mail</h3>
+        <a class="foot-email" href="mailto:creatioopl@gmail.com">creatioopl@gmail.com</a>
+        <button class="foot-copy" type="button" data-copy="creatioopl@gmail.com"><span class="foot-copy-ico" aria-hidden="true"></span><span class="foot-copy-txt">Kopiuj adres</span></button>
+      </div>
+      <div>
+        <h3>Na stronie</h3>
+        <ul class="foot-links"><li><a href="#projects">Projekty</a></li><li><a href="#offer">Oferta</a></li><li><a href="gallery/">Galeria</a></li><li><a href="#about">O mnie</a></li><li><a href="#process">Współpraca</a></li><li><a href="#reviews">Opinie</a></li></ul>
+      </div>
+      <div>
+        <h3>Bądźmy w kontakcie</h3>
+        <ul class="foot-links"><li><a href="https://discord.com/users/662788934266388510" target="_blank" rel="noopener">Discord: sackypl</a></li><li><a href="#contact">Formularz kontaktowy</a></li></ul>
+      </div>
     </div>
-    <div class="foot-contact">
-      <h3>Bądźmy w kontakcie</h3>
-      <ul><li><a href="mailto:creatioopl@gmail.com">creatioopl@gmail.com<span class="ar" aria-hidden="true"></span></a></li><li><a href="https://discord.com/users/662788934266388510" target="_blank" rel="noopener">Discord: sackypl<span class="ar" aria-hidden="true"></span></a></li></ul>
+    <div class="foot-word" aria-hidden="true">
+      <img src="assets/images/logo2.png" alt="" width="2048" height="440" loading="lazy">
     </div>
-  </div>
-  <div class="wrap foot-bot">
-    <span>© 2026 creatioo. Wszystkie prawa zastrzeżone.</span>
-    <div class="foot-legal"><a href="privacy-policy/">Polityka prywatności</a><a href="#pageTop" class="foot-top">Na górę<span class="ar" aria-hidden="true"></span></a></div>
+    <div class="wrap foot-bot">
+      <span>© 2026 creatioo. Wszystkie prawa zastrzeżone.</span>
+      <a href="privacy-policy/">Polityka prywatności</a>
+      <a class="foot-top" href="#pageTop"><span>Na górę</span><span class="foot-top-ico" aria-hidden="true"></span></a>
+    </div>
   </div>
 </footer>
-
-<button class="back-top" id="backTop" type="button" aria-label="Wróć na górę strony" title="Wróć na górę strony" aria-hidden="true" tabindex="-1"><span class="ar r" aria-hidden="true"></span></button>
-
-<div class="dock" id="dock">
-  <a class="dock-gallery" href="gallery/">Galeria</a>
-  <a class="btn" href="#contact">Napisz do mnie<span class="ar" aria-hidden="true"></span></a>
-</div>
 
 <dialog id="revDlg" aria-labelledby="revTitle">
   <form id="revForm" class="form flat" novalidate>
@@ -330,18 +347,21 @@
     <label>Treść opinii<textarea name="text" rows="4" maxlength="500" required></textarea></label>
     <p class="form-privacy">Opinie są moderowane przed publikacją. Szczegóły w <a href="privacy-policy/">polityce prywatności</a>.</p>
     <p class="note" id="revStatus" role="status"></p>
-    <div class="dlg-act"><button class="btn ghost" id="revClose" type="button">Anuluj</button><button class="btn" type="submit">Wyślij do zatwierdzenia</button></div>
+    <div class="dlg-act"><button class="btn ghost" id="revClose" type="button"><span class="btn-label">Anuluj</span></button><button class="btn" type="submit"><span class="btn-label">Wyślij do zatwierdzenia</span></button></div>
   </form>
 </dialog>
 
+<script async src="js/hero3d.js"></script>
+<script defer src="js/i18n.js"></script>
+<script defer src="js/common.js"></script>
+<script defer src="assets/vendor/gsap.min.js"></script>
+<script defer src="assets/vendor/ScrollTrigger.min.js"></script>
+<script defer src="assets/vendor/lenis.min.js"></script>
+<script defer src="js/motion.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
 <script defer src="js/firebase-init.js"></script>
-<script defer src="js/i18n.js"></script>
-<script defer src="js/common.js"></script>
-<script defer src="js/showcase.js"></script>
-<script defer src="js/reviews.js"></script>
-<script defer src="js/site.js"></script>
+<script defer src="js/home.js"></script>
 </body>
 </html>

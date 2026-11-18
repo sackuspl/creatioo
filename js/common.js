@@ -3,16 +3,172 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const root = document.documentElement;
 
+  /* Theme and language changes: the page crossfades as a whole. Element transitions are paused for that moment,
+     otherwise the header, buttons and links would each fade at their own speed and look out of sync. */
+  window.creatiooSwitch = change => {
+    const run = () => {
+      root.classList.add('switching');
+      change();
+      getComputedStyle(root).color; // apply the new styles while transitions are off
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('switching')));
+    };
+    if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(run);
+    else run();
+  };
+
   const theme = $('#theme');
   if (theme) {
     theme.addEventListener('click', () => {
       const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      const apply = () => { root.dataset.theme = next; };
-      if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(apply);
-      else apply();
+      window.creatiooSwitch(() => { root.dataset.theme = next; });
       try { localStorage.setItem('theme', next); } catch (e) {}
     });
   }
+
+  /* Header: glass once the page moves, hides on the way down, returns on the way up */
+  const top = $('#top');
+  if (top) {
+    let lastY = scrollY, queued = false;
+    const onScroll = () => {
+      queued = false;
+      const y = scrollY;
+      top.classList.toggle('is-scrolled', y > 24);
+      const down = y > lastY + 4, up = y < lastY - 4;
+      if (down && y > innerHeight * .6 && !document.body.classList.contains('menu-open')) top.classList.add('is-hidden');
+      else if (up || y < 80) top.classList.remove('is-hidden');
+      if (down || up) lastY = y;
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(onScroll); } }, { passive: true });
+    top.addEventListener('focusin', () => top.classList.remove('is-hidden'));
+    onScroll();
+  }
+
+  /* Footer: copy the e-mail address */
+  $$('[data-copy]').forEach(btn => {
+    const label = $('.foot-copy-txt', btn);
+    let timer = 0;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+      } catch (e) {
+        location.href = `mailto:${btn.dataset.copy}`;
+        return;
+      }
+      label.textContent = 'Skopiowano';
+      btn.classList.add('is-done');
+      clearTimeout(timer);
+      timer = setTimeout(() => { label.textContent = 'Kopiuj adres'; btn.classList.remove('is-done'); }, 2200);
+    });
+  });
+
+  /* Form selects: an option list in the site's style. The native select stays underneath,
+     so the form still sends its value and the browser still checks that one was picked. */
+  $$('.form select').forEach((native, n) => {
+    const id = `sel${n + 1}`;
+    const choices = [...native.options].filter(o => o.value !== '');
+    const placeholder = [...native.options].find(o => o.value === '');
+    const box = document.createElement('div');
+    box.className = 'sel';
+    box.innerHTML = `<button class="sel-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="${id}"><span class="sel-val" id="${id}-val"></span><span class="sel-ico" aria-hidden="true"></span></button><ul class="sel-list" id="${id}" role="listbox" tabindex="-1"></ul>`;
+    const btn = $('.sel-btn', box), val = $('.sel-val', box), list = $('.sel-list', box);
+    const caption = native.getAttribute('aria-labelledby');
+    if (caption) {
+      btn.setAttribute('aria-labelledby', `${caption} ${id}-val`);
+      list.setAttribute('aria-labelledby', caption);
+      $(`#${caption}`)?.addEventListener('click', () => btn.focus());
+    }
+    const opts = choices.map((o, i) => {
+      const li = document.createElement('li');
+      li.className = 'sel-opt';
+      li.id = `${id}-${i}`;
+      li.setAttribute('role', 'option');
+      li.textContent = o.text;
+      list.append(li);
+      return li;
+    });
+    native.classList.add('sel-native');
+    native.tabIndex = -1;
+    native.setAttribute('aria-hidden', 'true');
+    native.after(box);
+
+    let active = -1;
+    const isOpen = () => box.classList.contains('is-open');
+    const sync = () => {
+      const i = choices.indexOf(native.selectedOptions[0]);
+      opts.forEach((o, k) => o.setAttribute('aria-selected', String(k === i)));
+      val.textContent = i >= 0 ? opts[i].textContent : (placeholder?.text || '');
+      val.classList.toggle('is-empty', i < 0);
+    };
+    const setActive = i => {
+      active = i;
+      opts.forEach((o, k) => o.classList.toggle('is-active', k === i));
+      if (i >= 0) list.setAttribute('aria-activedescendant', opts[i].id);
+      else list.removeAttribute('aria-activedescendant');
+    };
+    const open = () => {
+      if (isOpen()) return;
+      // open upwards when the list would not fit below the field
+      const r = btn.getBoundingClientRect(), need = list.offsetHeight + 24;
+      box.classList.toggle('is-up', innerHeight - r.bottom < need && r.top > need);
+      box.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      setActive(Math.max(0, choices.indexOf(native.selectedOptions[0])));
+      list.focus({ preventScroll: true });
+    };
+    const close = (refocus = true) => {
+      if (!isOpen()) return;
+      box.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      setActive(-1);
+      if (refocus) btn.focus({ preventScroll: true });
+    };
+    const pick = i => {
+      if (i < 0) return;
+      native.value = choices[i].value;
+      native.dispatchEvent(new Event('change', { bubbles: true }));
+      close();
+    };
+
+    btn.addEventListener('click', () => (isOpen() ? close() : open()));
+    btn.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); }
+    });
+    list.addEventListener('keydown', e => {
+      const last = opts.length - 1;
+      if (e.key === 'ArrowDown') setActive(Math.min(last, active + 1));
+      else if (e.key === 'ArrowUp') setActive(Math.max(0, active - 1));
+      else if (e.key === 'Home') setActive(0);
+      else if (e.key === 'End') setActive(last);
+      else if (e.key === 'Enter' || e.key === ' ') pick(active);
+      else if (e.key === 'Escape') { e.stopPropagation(); close(); }
+      else if (e.key === 'Tab') { close(false); return; }
+      else if (e.key.length === 1) {
+        // jump to the next option starting with the typed letter
+        const ch = e.key.toLowerCase();
+        const order = opts.map((_, k) => (active + 1 + k) % opts.length);
+        const hit = order.find(k => opts[k].textContent.trim().toLowerCase().startsWith(ch));
+        if (hit !== undefined) setActive(hit);
+      } else return;
+      e.preventDefault();
+    });
+    let px = -1, py = -1;
+    list.addEventListener('pointermove', e => {
+      // a scroll under a still pointer also fires pointermove; only real movement picks the row
+      if (e.clientX === px && e.clientY === py) return;
+      px = e.clientX; py = e.clientY;
+      const o = e.target.closest('.sel-opt');
+      if (o && o !== opts[active]) setActive(opts.indexOf(o));
+    });
+    list.addEventListener('click', e => {
+      const o = e.target.closest('.sel-opt');
+      if (o) pick(opts.indexOf(o));
+    });
+    document.addEventListener('pointerdown', e => { if (!box.contains(e.target)) close(false); });
+    native.addEventListener('change', sync);
+    native.form?.addEventListener('reset', () => setTimeout(sync));
+    addEventListener('languagechange', sync);
+    sync();
+  });
 
   const burger = $('#burger');
   const setMenu = open => {
@@ -23,7 +179,7 @@
     burger.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
     $$('#links a').forEach(a => a.addEventListener('click', () => setMenu(false)));
     addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
-    matchMedia('(min-width: 1001px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
+    matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
   }
 
   // Keep the native details element, then animate its measured height.

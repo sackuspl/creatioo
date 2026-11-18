@@ -3,45 +3,79 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const hasDb = () => { try { return typeof db !== 'undefined' && !!db; } catch (e) { return false; } };
+  const emit = name => dispatchEvent(new CustomEvent(name));
+  const pad = n => String(n).padStart(2, '0');
 
   // Cloudinary delivers a smaller file when transformations are added to the path.
-  const cdn = (u, w) => {
-    if (typeof u === 'string' && /res\.cloudinary\.com/.test(u) && u.includes('/upload/') && !/\/upload\/[^/]*(f_auto|q_auto|w_\d)/.test(u)) {
-      return u.replace('/upload/', `/upload/f_auto,q_auto,w_${w}/`);
-    }
-    return u;
-  };
+  const cdn = (u, w) => (typeof u === 'string' && /res\.cloudinary\.com/.test(u) && u.includes('/upload/') && !/\/upload\/[^/]*(f_auto|q_auto|w_\d)/.test(u)
+    ? u.replace('/upload/', `/upload/f_auto,q_auto,w_${w}/`) : u);
   const logoUrl = u => (typeof u === 'string' && /res\.cloudinary\.com/.test(u) && u.includes('/upload/') && !/\/upload\/[^/]*(e_trim|f_auto|q_auto|w_\d)/.test(u)
     ? u.replace('/upload/', '/upload/e_trim,w_520,f_auto,q_auto/') : u);
-  const withFallback = (img, original) => {
-    img.addEventListener('error', () => { if (img.getAttribute('src') !== original) img.src = original; }, { once: true });
-  };
 
-  // Mobile dock hides while the contact form or the footer is on screen.
-  const dock = $('#dock');
-  if (dock && 'IntersectionObserver' in window) {
-    const seen = new Set();
+  /* Current section in the nav (header scrolling and the footer copy button live in common.js) */
+  const navLinks = $$('#links a[href^="#"]');
+  if ('IntersectionObserver' in window) {
+    const map = new Map(navLinks.map(a => [document.getElementById(a.getAttribute('href').slice(1)), a]));
     const io = new IntersectionObserver(entries => {
-      entries.forEach(e => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)));
-      dock.classList.toggle('hide', seen.size > 0);
-    }, { threshold: .12 });
-    io.observe($('#contact'));
-    io.observe($('.foot'));
+      entries.forEach(e => {
+        const link = map.get(e.target);
+        if (!link) return;
+        if (e.isIntersecting) { navLinks.forEach(a => a.removeAttribute('aria-current')); link.setAttribute('aria-current', 'true'); }
+        else if (link.getAttribute('aria-current')) link.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    map.forEach((_, sec) => sec && io.observe(sec));
   }
 
-  // Homepage works. Items added in the dashboard feed the rotating project cards.
+  /* Text split into words for motion.js: the about intro lights up word by word, [data-split] headings rise word by word.
+     Each element keeps its Polish source and is rebuilt in the active language. */
+  const i18n = window.creatiooI18n;
+  const splitWords = (el, wrap) => {
+    const source = i18n ? i18n.t(el.textContent.trim(), 'pl') : el.textContent.trim();
+    el.setAttribute('data-no-translate', '');
+    const build = () => {
+      const lang = i18n?.language || document.documentElement.dataset.lang;
+      const text = lang === 'en' && i18n ? i18n.t(source, 'en') : source;
+      el.setAttribute('aria-label', text);
+      el.innerHTML = text.split(/\s+/).map(wrap).join(' ');
+      emit('words:built');
+    };
+    build();
+    addEventListener('languagechange', build);
+  };
+  const intro = $('#aboutIntro');
+  if (intro) splitWords(intro, w => `<span class="w" aria-hidden="true">${esc(w)}</span>`);
+  $$('[data-split]').forEach(el => splitWords(el, (w, i) => `<span class="sw" aria-hidden="true"><span style="--i:${i}">${esc(w)}</span></span>`));
+
+  /* Featured work: items added in the dashboard replace the default cards */
+  const track = $('#workTrack');
   async function featured() {
-    if (!hasDb() || !window.creatiooShowcase) return;
+    if (!hasDb()) return;
     let list = [];
     try {
       const snap = await db.collection('projects').orderBy('order').get();
       list = snap.docs.map(d => d.data()).filter(p => p.imageUrl);
-    } catch (e) { console.error(e); }
-    if (list.length) window.creatiooShowcase.configure(list);
+    } catch (e) { console.error(e); return; }
+    if (list.length < 4) return;
+    const items = list.slice(0, 10);
+    const more = track.querySelector('.work-more');
+    const cards = items.map((p, i) => {
+      const href = p.galleryId ? `gallery/?projekt=${encodeURIComponent(p.galleryId)}` : 'gallery/';
+      const li = document.createElement('li');
+      li.className = 'work-card';
+      li.innerHTML = `<a data-cursor="Zobacz projekt" href="${esc(href)}"><div class="work-img"><img src="${esc(cdn(p.imageUrl, 1200))}" alt="${esc(p.alt || 'Projekt graficzny')}" width="1200" height="900" loading="lazy" decoding="async"></div><div class="work-meta"><span class="work-no">${pad(i + 1)}</span><h3>${esc(p.alt || 'Projekt')}</h3><span class="work-kind">${esc(p.category || '')}</span></div></a>`;
+      const img = li.querySelector('img');
+      img.addEventListener('error', () => { if (img.src !== p.imageUrl) img.src = p.imageUrl; }, { once: true });
+      return li;
+    });
+    track.replaceChildren(...cards, more);
+    $('#workCount').textContent = `(${pad(items.length)})`;
+    emit('works:updated');
   }
 
+  /* Reviews */
   async function reviews() {
-    const track = $('#rvTrack');
+    const box = $('#rvTrack');
     let data = [];
     if (hasDb()) {
       try {
@@ -49,22 +83,21 @@
         data = snap.docs.map(d => d.data());
       } catch (e) { console.error(e); }
     }
-    if (!data.length) { track.innerHTML = '<p class="empty">Opinie pojawią się tutaj wkrótce.</p>'; return; }
+    if (!data.length) { box.innerHTML = '<p class="empty">Opinie pojawią się tutaj wkrótce.</p>'; emit('layout:changed'); return; }
     const initials = n => String(n || '?').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('');
-    track.innerHTML = data.map(r => {
+    box.innerHTML = data.slice(0, 9).map(r => {
       const n = Math.max(1, Math.min(5, +r.stars || 5));
-      return `<article><div class="st" style="--n:${n}" role="img" aria-label="Ocena ${n} na 5"></div><p>${esc(r.text)}</p><footer><span class="av" aria-hidden="true">${esc(initials(r.name))}</span><div><b>${esc(r.name)}</b>${r.role ? `<small>${esc(r.role)}</small>` : ''}</div></footer></article>`;
+      return `<article role="listitem"><div class="st" style="--n:${n}" role="img" aria-label="Ocena ${n} na 5"></div><p>${esc(r.text)}</p><footer><span class="av" aria-hidden="true">${esc(initials(r.name))}</span><div><b>${esc(r.name)}</b>${r.role ? `<small>${esc(r.role)}</small>` : ''}</div></footer></article>`;
     }).join('');
-    window.creatiooReviews?.mount();
+    emit('layout:changed');
   }
 
-  // Logo wall: flat marks become one-tone silhouettes, detailed artwork becomes a grayscale drawing
+  /* Client logos: flat marks become one-tone silhouettes, detailed artwork stays as a grayscale picture */
   const tuneLogo = img => {
     const w = img.naturalWidth, h = img.naturalHeight;
     if (w && h) {
       const ar = w / h;
-      img.style.setProperty('--ar', ar.toFixed(3));
-      img.style.setProperty('--k', Math.sqrt(ar).toFixed(3));
+      img.style.setProperty('--k', Math.min(1.6, Math.sqrt(ar)).toFixed(3));
       try {
         const scale = Math.min(1, 96 / Math.max(w, h));
         const cw = Math.max(1, Math.round(w * scale)), ch = Math.max(1, Math.round(h * scale));
@@ -87,7 +120,6 @@
     }
     img.classList.add('is-ready');
   };
-
   async function clients() {
     const section = $('#clients');
     let list = [];
@@ -97,7 +129,7 @@
         list = snap.docs.map(d => d.data()).filter(c => c.imageUrl);
       } catch (e) { console.error(e); }
     }
-    if (!list.length) { section.hidden = true; return; }
+    if (!list.length) { section.hidden = true; emit('layout:changed'); return; }
     $('#clientGrid').innerHTML = list.map(c => `<div class="client-cell" role="listitem"><div class="client-mark"><img src="${esc(logoUrl(c.imageUrl))}" alt="${esc(c.alt || 'Logo klienta')}" crossorigin="anonymous" loading="lazy" decoding="async"></div>${c.alt ? `<span class="client-name">${esc(c.alt)}</span>` : ''}</div>`).join('');
     $$('#clientGrid img').forEach((img, i) => {
       let tries = 0;
@@ -105,18 +137,17 @@
       img.addEventListener('error', () => {
         tries += 1;
         if (tries === 1) {
-          // retry without CORS, the logo is still shown (just not analysed)
           const src = img.getAttribute('src');
-          img.removeAttribute('crossorigin');
-          img.removeAttribute('src');
-          img.src = src;
+          img.removeAttribute('crossorigin'); img.removeAttribute('src'); img.src = src;
         } else if (tries === 2 && img.getAttribute('src') !== list[i].imageUrl) img.src = list[i].imageUrl;
+        else img.classList.add('is-ready');
       });
       if (img.complete && img.naturalWidth) tuneLogo(img);
     });
+    emit('layout:changed');
   }
 
-  // Review dialog
+  /* Review dialog */
   const dlg = $('#revDlg'), form = $('#revForm'), out = $('#revStatus');
   let stars = 5;
   const say = (msg, cls) => { out.textContent = msg; out.className = 'note ' + (cls || ''); };
@@ -128,7 +159,6 @@
   $('#revClose').addEventListener('click', closeDlg);
   dlg.addEventListener('click', e => { if (e.target === dlg) closeDlg(); });
   dlg.addEventListener('close', () => document.body.classList.remove('dialog-open'));
-
   const deviceId = () => {
     try {
       let id = localStorage.getItem('reviewDeviceId');
@@ -139,7 +169,6 @@
       return id;
     } catch (e) { return `dev-${Date.now()}`; }
   };
-
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const f = new FormData(form), name = f.get('name').trim(), text = f.get('text').trim();
@@ -161,7 +190,7 @@
     btn.disabled = false;
   });
 
-  // Contact form
+  /* Contact form */
   const cf = $('#cform'), cs = $('#cstatus');
   cf.addEventListener('submit', async e => {
     e.preventDefault();

@@ -46,25 +46,44 @@
     ).join('');
   };
 
+  // Cards open from below as they scroll into view, columns slightly staggered
+  const io = !reduce && 'IntersectionObserver' in window
+    ? new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      io.unobserve(e.target);
+    }), { rootMargin: '0px 0px -8% 0px' })
+    : null;
+  if (io) document.documentElement.classList.add('g-anim');
+
   const render = () => {
     const n = colsNow();
-    const cols = Array.from({ length: n }, () => ({ h: 0, html: '' }));
+    // the caption under each image adds roughly this much height, relative to the column width
+    const capH = innerWidth >= 640 ? .16 : .3;
+    const cols = Array.from({ length: n }, (_, c) => ({ c, h: 0, html: '' }));
     list.forEach((p, i) => {
-      const c = cols.reduce((a, b) => (b.h < a.h ? b : a));
-      c.h += 1 / (p.ar || 4 / 3);
-      c.html += `<button class="shot" type="button" data-i="${i}" style="--ar:${(p.ar || 4 / 3).toFixed(4)}" aria-label="Powiększ: ${esc(p.alt)}"><img src="${esc(p.thumb)}" alt="${esc(p.alt)}" decoding="async"${i > 5 ? ' loading="lazy"' : ''}><span class="cap" aria-hidden="true"><b>${esc(p.title || p.label)}</b><small>${esc(p.label)}</small></span></button>`;
+      const col = cols.reduce((a, b) => (b.h < a.h ? b : a));
+      col.h += 1 / (p.ar || 4 / 3) + capH;
+      const title = p.title || p.label;
+      col.html += `<button class="shot" type="button" data-i="${i}" style="--d:${col.c * 70}ms" aria-label="Powiększ: ${esc(p.alt)}"><span class="shot-img" style="--ar:${(p.ar || 4 / 3).toFixed(4)}"><img src="${esc(p.thumb)}" alt="${esc(p.alt)}" decoding="async"${i > 5 ? ' loading="lazy"' : ''}></span><span class="cap" aria-hidden="true"><b>${esc(title)}</b>${p.title ? `<small>${esc(p.label)}</small>` : ''}</span></button>`;
     });
+    io?.disconnect();
     mas.innerHTML = cols.map(c => `<div class="mas-col">${c.html}</div>`).join('');
     mas.dataset.cols = n;
-    mas.querySelectorAll('.shot img').forEach((img, i) => withFallback(img, list[i].img));
+    mas.querySelectorAll('.shot').forEach(shot => {
+      const img = shot.querySelector('img');
+      withFallback(img, list[+shot.dataset.i].img);
+      if (img.complete && img.naturalWidth) img.classList.add('on');
+      else img.addEventListener('load', () => img.classList.add('on'), { once: true });
+      io?.observe(shot);
+    });
   };
 
   const visible = () => (filter === 'all' ? items : items.filter(p => p.cat === filter));
 
   const show = async (animate) => {
     list = visible();
-    const word = n => (n === 1 ? 'projekt' : n >= 2 && n <= 4 ? 'projekty' : 'projektów');
-    count.textContent = `${list.length} ${word(list.length)}`;
+    count.textContent = `(${String(list.length).padStart(2, '0')})`;
     if (animate && !reduce) { mas.classList.add('swap'); await new Promise(r => setTimeout(r, 160)); }
     await Promise.all(list.map(loadRatio));
     render();
@@ -79,7 +98,7 @@
     });
     const label = c => LABELS[c] || items.find(p => p.cat === c)?.catLabel || c;
     const defs = [['all', 'Wszystkie', items.length], ...present.map(c => [c, label(c), items.filter(p => p.cat === c).length])];
-    chips.innerHTML = defs.map(([k, l, n]) => `<button class="chip" type="button" data-k="${esc(k)}" aria-pressed="${k === filter}">${esc(l)} <small>${n}</small></button>`).join('');
+    chips.innerHTML = defs.map(([k, l, n]) => `<button class="chip" type="button" data-k="${esc(k)}" aria-pressed="${k === filter}">${esc(l)}<small>${n}</small></button>`).join('');
     bar.hidden = present.length < 2;
     chips.onclick = e => {
       const b = e.target.closest('.chip');
@@ -188,7 +207,7 @@
     opener = document.activeElement;
     paintLightbox();
     dlg.showModal();
-    document.body.classList.add('lb-open');
+    document.body.classList.add('dialog-open');
     const u = new URL(location.href);
     u.searchParams.set('projekt', list[i].id);
     history.pushState({ lb: 1 }, '', u);
@@ -205,7 +224,7 @@
   lbNext.onclick = () => go(1);
   dlg.addEventListener('click', e => { if (e.target === dlg || e.target === lbStage) dlg.close(); });
   dlg.addEventListener('close', () => {
-    document.body.classList.remove('lb-open');
+    document.body.classList.remove('dialog-open');
     if (pushed) { pushed = false; history.back(); }
     if (opener && document.contains(opener)) opener.focus({ preventScroll: true });
   });

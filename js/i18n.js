@@ -4,15 +4,27 @@
   "Przejdź do treści": "Skip to content",
   "Oferta": "Services",
   "Galeria": "Portfolio",
+  "Projekty": "Projects",
+  "Logotypy, branding i grafiki dla twórców gier, serwerów i firm, które nie chcą wyglądać jak wszyscy.": "Logos, branding and graphics for game creators, servers and companies that refuse to look like everyone else.",
+  "dni": "days",
+  "Ponad 300 projektów": "Over 300 projects",
+  "Identyfikacja wizualna": "Visual identity",
+  "Grafiki dla serwerów": "Server graphics",
+  "Banery i okładki": "Banners and covers",
+  "Zobacz projekt": "View project",
+  "Przeciągnij": "Drag",
+  "Porozmawiajmy o Twoim projekcie.": "Let's talk about your project.",
+  "Kopiuj adres": "Copy address",
+  "Skopiowano": "Copied",
+  "Formularz kontaktowy": "Contact form",
   "O mnie": "About",
   "Współpraca": "Process",
   "Opinie": "Reviews",
   "Kontakt": "Contact",
   "Napisz do mnie": "Get in touch",
-  "Grafika dla marek, serwerów i twórców": "Design for brands, servers and creators",
   "Tworzymy,": "We create",
   "by": "to",
-  "wyróżniać.": "stand out.",
+  "wyróżniać": "stand out",
   "Dobra firma zasługuje na dobry wygląd. Skończmy wspólnie z tymczasowymi rozwiązaniami.": "Your business deserves great design. Let's move beyond temporary solutions, together.",
   "Zacznijmy projekt": "Start a project",
   "Galeria prac": "Portfolio",
@@ -400,7 +412,21 @@
     dispatchEvent(new CustomEvent('languagechange', { detail: { language } }));
     dispatchEvent(new Event('resize'));
   }
-  document.querySelector('#language')?.addEventListener('click', () => set(language === 'en' ? 'pl' : 'en'));
+  // The page dips out for a moment, the words change while it is hidden, then it comes back.
+  // A crossfade would show both languages on top of each other.
+  let switching = false;
+  document.querySelector('#language')?.addEventListener('click', () => {
+    const next = language === 'en' ? 'pl' : 'en';
+    const root = document.documentElement;
+    if (switching) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { set(next); return; }
+    switching = true;
+    root.classList.add('lang-fade');
+    setTimeout(() => {
+      set(next);
+      requestAnimationFrame(() => requestAnimationFrame(() => { root.classList.remove('lang-fade'); switching = false; }));
+    }, 200);
+  });
   const pending = new Set(); let queued = false;
   const observer = new MutationObserver(records => {
     records.forEach(record => {
