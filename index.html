@@ -354,7 +354,41 @@
   </form>
 </dialog>
 
-<script async src="js/hero3d.js"></script>
+<script>
+/* The 3D mark is loaded only where it runs smoothly (the same checks as canRun() in tools/3d/src/hero3d.js).
+   Without a graphics card it would crawl at a few frames per second, so the flat SVG mark stays
+   and the 520 KB scene is not downloaded at all. */
+(() => {
+  const root = document.documentElement;
+  const fast = (() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    const connection = navigator.connection;
+    if ((navigator.hardwareConcurrency || 8) <= 2 || (connection && connection.saveData)) return false;
+    try {
+      const options = { failIfMajorPerformanceCaveat: true };
+      const probe = document.createElement('canvas');
+      const gl = probe.getContext('webgl2', options) || probe.getContext('webgl', options);
+      if (!gl) return false;
+      const info = gl.getExtension('WEBGL_debug_renderer_info');
+      const name = String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER) || '');
+      const lose = gl.getExtension('WEBGL_lose_context');
+      if (lose) lose.loseContext();
+      return !/swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
+    } catch (e) {
+      return false;
+    }
+  })();
+  if (fast) {
+    const script = document.createElement('script');
+    script.src = 'js/hero3d.js';
+    script.async = true;
+    document.body.append(script);
+  } else {
+    root.dataset.gl = 'none';
+    dispatchEvent(new Event('hero3d:none'));
+  }
+})();
+</script>
 <script defer src="js/i18n.js"></script>
 <script defer src="js/common.js"></script>
 <script defer src="assets/vendor/gsap.min.js"></script>

@@ -16,6 +16,14 @@ const signal = state => {
   dispatchEvent(new Event('hero3d:' + state));
 };
 
+/* Without a graphics card (blocked drivers, remote desktops, test robots such as PageSpeed) WebGL is drawn
+   by the processor: the scene then runs at a few frames per second and slows the whole page down. */
+const isSoftware = gl => {
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const name = String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER) || '');
+  return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
+};
+
 const canRun = () => {
   if (!canvas || !hero) return false;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
@@ -23,7 +31,13 @@ const canRun = () => {
   if ((navigator.hardwareConcurrency || 8) <= 2 || (connection && connection.saveData)) return false;
   try {
     const probe = document.createElement('canvas');
-    return !!(probe.getContext('webgl2') || probe.getContext('webgl'));
+    const options = { failIfMajorPerformanceCaveat: true };
+    const gl = probe.getContext('webgl2', options) || probe.getContext('webgl', options);
+    if (!gl) return false;
+    const fast = !isSoftware(gl);
+    const lose = gl.getExtension('WEBGL_lose_context');
+    if (lose) lose.loseContext();
+    return fast;
   } catch (e) {
     return false;
   }
@@ -159,6 +173,7 @@ async function start() {
   renderer.toneMappingExposure = 1;
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.autoClear = false;
+  let stopped = false; // set when the scene hands over to the flat SVG mark
 
   /* Field */
   const uniforms = {
@@ -269,6 +284,7 @@ async function start() {
     return { px, cx: (box.x0 + box.x1) / 2, cy: (box.y0 + box.y1) / 2 };
   };
   const layout = () => {
+    if (stopped) return;
     width = Math.max(1, hero.clientWidth);
     height = Math.max(1, hero.clientHeight);
     dpr = Math.min(devicePixelRatio || 1, 2, Math.sqrt(4.6e6 / (width * height)));
@@ -351,13 +367,13 @@ async function start() {
       spin += dx * 0.011;
       spinVel = MathUtils.lerp(spinVel, (dx * 0.011) / Math.max(0.008, (now - lastT) / 1000), 0.5);
       lastX = e.clientX; lastT = now;
-    } else if (fine && introAt >= 0 && e.pointerType === 'mouse') {
+    } else if (fine && introAt >= 0 && !stopped && e.pointerType === 'mouse') {
       setHover(pointer.inside && !interactive(e.target) && hitsMark(e.clientX, e.clientY));
     }
   }, { passive: true });
 
   hero.addEventListener('pointerdown', e => {
-    if (introAt < 0 || interactive(e.target) || !hitsMark(e.clientX, e.clientY)) return;
+    if (stopped || introAt < 0 || interactive(e.target) || !hitsMark(e.clientX, e.clientY)) return;
     if (e.pointerType === 'mouse') {
       e.preventDefault();
       dragging = true; dragId = e.pointerId; lastX = e.clientX; lastT = performance.now(); travel = 0; spinVel = 0;
@@ -412,13 +428,38 @@ async function start() {
     renderer.render(scene, camera);
   };
 
+  /* A weak graphics chip can still pass the checks above. The frame rate is measured just after the
+     intro starts; below about 25 frames per second the scene fades out and the flat SVG mark takes over. */
+  const gaps = [];
+  let lastFrame = 0;
+  const fallBack = () => {
+    stopped = true;
+    setHover(false);
+    root.classList.remove('has-3d');
+    root.dataset.gl = 'slow';
+    setTimeout(() => { renderer.dispose(); renderer.forceContextLoss(); }, 1400); // after the canvas has faded out
+  };
+  const watch = (now, since) => {
+    if (gaps.length >= 40) return false;
+    if (since < 0.6 || !lastFrame) { lastFrame = now; return false; }
+    gaps.push(now - lastFrame);
+    lastFrame = now;
+    if (gaps.length < 40) return false;
+    const median = gaps.slice().sort((a, b) => a - b)[20];
+    if (median <= 40) return false;
+    fallBack();
+    return true;
+  };
+
   const tick = () => {
+    if (stopped) return;
     requestAnimationFrame(tick);
     if (lost) return;
-    if (!visible || document.hidden) { clock.getDelta(); return; }
+    if (!visible || document.hidden) { clock.getDelta(); lastFrame = 0; return; }
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
     const since = introAt < 0 ? 0 : t - introAt;
+    if (introAt >= 0 && watch(performance.now(), since)) return;
     const eA = easeOutExpo(clamp01((since - 0.05) / 2));
     const eB = easeOutExpo(clamp01((since - 0.2) / 2));
     const reveal = easeOutQuart(clamp01((since - 0.1) / 2.6));

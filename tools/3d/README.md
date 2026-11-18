@@ -29,3 +29,5 @@ npm run build
 - położenie i wielkość znaku: funkcja `layout()`, która dopasowuje znak do wolnego miejsca obok nagłówka
 
 Bez WebGL, przy włączonym ograniczeniu animacji w systemie albo na bardzo słabych urządzeniach strona pokazuje płaski znak SVG.
+
+Płaski znak zostaje też wtedy, gdy przeglądarka rysuje WebGL procesorem zamiast karty graficznej (np. PageSpeed Insights, zdalny pulpit, zablokowane sterowniki), oraz gdy scena po starcie chodzi wolniej niż około 25 klatek na sekundę. Pierwsze sprawdzenie jest też w `index.html`, w skrypcie, który dopiero wtedy pobiera `js/hero3d.js`. Przy zmianie warunków popraw oba miejsca (`canRun()` w `src/hero3d.js`).
